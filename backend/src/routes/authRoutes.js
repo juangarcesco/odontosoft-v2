@@ -2,10 +2,11 @@ const express = require('express');
 const { login, logout } = require('../controllers/authController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
+const { loginLimiter } = require('../middlewares/rateLimiter');
 
 const router = express.Router();
 
-router.post('/login', login);
+router.post('/login', loginLimiter, login);
 router.post('/logout', verificarToken, logout);
 
 router.get('/perfil', verificarToken, (req, res) => {

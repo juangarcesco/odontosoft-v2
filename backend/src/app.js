@@ -5,6 +5,8 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
+app.set('trust proxy', 1); // necesario en Codespaces / detrás de proxy
+
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
