@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const TokenInvalidado = require('../models/TokenInvalidado');
 
-function verificarToken(req, res, next) {
+async function verificarToken(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -11,7 +12,13 @@ function verificarToken(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.usuario = payload; // { id, rol, nombre, iat, exp }
+
+    const invalidado = await TokenInvalidado.findOne({ token });
+    if (invalidado) {
+      return res.status(401).json({ mensaje: 'Sesión cerrada, inicie sesión nuevamente' });
+    }
+
+    req.usuario = payload;
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {

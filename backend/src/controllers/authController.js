@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
+const TokenInvalidado = require('../models/TokenInvalidado');
 const { compararPassword } = require('../services/authService');
 const { generarToken } = require('../services/tokenService');
 
@@ -32,7 +34,7 @@ async function login(req, res) {
     return res.status(200).json({
       mensaje: 'Login exitoso',
       token,
-      usuario: usuario.toJSON(), // gracias al transform, no incluye passwordHash
+      usuario: usuario.toJSON(),
     });
   } catch (error) {
     console.error('Error en login:', error);
@@ -40,4 +42,23 @@ async function login(req, res) {
   }
 }
 
-module.exports = { login };
+async function logout(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader.split(' ')[1];
+
+    const payload = jwt.decode(token); // ya sabemos que es válido, pasó por verificarToken
+
+    await TokenInvalidado.create({
+      token,
+      expiraEn: new Date(payload.exp * 1000), // exp viene en segundos, Date usa milisegundos
+    });
+
+    return res.status(200).json({ mensaje: 'Sesión cerrada correctamente' });
+  } catch (error) {
+    console.error('Error en logout:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { login, logout };
