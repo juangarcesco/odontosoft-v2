@@ -1,0 +1,176 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+backend/
+  src/
+    config/
+      db.js
+    app.js
+    server.js
+  .env.example
+  .gitignore
+  package.json
+.gitignore
+docker-compose.yml
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="backend/src/config/db.js">
+const mongoose = require('mongoose');
+
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ MongoDB conectado');
+  } catch (err) {
+    console.error('❌ Error al conectar a MongoDB:', err.message);
+    process.exit(1);
+  }
+}
+
+module.exports = connectDB;
+</file>
+
+<file path="backend/src/app.js">
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(morgan('dev')); // log de peticiones (base para RNF-06)
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'OdontoSoft API' });
+});
+
+module.exports = app;
+</file>
+
+<file path="backend/src/server.js">
+require('dotenv').config();
+const app = require('./app');
+const connectDB = require('./config/db');
+
+const PORT = process.env.PORT || 3000;
+
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor escuchando en puerto ${PORT}`);
+  });
+});
+</file>
+
+<file path="backend/.gitignore">
+
+</file>
+
+<file path="backend/package.json">
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",        
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.4",
+    "morgan": "^1.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
+</file>
+
+<file path=".gitignore">
+backend/node_modules
+backend/.env
+frontend/node_modules
+frontend/dist
+</file>
+
+<file path="docker-compose.yml">
+services:
+  mongo:
+    image: mongo:7
+    container_name: odontosoft-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+</file>
+
+<file path="backend/.env.example">
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/odontosoft
+JWT_SECRET=
+JWT_EXPIRES_IN=8h
+</file>
+
+<file path="README.md">
+# odontosoft-v2
+</file>
+
+</files>
