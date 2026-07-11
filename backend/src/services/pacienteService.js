@@ -30,4 +30,45 @@ async function listarPacientes({ pagina = 1, limite = 10 }) {
   };
 }
 
-module.exports = { crearPaciente, listarPacientes };
+function escaparRegex(texto) {
+  return texto.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+function construirPatronInsensibleATildes(termino) {
+  const mapaAcentos = {
+    a: '[aàáâãä]',
+    e: '[eèéêë]',
+    i: '[iìíîï]',
+    o: '[oòóôõö]',
+    u: '[uùúûü]',
+    n: '[nñ]',
+  };
+
+  return termino
+    .toLowerCase()
+    .split('')
+    .map((caracter) => mapaAcentos[caracter] || escaparRegex(caracter))
+    .join('');
+}
+
+async function buscarPacientes(termino) {
+  if (!termino || termino.trim() === '') {
+    return [];
+  }
+
+  const patron = construirPatronInsensibleATildes(termino.trim());
+  const regex = new RegExp(patron, 'i');
+
+  const pacientes = await Paciente.find({
+    estado: 'ACTIVO',
+    $or: [
+      { nombre: regex },
+      { apellido: regex },
+      { numeroDocumento: regex },
+    ],
+  }).limit(20);
+
+  return pacientes;
+}
+
+module.exports = { crearPaciente, listarPacientes, buscarPacientes };
