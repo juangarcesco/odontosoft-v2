@@ -13,7 +13,8 @@ async function run() {
     return;
   }
 
-  const passwordHash = await hashPassword('Admin123!');
+  const passwordHash = await hashPassword(process.env.SEED_ADMIN_PASSWORD || 'CambiaEstaClave123!');
+
 
   const admin = await Usuario.create({
     nombre: 'Administrador General',
