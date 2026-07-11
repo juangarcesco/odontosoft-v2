@@ -76,4 +76,22 @@ async function obtenerPacientePorId(id) {
   return paciente;
 }
 
-module.exports = { crearPaciente, listarPacientes, buscarPacientes, obtenerPacientePorId };
+async function actualizarPaciente(id, datos) {
+  // Nunca permitir que la edición cambie estos campos por esta vía
+  const { estado, creadoPor, _id, ...datosPermitidos } = datos;
+
+  const paciente = await Paciente.findByIdAndUpdate(id, datosPermitidos, {
+    new: true, // devuelve el documento ya actualizado, no el anterior
+    runValidators: true, // vuelve a correr las validaciones del esquema
+  });
+
+  return paciente;
+}
+
+module.exports = {
+  crearPaciente,
+  listarPacientes,
+  buscarPacientes,
+  obtenerPacientePorId,
+  actualizarPaciente,
+};

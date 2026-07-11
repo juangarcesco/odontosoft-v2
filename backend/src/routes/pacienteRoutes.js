@@ -1,5 +1,5 @@
 const express = require('express');
-const { crear, listar, buscar, obtenerDetalle } = require('../controllers/pacienteController');
+const { crear, listar, buscar, obtenerDetalle, actualizar } = require('../controllers/pacienteController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
 
@@ -12,5 +12,7 @@ router.post('/', verificarToken, permitirRoles('ADMIN', 'RECEPCIONISTA'), crear)
 router.get('/buscar', verificarToken, buscar);
 
 router.get('/:id', verificarToken, obtenerDetalle);
+
+router.put('/:id', verificarToken, permitirRoles('ADMIN', 'RECEPCIONISTA'), actualizar);
 
 module.exports = router;
