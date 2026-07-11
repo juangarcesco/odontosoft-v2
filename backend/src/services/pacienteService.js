@@ -71,4 +71,9 @@ async function buscarPacientes(termino) {
   return pacientes;
 }
 
-module.exports = { crearPaciente, listarPacientes, buscarPacientes };
+async function obtenerPacientePorId(id) {
+  const paciente = await Paciente.findById(id);
+  return paciente;
+}
+
+module.exports = { crearPaciente, listarPacientes, buscarPacientes, obtenerPacientePorId };

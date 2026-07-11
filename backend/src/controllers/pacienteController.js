@@ -1,4 +1,4 @@
-const { crearPaciente, listarPacientes, buscarPacientes } = require('../services/pacienteService');
+const { crearPaciente, listarPacientes, buscarPacientes, obtenerPacientePorId } = require('../services/pacienteService');
 
 async function crear(req, res) {
   try {
@@ -44,4 +44,23 @@ async function buscar(req, res) {
   }
 }
 
-module.exports = { crear, listar, buscar };
+async function obtenerDetalle(req, res) {
+  try {
+    const { id } = req.params;
+    const paciente = await obtenerPacientePorId(id);
+
+    if (!paciente) {
+      return res.status(404).json({ mensaje: 'Paciente no encontrado' });
+    }
+
+    return res.status(200).json({ paciente });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al obtener detalle de paciente:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, buscar, obtenerDetalle };
