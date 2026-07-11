@@ -1,0 +1,65 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Pacientes</h1>
+    <a routerLink="/pacientes/nuevo" class="btn-primario">+ Nuevo paciente</a>
+  </div>
+
+  <div class="buscador">
+    <input
+      type="text"
+      placeholder="Buscar por nombre, apellido o documento..."
+      [ngModel]="terminoBusqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+    />
+    @if (terminoBusqueda()) {
+      <button type="button" (click)="limpiarBusqueda()">✕</button>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && pacientes().length === 0) {
+    <p class="estado-info">No se encontraron pacientes.</p>
+  }
+
+  @if (pacientes().length > 0) {
+    <table class="tabla-pacientes">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Documento</th>
+          <th>Teléfono</th>
+          <th>EPS</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (paciente of pacientes(); track paciente._id) {
+          <tr>
+            <td>{{ paciente.nombre }} {{ paciente.apellido }}</td>
+            <td>{{ paciente.tipoDocumento }} {{ paciente.numeroDocumento }}</td>
+            <td>{{ paciente.telefono }}</td>
+            <td>{{ paciente.eps || '—' }}</td>
+            <td>
+              <a [routerLink]="['/pacientes', paciente._id]">Ver</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  @if (!enModoBusqueda() && paginacion(); as pag) {
+    <div class="paginador">
+      <button [disabled]="pag.pagina <= 1" (click)="irAPagina(pag.pagina - 1)">← Anterior</button>
+      <span>Página {{ pag.pagina }} de {{ pag.totalPaginas }} ({{ pag.total }} pacientes)</span>
+      <button [disabled]="pag.pagina >= pag.totalPaginas" (click)="irAPagina(pag.pagina + 1)">Siguiente →</button>
+    </div>
+  }
+</div>
