@@ -4,6 +4,7 @@ const {
   buscarPacientes,
   obtenerPacientePorId,
   actualizarPaciente,
+  desactivarPaciente,
 } = require('../services/pacienteService');
 
 async function crear(req, res) {
@@ -100,4 +101,26 @@ async function actualizar(req, res) {
   }
 }
 
-module.exports = { crear, listar, buscar, obtenerDetalle, actualizar };
+async function desactivar(req, res) {
+  try {
+    const { id } = req.params;
+    const paciente = await desactivarPaciente(id);
+
+    if (!paciente) {
+      return res.status(404).json({ mensaje: 'Paciente no encontrado' });
+    }
+
+    return res.status(200).json({
+      mensaje: 'Paciente desactivado exitosamente',
+      paciente,
+    });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al desactivar paciente:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, buscar, obtenerDetalle, actualizar, desactivar };

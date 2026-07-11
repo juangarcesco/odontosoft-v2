@@ -88,10 +88,20 @@ async function actualizarPaciente(id, datos) {
   return paciente;
 }
 
+async function desactivarPaciente(id) {
+  const paciente = await Paciente.findByIdAndUpdate(
+    id,
+    { estado: 'INACTIVO' },
+    { new: true }
+  );
+  return paciente;
+}
+
 module.exports = {
   crearPaciente,
   listarPacientes,
   buscarPacientes,
   obtenerPacientePorId,
   actualizarPaciente,
+  desactivarPaciente,
 };
