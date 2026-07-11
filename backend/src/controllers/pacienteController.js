@@ -1,4 +1,4 @@
-const { crearPaciente } = require('../services/pacienteService');
+const { crearPaciente, listarPacientes } = require('../services/pacienteService');
 
 async function crear(req, res) {
   try {
@@ -22,4 +22,15 @@ async function crear(req, res) {
   }
 }
 
-module.exports = { crear };
+async function listar(req, res) {
+  try {
+    const { pagina, limite } = req.query;
+    const resultado = await listarPacientes({ pagina, limite });
+    return res.status(200).json(resultado);
+  } catch (error) {
+    console.error('Error al listar pacientes:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar };
