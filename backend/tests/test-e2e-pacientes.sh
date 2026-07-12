@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo "=== 0. Limpieza de datos de pruebas anteriores ==="
+docker exec odontosoft-mongo mongosh odontosoft --quiet --eval "db.pacientes.deleteMany({numeroDocumento: {\$in: ['5556667778', '0000000000']}})" > /dev/null
+echo "Limpieza completada."
+echo ""
+
 echo "=== 1. Login RECEPCIONISTA, ODONTOLOGO, ADMIN ==="
 TOKEN_RECEP=$(curl -s -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"recepcion@odontosoft.com","password":"Recepcion123!"}' | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).token")
 TOKEN_ODONTO=$(curl -s -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"odontologo@odontosoft.com","password":"Odonto123!"}' | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).token")
