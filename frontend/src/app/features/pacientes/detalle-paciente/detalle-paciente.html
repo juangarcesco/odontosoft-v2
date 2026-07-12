@@ -1,0 +1,78 @@
+<div class="contenedor">
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+    <a routerLink="/pacientes">← Volver al listado</a>
+  }
+
+  @if (paciente(); as p) {
+    <div class="encabezado">
+      <div>
+        <h1>{{ p.nombre }} {{ p.apellido }}</h1>
+        <span class="badge" [class.badge-inactivo]="p.estado === 'INACTIVO'">
+          {{ p.estado }}
+        </span>
+      </div>
+      <div class="acciones-encabezado">
+        <a [routerLink]="['/pacientes', p._id, 'editar']" class="btn-secundario">Editar</a>
+        @if (p.estado === 'ACTIVO') {
+          <button
+            type="button"
+            class="btn-peligro"
+            (click)="desactivarPaciente()"
+            [disabled]="desactivando()"
+          >
+            {{ desactivando() ? 'Desactivando...' : 'Desactivar' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="secciones">
+      <section class="tarjeta">
+        <h2>Información personal</h2>
+        <dl>
+          <dt>Documento</dt>
+          <dd>{{ p.tipoDocumento }} {{ p.numeroDocumento }}</dd>
+
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ p.fechaNacimiento | date: 'longDate' }} ({{ calcularEdad(p.fechaNacimiento) }} años)</dd>
+
+          <dt>Sexo</dt>
+          <dd>{{ p.sexo }}</dd>
+
+          <dt>Teléfono</dt>
+          <dd>{{ p.telefono }}</dd>
+
+          <dt>Email</dt>
+          <dd>{{ p.email || '—' }}</dd>
+
+          <dt>Dirección</dt>
+          <dd>{{ p.direccion || '—' }}, {{ p.ciudad || '—' }}</dd>
+        </dl>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Información clínica</h2>
+        <dl>
+          <dt>EPS</dt>
+          <dd>{{ p.eps || '—' }}</dd>
+
+          <dt>Grupo sanguíneo</dt>
+          <dd>{{ p.grupoSanguineo === 'NO_REGISTRA' ? 'No registra' : p.grupoSanguineo }}</dd>
+
+          <dt>Alergias</dt>
+          <dd>{{ p.alergias || 'Ninguna registrada' }}</dd>
+
+          <dt>Observaciones</dt>
+          <dd>{{ p.observaciones || '—' }}</dd>
+        </dl>
+      </section>
+    </div>
+
+    <a routerLink="/pacientes" class="volver">← Volver al listado</a>
+  }
+</div>

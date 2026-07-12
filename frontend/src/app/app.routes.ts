@@ -27,4 +27,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/pacientes/form-paciente/form-paciente').then((m) => m.FormPaciente),
   },
+  {
+    path: 'pacientes/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pacientes/detalle-paciente/detalle-paciente').then((m) => m.DetallePaciente),
+  },
 ];
