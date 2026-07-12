@@ -1,0 +1,97 @@
+.contenedor {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: sans-serif;
+
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.fila {
+  display: flex;
+  gap: 1rem;
+
+  .campo {
+    flex: 1;
+  }
+}
+
+.campo {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.85rem;
+    color: #34495e;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #dcdfe3;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+}
+
+.campo-ancho {
+  width: 100%;
+}
+
+.estado-info {
+  color: #7f8c8d;
+}
+
+.estado-error {
+  background: #fdecea;
+  color: #e74c3c;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-primario {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background: #2471a3;
+  }
+}
+
+.btn-secundario {
+  background: white;
+  border: 1px solid #dcdfe3;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}
