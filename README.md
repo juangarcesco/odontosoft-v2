@@ -178,9 +178,11 @@ Tras ejecutar los scripts de seed, quedan disponibles los siguientes usuarios (c
 
 ### Permisos por rol (gestión de pacientes)
 
+Según la matriz de permisos del SRS (sección 3.1):
+
 | Acción | ADMIN | RECEPCIONISTA | ODONTOLOGO |
 |---|:---:|:---:|:---:|
-| Crear / editar / desactivar pacientes | ✅ | ✅ | ❌ |
+| Crear / editar / desactivar pacientes | ❌ (solo lectura) | ✅ CRUD | ❌ (solo lectura) |
 | Listar / buscar / ver detalle de pacientes | ✅ | ✅ | ✅ |
 
 ---
