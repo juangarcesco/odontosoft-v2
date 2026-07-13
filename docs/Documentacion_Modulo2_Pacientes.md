@@ -19,10 +19,16 @@
 
 ### Regla de negocio definida para este módulo
 
-El SRS no especificaba explícitamente qué roles gestionan pacientes. Se definió la siguiente política, consistente con el flujo típico de una clínica:
+Según la **matriz de permisos por módulo** del SRS (sección 3.1):
 
-- **ADMIN y RECEPCIONISTA**: pueden crear, editar y desactivar pacientes.
-- **ODONTOLOGO**: puede consultar (listar, buscar, ver detalle), pero no modificar — necesita ver los datos del paciente durante la consulta, pero la gestión administrativa corresponde a recepción/administración.
+| Acción | ADMIN | ODONTOLOGO | RECEPCIONISTA |
+|---|:---:|:---:|:---:|
+| Crear / editar / desactivar pacientes | ❌ (solo lectura) | ❌ (solo lectura) | ✅ CRUD |
+| Listar / buscar / ver detalle | ✅ | ✅ | ✅ |
+
+Esto es consistente con la nota de diseño del SRS sobre separación de funciones: el rol ADMIN controla la configuración del sistema y supervisa mediante reportes, pero no ejecuta las operaciones diarias — esas corresponden a RECEPCIONISTA (gestión de pacientes) y ODONTOLOGO (historia clínica).
+
+> **Corrección aplicada:** la implementación inicial de este módulo otorgaba CRUD también a ADMIN, basada en una interpretación razonable pero incorrecta ante la ausencia inicial de revisión de la matriz de permisos del SRS. Se corrigió en la rama `fix/permisos-pacientes-admin-lectura`, restringiendo `permitirRoles('ADMIN', 'RECEPCIONISTA')` a `permitirRoles('RECEPCIONISTA')` en las rutas de creación, edición y desactivación.
 
 ---
 
@@ -30,7 +36,7 @@ El SRS no especificaba explícitamente qué roles gestionan pacientes. Se defini
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
-| RF-09 | Registro de nuevo paciente | `pacienteController.js` (`crear`), `pacienteService.js` (`crearPaciente`) | `test-e2e-pacientes.sh` bloque 2; formulario `/pacientes/nuevo` | ✅ |
+| RF-09 | Registro de nuevo paciente (solo RECEPCIONISTA) | `pacienteController.js` (`crear`), `pacienteService.js` (`crearPaciente`), `pacienteRoutes.js` (`permitirRoles('RECEPCIONISTA')`) | `test-e2e-pacientes.sh` bloques 2-3b; formulario `/pacientes/nuevo` | ✅ |
 | RF-10 | Listado de pacientes con paginación | `pacienteService.js` (`listarPacientes`) | `test-e2e-pacientes.sh` bloque 5; componente `ListaPacientes` | ✅ |
 | RF-11 | Búsqueda por nombre o documento | `pacienteService.js` (`buscarPacientes`), insensible a tildes | `test-e2e-pacientes.sh` bloque 6; buscador con debounce en frontend | ✅ |
 | RF-12 | Ver detalle de un paciente | `pacienteController.js` (`obtenerDetalle`) | `test-e2e-pacientes.sh` bloques 7-8; componente `DetallePaciente` | ✅ |
@@ -181,6 +187,7 @@ feat(RF-15,RF-16): agregar modelo Paciente con validación de documento único
 | 6 | `curl` con tilde directa en la URL devolvía `400` | Codificación de caracteres especiales mal interpretada por la terminal al escribir la URL manualmente | Confirmado que no es un problema real de la aplicación: Angular codifica automáticamente vía `encodeURIComponent` en el navegador |
 | 7 | Script de pruebas fallaba en la segunda ejecución (409 inesperado, cascada de errores) | El script no era idempotente: creaba un paciente con documento fijo que ya existía de una corrida anterior | Se agregó un bloque de limpieza (`db.pacientes.deleteMany(...)`) al inicio del script |
 | 8 | `module.exports` duplicado dejaba funciones del servicio sin exportar | Al agregar nuevas funciones a `pacienteService.js`, se dejaba el `module.exports` anterior sin eliminar, y el último sobrescribía al primero | Revisión y consolidación en un único `module.exports` al final del archivo, con todas las funciones |
+| 9 | ADMIN tenía permisos de CRUD sobre pacientes, contradiciendo el SRS | La política de roles se definió por inferencia razonable antes de revisar la matriz de permisos de la sección 3.1 del SRS, que especifica ADMIN con solo lectura | Corregido en `fix/permisos-pacientes-admin-lectura`: `permitirRoles('ADMIN', 'RECEPCIONISTA')` → `permitirRoles('RECEPCIONISTA')` en crear, editar y desactivar |
 
 ---
 
