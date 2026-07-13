@@ -19,6 +19,10 @@ echo "ID creado: $PACIENTE_ID"
 echo "=== 3. ODONTOLOGO intenta crear paciente (debe dar 403) ==="
 curl -s -o /dev/null -w "Status: %{http_code}\n" -X POST http://localhost:3000/api/pacientes -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN_ODONTO" -d '{"nombre":"Test","apellido":"Test","tipoDocumento":"CC","numeroDocumento":"0000000000","fechaNacimiento":"2000-01-01","sexo":"M","telefono":"3000000000"}'
 
+echo "=== 3b. ADMIN intenta crear paciente (debe dar 403) ==="
+TOKEN_ADMIN=$(curl -s -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@odontosoft.com","password":"Admin123!"}' | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).token")
+curl -s -o /dev/null -w "Status: %{http_code}\n" -X POST http://localhost:3000/api/pacientes -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN_ADMIN" -d '{"nombre":"Test","apellido":"Test","tipoDocumento":"CC","numeroDocumento":"2222222222","fechaNacimiento":"2000-01-01","sexo":"M","telefono":"3000000000"}'
+
 echo "=== 4. Crear paciente duplicado (debe dar 409) ==="
 curl -s -o /dev/null -w "Status: %{http_code}\n" -X POST http://localhost:3000/api/pacientes -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN_RECEP" -d '{"nombre":"Laura","apellido":"Suárez","tipoDocumento":"CC","numeroDocumento":"5556667778","fechaNacimiento":"1995-02-14","sexo":"F","telefono":"3187778899"}'
 

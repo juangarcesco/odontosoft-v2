@@ -12,17 +12,15 @@ const { permitirRoles } = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
-router.post('/', verificarToken, permitirRoles('ADMIN', 'RECEPCIONISTA'), crear);
+router.post('/', verificarToken, permitirRoles('RECEPCIONISTA'), crear);
 
-// Los 3 roles pueden listar/consultar pacientes
+// ADMIN y ODONTOLOGO tienen solo lectura; RECEPCIONISTA tiene CRUD completo
 router.get('/', verificarToken, listar);
-
 router.get('/buscar', verificarToken, buscar);
-
 router.get('/:id', verificarToken, obtenerDetalle);
 
-router.put('/:id', verificarToken, permitirRoles('ADMIN', 'RECEPCIONISTA'), actualizar);
+router.put('/:id', verificarToken, permitirRoles('RECEPCIONISTA'), actualizar);
 
-router.patch('/:id/desactivar', verificarToken, permitirRoles('ADMIN', 'RECEPCIONISTA'), desactivar);
+router.patch('/:id/desactivar', verificarToken, permitirRoles('RECEPCIONISTA'), desactivar);
 
 module.exports = router;
