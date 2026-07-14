@@ -5,6 +5,7 @@ const {
   editarCita,
   cancelarCita,
   obtenerCitasDeHoy,
+  obtenerCitaPorId,
 } = require('../services/citaService');
 
 async function crear(req, res) {
@@ -131,4 +132,23 @@ async function citasDeHoy(req, res) {
   }
 }
 
-module.exports = { crear, listar, cambiarEstado, editar, cancelar, citasDeHoy };
+async function obtenerDetalle(req, res) {
+  try {
+    const { id } = req.params;
+    const cita = await obtenerCitaPorId(id);
+
+    if (!cita) {
+      return res.status(404).json({ mensaje: 'Cita no encontrada' });
+    }
+
+    return res.status(200).json({ cita });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de cita inválido' });
+    }
+    console.error('Error al obtener detalle de cita:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, cambiarEstado, editar, cancelar, citasDeHoy, obtenerDetalle };

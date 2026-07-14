@@ -162,6 +162,13 @@ async function obtenerCitasDeHoy() {
   return listarCitasPorRango(hoy, hoy);
 }
 
+async function obtenerCitaPorId(id) {
+  const cita = await Cita.findById(id)
+    .populate('paciente', 'nombre apellido telefono')
+    .populate('odontologo', 'nombre');
+  return cita;
+}
+
 module.exports = {
   crearCita,
   existeConflictoHorario,
@@ -170,4 +177,5 @@ module.exports = {
   editarCita,
   cancelarCita,
   obtenerCitasDeHoy,
+  obtenerCitaPorId,
 };

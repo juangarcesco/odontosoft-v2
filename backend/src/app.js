@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/authRoutes');
 const pacienteRoutes = require('./routes/pacienteRoutes');
 const citaRoutes = require('./routes/citaRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
 
 
 const app = express();
@@ -23,5 +24,8 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/usuarios', usuarioRoutes);
+
 
 module.exports = app;
