@@ -148,10 +148,20 @@ async function editarCita(id, datos) {
   return citaActualizada;
 }
 
+async function cancelarCita(id) {
+  const cita = await Cita.findByIdAndUpdate(
+    id,
+    { estado: 'CANCELADA' },
+    { new: true }
+  );
+  return cita;
+}
+
 module.exports = {
   crearCita,
   existeConflictoHorario,
   listarCitasPorRango,
   cambiarEstadoCita,
   editarCita,
+  cancelarCita,
 };

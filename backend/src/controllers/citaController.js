@@ -3,8 +3,8 @@ const {
   listarCitasPorRango,
   cambiarEstadoCita,
   editarCita,
+  cancelarCita,
 } = require('../services/citaService');
-
 
 async function crear(req, res) {
   try {
@@ -101,4 +101,23 @@ async function editar(req, res) {
   }
 }
 
-module.exports = { crear, listar, cambiarEstado, editar };
+async function cancelar(req, res) {
+  try {
+    const { id } = req.params;
+    const cita = await cancelarCita(id);
+
+    if (!cita) {
+      return res.status(404).json({ mensaje: 'Cita no encontrada' });
+    }
+
+    return res.status(200).json({ mensaje: 'Cita cancelada exitosamente', cita });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de cita inválido' });
+    }
+    console.error('Error al cancelar cita:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, cambiarEstado, editar, cancelar };
