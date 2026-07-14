@@ -1,4 +1,9 @@
-const { crearCita, listarCitasPorRango, cambiarEstadoCita } = require('../services/citaService');
+const {
+  crearCita,
+  listarCitasPorRango,
+  cambiarEstadoCita,
+  editarCita,
+} = require('../services/citaService');
 
 
 async function crear(req, res) {
@@ -70,4 +75,30 @@ async function cambiarEstado(req, res) {
   }
 }
 
-module.exports = { crear, listar, cambiarEstado };
+async function editar(req, res) {
+  try {
+    const { id } = req.params;
+    const cita = await editarCita(id, req.body);
+
+    if (!cita) {
+      return res.status(404).json({ mensaje: 'Cita no encontrada' });
+    }
+
+    return res.status(200).json({ mensaje: 'Cita actualizada exitosamente', cita });
+  } catch (error) {
+    if (error.codigo === 'CONFLICTO_HORARIO') {
+      return res.status(409).json({ mensaje: error.message });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID inválido' });
+    }
+    if (error.name === 'ValidationError') {
+      const errores = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({ mensaje: 'Datos inválidos', errores });
+    }
+    console.error('Error al editar cita:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, cambiarEstado, editar };

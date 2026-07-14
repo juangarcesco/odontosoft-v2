@@ -108,4 +108,50 @@ async function cambiarEstadoCita(id, nuevoEstado) {
   return cita;
 }
 
-module.exports = { crearCita, existeConflictoHorario, listarCitasPorRango, cambiarEstadoCita };
+async function editarCita(id, datos) {
+  const citaExistente = await Cita.findById(id);
+  if (!citaExistente) {
+    return null;
+  }
+
+  // Solo revalidar conflicto si cambia algo que afecte el horario ocupado
+  const cambiaHorario =
+    datos.fecha !== undefined ||
+    datos.hora !== undefined ||
+    datos.duracion !== undefined ||
+    datos.odontologo !== undefined;
+
+  if (cambiaHorario) {
+    const hayConflicto = await existeConflictoHorario({
+      odontologo: datos.odontologo || citaExistente.odontologo,
+      fecha: datos.fecha || citaExistente.fecha,
+      hora: datos.hora || citaExistente.hora,
+      duracion: datos.duracion || citaExistente.duracion,
+      citaIdExcluir: id,
+    });
+
+    if (hayConflicto) {
+      const error = new Error('El odontólogo ya tiene una cita programada en ese horario');
+      error.codigo = 'CONFLICTO_HORARIO';
+      throw error;
+    }
+  }
+
+  // No permitir cambiar el estado por esta vía (eso es responsabilidad de cambiarEstadoCita)
+  const { estado, creadoPor, _id, ...datosPermitidos } = datos;
+
+  const citaActualizada = await Cita.findByIdAndUpdate(id, datosPermitidos, {
+    new: true,
+    runValidators: true,
+  });
+
+  return citaActualizada;
+}
+
+module.exports = {
+  crearCita,
+  existeConflictoHorario,
+  listarCitasPorRango,
+  cambiarEstadoCita,
+  editarCita,
+};
