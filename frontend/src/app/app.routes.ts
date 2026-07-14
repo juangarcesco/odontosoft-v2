@@ -33,4 +33,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/pacientes/detalle-paciente/detalle-paciente').then((m) => m.DetallePaciente),
   },
+{
+  path: 'citas',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/citas/agenda/agenda').then((m) => m.Agenda),
+},
+
 ];
+

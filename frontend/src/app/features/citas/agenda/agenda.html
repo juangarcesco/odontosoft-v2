@@ -1,0 +1,50 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Agenda</h1>
+    <a routerLink="/citas/nueva" class="btn-primario">+ Nueva cita</a>
+  </div>
+
+  <div class="controles">
+    <div class="selector-vista">
+      <button [class.activo]="vista() === 'dia'" (click)="cambiarVista('dia')">Día</button>
+      <button [class.activo]="vista() === 'semana'" (click)="cambiarVista('semana')">Semana</button>
+      <button [class.activo]="vista() === 'mes'" (click)="cambiarVista('mes')">Mes</button>
+    </div>
+
+    <div class="navegacion">
+      <button (click)="irAnterior()">← Anterior</button>
+      <button (click)="irHoy()" class="btn-hoy">Hoy</button>
+      <button (click)="irSiguiente()">Siguiente →</button>
+    </div>
+  </div>
+
+  <h2 class="rango-actual">{{ rangoTexto() }}</h2>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && citas().length === 0) {
+    <p class="estado-info">No hay citas en este rango.</p>
+  }
+
+  @for (grupo of citasAgrupadasPorDia(); track grupo[0]) {
+    <div class="dia-agenda">
+      <h3>{{ formatearNombreDia(grupo[0]) }}</h3>
+      <div class="lista-citas">
+        @for (cita of grupo[1]; track cita._id) {
+          <a [routerLink]="['/citas', cita._id]" class="tarjeta-cita" [class]="claseEstado(cita.estado)">
+            <span class="hora">{{ cita.hora }}</span>
+            <span class="paciente">{{ nombrePaciente(cita) }}</span>
+            <span class="motivo">{{ cita.motivo }}</span>
+            <span class="badge-estado">{{ cita.estado }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  }
+</div>
