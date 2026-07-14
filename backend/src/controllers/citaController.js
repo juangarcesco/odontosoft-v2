@@ -1,4 +1,5 @@
-const { crearCita } = require('../services/citaService');
+const { crearCita, listarCitasPorRango } = require('../services/citaService');
+
 
 async function crear(req, res) {
   try {
@@ -29,4 +30,20 @@ async function crear(req, res) {
   }
 }
 
-module.exports = { crear };
+async function listar(req, res) {
+  try {
+    const { desde, hasta } = req.query;
+
+    if (!desde || !hasta) {
+      return res.status(400).json({ mensaje: 'Los parámetros "desde" y "hasta" son obligatorios' });
+    }
+
+    const citas = await listarCitasPorRango(desde, hasta);
+    return res.status(200).json({ citas });
+  } catch (error) {
+    console.error('Error al listar citas:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar };

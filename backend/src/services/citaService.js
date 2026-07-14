@@ -71,4 +71,21 @@ async function crearCita(datos, usuarioId) {
   return cita;
 }
 
-module.exports = { crearCita, existeConflictoHorario };
+async function listarCitasPorRango(fechaInicio, fechaFin) {
+  const inicio = new Date(fechaInicio);
+  inicio.setUTCHours(0, 0, 0, 0);
+
+  const fin = new Date(fechaFin);
+  fin.setUTCHours(23, 59, 59, 999);
+
+  const citas = await Cita.find({
+    fecha: { $gte: inicio, $lte: fin },
+  })
+    .populate('paciente', 'nombre apellido telefono')
+    .populate('odontologo', 'nombre')
+    .sort({ fecha: 1, hora: 1 });
+
+  return citas;
+}
+
+module.exports = { crearCita, existeConflictoHorario, listarCitasPorRango };
