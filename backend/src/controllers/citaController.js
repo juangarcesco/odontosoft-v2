@@ -4,6 +4,7 @@ const {
   cambiarEstadoCita,
   editarCita,
   cancelarCita,
+  obtenerCitasDeHoy,
 } = require('../services/citaService');
 
 async function crear(req, res) {
@@ -120,4 +121,14 @@ async function cancelar(req, res) {
   }
 }
 
-module.exports = { crear, listar, cambiarEstado, editar, cancelar };
+async function citasDeHoy(req, res) {
+  try {
+    const citas = await obtenerCitasDeHoy();
+    return res.status(200).json({ citas });
+  } catch (error) {
+    console.error('Error al obtener citas de hoy:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, cambiarEstado, editar, cancelar, citasDeHoy };

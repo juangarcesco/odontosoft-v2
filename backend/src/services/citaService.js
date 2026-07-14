@@ -157,6 +157,11 @@ async function cancelarCita(id) {
   return cita;
 }
 
+async function obtenerCitasDeHoy() {
+  const hoy = new Date();
+  return listarCitasPorRango(hoy, hoy);
+}
+
 module.exports = {
   crearCita,
   existeConflictoHorario,
@@ -164,4 +169,5 @@ module.exports = {
   cambiarEstadoCita,
   editarCita,
   cancelarCita,
+  obtenerCitasDeHoy,
 };
