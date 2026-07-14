@@ -3,6 +3,9 @@ const Paciente = require('../models/Paciente');
 
 const ESTADOS_QUE_BLOQUEAN_HORARIO = ['PROGRAMADA', 'CONFIRMADA'];
 
+const ESTADOS_VALIDOS = ['PROGRAMADA', 'CONFIRMADA', 'EN_ATENCION', 'FINALIZADA', 'CANCELADA', 'NO_ASISTIO'];
+
+
 function horaAMinutos(hora) {
   const [horas, minutos] = hora.split(':').map(Number);
   return horas * 60 + minutos;
@@ -88,4 +91,21 @@ async function listarCitasPorRango(fechaInicio, fechaFin) {
   return citas;
 }
 
-module.exports = { crearCita, existeConflictoHorario, listarCitasPorRango };
+
+async function cambiarEstadoCita(id, nuevoEstado) {
+  if (!ESTADOS_VALIDOS.includes(nuevoEstado)) {
+    const error = new Error(`Estado inválido. Valores permitidos: ${ESTADOS_VALIDOS.join(', ')}`);
+    error.codigo = 'ESTADO_INVALIDO';
+    throw error;
+  }
+
+  const cita = await Cita.findByIdAndUpdate(
+    id,
+    { estado: nuevoEstado },
+    { new: true }
+  );
+
+  return cita;
+}
+
+module.exports = { crearCita, existeConflictoHorario, listarCitasPorRango, cambiarEstadoCita };
