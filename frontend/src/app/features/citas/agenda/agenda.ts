@@ -2,8 +2,18 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CitaService, Cita, EstadoCita, PacienteResumen, OdontologoResumen } from '../../../core/cita';
+import { AuthService } from '../../../core/auth';
 
 type VistaAgenda = 'dia' | 'semana' | 'mes';
+
+const ESTADOS_DISPONIBLES: EstadoCita[] = [
+  'PROGRAMADA',
+  'CONFIRMADA',
+  'EN_ATENCION',
+  'FINALIZADA',
+  'CANCELADA',
+  'NO_ASISTIO',
+];
 
 @Component({
   selector: 'app-agenda',
@@ -14,12 +24,25 @@ type VistaAgenda = 'dia' | 'semana' | 'mes';
 })
 export class Agenda implements OnInit {
   private citaService = inject(CitaService);
+  private authService = inject(AuthService);
 
   vista = signal<VistaAgenda>('semana');
   fechaReferencia = signal(new Date());
   citas = signal<Cita[]>([]);
   cargando = signal(false);
   error = signal<string | null>(null);
+  actualizandoEstadoId = signal<string | null>(null);
+
+  estadosDisponibles = ESTADOS_DISPONIBLES;
+
+  puedeGestionar = computed(() => {
+    const rol = this.authService.getUsuario()?.rol;
+    return rol === 'RECEPCIONISTA' || rol === 'ODONTOLOGO';
+  });
+
+  puedeEditarOCancelar = computed(() => {
+    return this.authService.getUsuario()?.rol === 'RECEPCIONISTA';
+  });
 
   rangoTexto = computed(() => {
     const { desde, hasta } = this.calcularRango();
@@ -37,7 +60,6 @@ export class Agenda implements OnInit {
       if (!grupos.has(clave)) grupos.set(clave, []);
       grupos.get(clave)!.push(cita);
     }
-    // Ordenar cada grupo por hora
     for (const lista of grupos.values()) {
       lista.sort((a, b) => a.hora.localeCompare(b.hora));
     }
@@ -61,7 +83,7 @@ export class Agenda implements OnInit {
     }
 
     if (this.vista() === 'semana') {
-      const diaSemana = ref.getDay(); // 0 = domingo
+      const diaSemana = ref.getDay();
       const desde = new Date(ref);
       desde.setDate(ref.getDate() - diaSemana);
       const hasta = new Date(desde);
@@ -69,7 +91,6 @@ export class Agenda implements OnInit {
       return { desde, hasta };
     }
 
-    // mes
     const desde = new Date(ref.getFullYear(), ref.getMonth(), 1);
     const hasta = new Date(ref.getFullYear(), ref.getMonth() + 1, 0);
     return { desde, hasta };
@@ -117,6 +138,41 @@ export class Agenda implements OnInit {
     ref.setDate(ref.getDate() + dias * direccion);
     this.fechaReferencia.set(ref);
     this.cargarCitas();
+  }
+
+  onCambiarEstado(citaId: string | undefined, nuevoEstado: string): void {
+    if (!citaId) return;
+
+    this.actualizandoEstadoId.set(citaId);
+    this.citaService.cambiarEstado(citaId, nuevoEstado as EstadoCita).subscribe({
+      next: () => {
+        this.actualizandoEstadoId.set(null);
+        this.cargarCitas();
+      },
+      error: () => {
+        this.actualizandoEstadoId.set(null);
+        this.error.set('No se pudo actualizar el estado de la cita');
+      },
+    });
+  }
+
+  cancelarCita(citaId: string | undefined): void {
+    if (!citaId) return;
+
+    const confirmado = confirm('¿Seguro que deseas cancelar esta cita?');
+    if (!confirmado) return;
+
+    this.actualizandoEstadoId.set(citaId);
+    this.citaService.cancelar(citaId).subscribe({
+      next: () => {
+        this.actualizandoEstadoId.set(null);
+        this.cargarCitas();
+      },
+      error: () => {
+        this.actualizandoEstadoId.set(null);
+        this.error.set('No se pudo cancelar la cita');
+      },
+    });
   }
 
   nombrePaciente(cita: Cita): string {

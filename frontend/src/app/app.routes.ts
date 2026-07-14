@@ -39,5 +39,16 @@ export const routes: Routes = [
   loadComponent: () => import('./features/citas/agenda/agenda').then((m) => m.Agenda),
 },
 
+{
+  path: 'citas/nueva',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/citas/form-cita/form-cita').then((m) => m.FormCita),
+},
+{
+  path: 'citas/:id/editar',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/citas/form-cita/form-cita').then((m) => m.FormCita),
+},
+
 ];
 

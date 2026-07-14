@@ -37,12 +37,45 @@
       <h3>{{ formatearNombreDia(grupo[0]) }}</h3>
       <div class="lista-citas">
         @for (cita of grupo[1]; track cita._id) {
-          <a [routerLink]="['/citas', cita._id]" class="tarjeta-cita" [class]="claseEstado(cita.estado)">
-            <span class="hora">{{ cita.hora }}</span>
-            <span class="paciente">{{ nombrePaciente(cita) }}</span>
-            <span class="motivo">{{ cita.motivo }}</span>
-            <span class="badge-estado">{{ cita.estado }}</span>
-          </a>
+          <div class="tarjeta-cita" [class]="claseEstado(cita.estado)">
+            <div class="info-cita">
+              <span class="hora">{{ cita.hora }}</span>
+              <span class="paciente">{{ nombrePaciente(cita) }}</span>
+              <span class="motivo">{{ cita.motivo }}</span>
+              <span class="odontologo">{{ nombreOdontologo(cita) }}</span>
+            </div>
+
+            <div class="acciones-cita">
+              @if (puedeGestionar() && cita.estado !== 'CANCELADA') {
+                <select
+                  class="select-estado"
+                  [value]="cita.estado"
+                  [disabled]="actualizandoEstadoId() === cita._id"
+                  (change)="onCambiarEstado(cita._id, $any($event.target).value)"
+                >
+                  @for (estado of estadosDisponibles; track estado) {
+                    <option [value]="estado">{{ estado }}</option>
+                  }
+                </select>
+              } @else {
+                <span class="badge-estado">{{ cita.estado }}</span>
+              }
+
+              @if (puedeEditarOCancelar()) {
+                <a [routerLink]="['/citas', cita._id, 'editar']" class="link-editar">Editar</a>
+                @if (cita.estado !== 'CANCELADA') {
+                  <button
+                    type="button"
+                    class="btn-cancelar"
+                    [disabled]="actualizandoEstadoId() === cita._id"
+                    (click)="cancelarCita(cita._id)"
+                  >
+                    Cancelar
+                  </button>
+                }
+              }
+            </div>
+          </div>
         }
       </div>
     </div>

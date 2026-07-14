@@ -75,4 +75,8 @@ export class CitaService {
   cancelar(id: string): Observable<CitaResponse> {
     return this.http.patch<CitaResponse>(`${this.baseUrl}/${id}/cancelar`, {});
   }
+  
+  obtenerPorId(id: string): Observable<{ cita: Cita }> {
+  return this.http.get<{ cita: Cita }>(`${this.baseUrl}/${id}`);
+} 
 }
