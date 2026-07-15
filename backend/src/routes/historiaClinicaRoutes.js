@@ -3,6 +3,7 @@ const {
   crear,
   obtenerPorPaciente,
   actualizarOdontograma,
+  crearEvolucion,
 } = require('../controllers/historiaClinicaController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
@@ -21,6 +22,14 @@ router.patch(
   verificarToken,
   permitirRoles('ODONTOLOGO'),
   actualizarOdontograma
+);
+
+// RN-03: solo ODONTOLOGO crea evoluciones; RN-09: se registra automáticamente quién y cuándo
+router.post(
+  '/paciente/:pacienteId/evoluciones',
+  verificarToken,
+  permitirRoles('ODONTOLOGO'),
+  crearEvolucion
 );
 
 module.exports = router;

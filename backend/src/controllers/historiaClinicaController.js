@@ -2,6 +2,7 @@ const {
   crearHistoriaClinica,
   obtenerHistoriaPorPaciente,
   actualizarDiente,
+  agregarEvolucion,
 } = require('../services/historiaClinicaService');
 
 async function crear(req, res) {
@@ -68,4 +69,25 @@ async function actualizarOdontograma(req, res) {
   }
 }
 
-module.exports = { crear, obtenerPorPaciente, actualizarOdontograma };
+async function crearEvolucion(req, res) {
+  try {
+    const { pacienteId } = req.params;
+    const historia = await agregarEvolucion(pacienteId, req.body, req.usuario.id);
+    return res.status(201).json({ mensaje: 'Evolución clínica registrada exitosamente', historia });
+  } catch (error) {
+    if (error.codigo === 'HISTORIA_NO_EXISTE') {
+      return res.status(404).json({ mensaje: error.message });
+    }
+    if (error.name === 'ValidationError') {
+      const errores = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({ mensaje: 'Datos inválidos', errores });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al crear evolución clínica:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, obtenerPorPaciente, actualizarOdontograma, crearEvolucion };

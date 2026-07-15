@@ -53,4 +53,31 @@ async function actualizarDiente(pacienteId, numeroDiente, datosActualizados) {
   return historia;
 }
 
-module.exports = { crearHistoriaClinica, obtenerHistoriaPorPaciente, actualizarDiente };
+async function agregarEvolucion(pacienteId, datosEvolucion, odontologoId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const nuevaEvolucion = {
+    fecha: datosEvolucion.fecha || new Date(),
+    odontologo: odontologoId, // RN-09: queda registrado quién la realizó
+    descripcion: datosEvolucion.descripcion,
+    tratamientosRealizados: datosEvolucion.tratamientosRealizados || [],
+  };
+
+  historia.evoluciones.push(nuevaEvolucion);
+  await historia.save();
+
+  return historia;
+}
+
+module.exports = {
+  crearHistoriaClinica,
+  obtenerHistoriaPorPaciente,
+  actualizarDiente,
+  agregarEvolucion,
+};
