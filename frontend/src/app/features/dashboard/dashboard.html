@@ -1,9 +1,41 @@
-<div style="padding: 2rem; font-family: sans-serif;">
-  <h1>Bienvenido a OdontoSoft</h1>
-  <p>Sesión iniciada correctamente.</p>
-  <nav style="margin: 1rem 0; display: flex; gap: 1rem;">
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Bienvenido a OdontoSoft</h1>
+    <button (click)="cerrarSesion()" class="btn-secundario">Cerrar sesión</button>
+  </div>
+
+  <nav class="accesos-rapidos">
     <a routerLink="/pacientes">Ver Pacientes</a>
-    <a routerLink="/citas">Ver Citas</a>
+    <a routerLink="/citas">Ver Agenda</a>
   </nav>
-  <button (click)="cerrarSesion()">Cerrar sesión</button>
+
+  <section class="widget-citas-hoy">
+    <h2>Citas de hoy</h2>
+
+    @if (cargandoCitas()) {
+      <p class="estado-info">Cargando...</p>
+    }
+
+    @if (errorCitas()) {
+      <p class="estado-error">{{ errorCitas() }}</p>
+    }
+
+    @if (!cargandoCitas() && citasHoy().length === 0) {
+      <p class="estado-info">No hay citas programadas para hoy.</p>
+    }
+
+    @if (citasHoy().length > 0) {
+      <div class="lista-citas-hoy">
+        @for (cita of citasHoy(); track cita._id) {
+          <a [routerLink]="['/citas', cita._id, 'editar']" class="tarjeta-cita-hoy" [class]="claseEstado(cita.estado)">
+            <span class="hora">{{ cita.hora }}</span>
+            <span class="paciente">{{ nombrePaciente(cita) }}</span>
+            <span class="motivo">{{ cita.motivo }}</span>
+            <span class="odontologo">{{ nombreOdontologo(cita) }}</span>
+            <span class="badge-estado">{{ cita.estado }}</span>
+          </a>
+        }
+      </div>
+    }
+  </section>
 </div>

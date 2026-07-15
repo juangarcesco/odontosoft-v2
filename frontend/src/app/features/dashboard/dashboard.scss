@@ -1,0 +1,122 @@
+.contenedor {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0;
+    color: #2c3e50;
+  }
+}
+
+.btn-secundario {
+  background: white;
+  border: 1px solid #dcdfe3;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}
+
+.accesos-rapidos {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  a {
+    color: #2980b9;
+    text-decoration: none;
+    font-size: 0.95rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.widget-citas-hoy {
+  background: white;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 1.25rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: #34495e;
+  }
+}
+
+.estado-info,
+.estado-error {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.estado-error {
+  color: #e74c3c;
+}
+
+.lista-citas-hoy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tarjeta-cita-hoy {
+  display: grid;
+  grid-template-columns: 55px 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #2c3e50;
+  border-left: 4px solid #bdc3c7;
+  background: #f9fafb;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: #f1f3f5;
+  }
+
+  .hora {
+    font-weight: 600;
+  }
+
+  .motivo,
+  .odontologo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #7f8c8d;
+  }
+}
+
+.badge-estado {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid currentColor;
+  justify-self: end;
+}
+
+.estado-programada { border-left-color: #3498db; }
+.estado-confirmada { border-left-color: #27ae60; }
+.estado-en-atencion { border-left-color: #f39c12; }
+.estado-finalizada { border-left-color: #7f8c8d; }
+.estado-cancelada { border-left-color: #e74c3c; opacity: 0.6; }
+.estado-no-asistio { border-left-color: #c0392b; opacity: 0.7; }
