@@ -6,7 +6,9 @@ const {
   actualizarOdontograma,
   crearEvolucion,
   editarAntecedentes,
+  desactivarEvolucionClinica,
 } = require('../controllers/historiaClinicaController');
+
 
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
@@ -40,6 +42,14 @@ router.patch(
   verificarToken,
   permitirRoles('ODONTOLOGO'),
   editarAntecedentes
+);
+
+// RN-10: única acción de ADMIN sobre historia clínica — desactivar, nunca editar
+router.patch(
+  '/paciente/:pacienteId/evoluciones/:evolucionId/desactivar',
+  verificarToken,
+  permitirRoles('ADMIN'),
+  desactivarEvolucionClinica
 );
 
 module.exports = router;

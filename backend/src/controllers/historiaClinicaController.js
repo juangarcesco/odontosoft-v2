@@ -4,6 +4,7 @@ const {
   actualizarDiente,
   agregarEvolucion,
   actualizarAntecedentes,
+  desactivarEvolucion,
 } = require('../services/historiaClinicaService');
 
 async function crear(req, res) {
@@ -112,10 +113,32 @@ async function editarAntecedentes(req, res) {
   }
 }
 
+async function desactivarEvolucionClinica(req, res) {
+  try {
+    const { pacienteId, evolucionId } = req.params;
+    const historia = await desactivarEvolucion(pacienteId, evolucionId, req.usuario.id);
+
+    return res.status(200).json({ mensaje: 'Evolución clínica desactivada exitosamente', historia });
+  } catch (error) {
+    if (error.codigo === 'HISTORIA_NO_EXISTE' || error.codigo === 'EVOLUCION_NO_EXISTE') {
+      return res.status(404).json({ mensaje: error.message });
+    }
+    if (error.codigo === 'YA_DESACTIVADA') {
+      return res.status(409).json({ mensaje: error.message });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID inválido' });
+    }
+    console.error('Error al desactivar evolución clínica:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
 module.exports = {
   crear,
   obtenerPorPaciente,
   actualizarOdontograma,
   crearEvolucion,
   editarAntecedentes,
+  desactivarEvolucionClinica,
 };

@@ -85,10 +85,43 @@ async function actualizarAntecedentes(pacienteId, antecedentesMedicos) {
   return historia;
 }
 
+async function desactivarEvolucion(pacienteId, evolucionId, adminId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const evolucion = historia.evoluciones.id(evolucionId);
+
+  if (!evolucion) {
+    const error = new Error('Evolución clínica no encontrada');
+    error.codigo = 'EVOLUCION_NO_EXISTE';
+    throw error;
+  }
+
+  if (!evolucion.activo) {
+    const error = new Error('Esta evolución ya se encuentra desactivada');
+    error.codigo = 'YA_DESACTIVADA';
+    throw error;
+  }
+
+  evolucion.activo = false;
+  evolucion.desactivadoPor = adminId;
+  evolucion.fechaDesactivacion = new Date();
+
+  await historia.save();
+
+  return historia;
+}
+
 module.exports = {
   crearHistoriaClinica,
   obtenerHistoriaPorPaciente,
   actualizarDiente,
   agregarEvolucion,
   actualizarAntecedentes,
+  desactivarEvolucion,
 };
