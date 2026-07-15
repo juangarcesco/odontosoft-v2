@@ -24,4 +24,33 @@ async function obtenerHistoriaPorPaciente(pacienteId) {
   return historia;
 }
 
-module.exports = { crearHistoriaClinica, obtenerHistoriaPorPaciente };
+async function actualizarDiente(pacienteId, numeroDiente, datosActualizados) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const diente = historia.odontograma.find((d) => d.numero === Number(numeroDiente));
+
+  if (!diente) {
+    const error = new Error('Número de diente inválido');
+    error.codigo = 'DIENTE_INVALIDO';
+    throw error;
+  }
+
+  if (datosActualizados.estado !== undefined) {
+    diente.estado = datosActualizados.estado;
+  }
+  if (datosActualizados.observaciones !== undefined) {
+    diente.observaciones = datosActualizados.observaciones;
+  }
+
+  await historia.save();
+
+  return historia;
+}
+
+module.exports = { crearHistoriaClinica, obtenerHistoriaPorPaciente, actualizarDiente };

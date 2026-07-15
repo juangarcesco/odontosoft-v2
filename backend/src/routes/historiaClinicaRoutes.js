@@ -1,5 +1,9 @@
 const express = require('express');
-const { crear, obtenerPorPaciente } = require('../controllers/historiaClinicaController');
+const {
+  crear,
+  obtenerPorPaciente,
+  actualizarOdontograma,
+} = require('../controllers/historiaClinicaController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
 
@@ -10,5 +14,13 @@ router.post('/', verificarToken, permitirRoles('ODONTOLOGO'), crear);
 
 // ADMIN y ODONTOLOGO pueden ver (RECEPCIONISTA sin acceso, según matriz)
 router.get('/paciente/:pacienteId', verificarToken, permitirRoles('ADMIN', 'ODONTOLOGO'), obtenerPorPaciente);
+
+// RN-03: solo ODONTOLOGO edita contenido clínico
+router.patch(
+  '/paciente/:pacienteId/odontograma/:numeroDiente',
+  verificarToken,
+  permitirRoles('ODONTOLOGO'),
+  actualizarOdontograma
+);
 
 module.exports = router;
