@@ -1,0 +1,72 @@
+<div class="contenedor">
+  <h1>{{ modoEdicion() ? 'Editar cita' : 'Nueva cita' }}</h1>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (!cargando()) {
+    <form [formGroup]="citaForm" (ngSubmit)="onSubmit()">
+      <div class="campo">
+        <label for="buscarPaciente">Buscar paciente *</label>
+        <input
+          id="buscarPaciente"
+          type="text"
+          placeholder="Nombre o documento del paciente..."
+          (input)="buscarPacientes($any($event.target).value)"
+        />
+        <select formControlName="paciente" size="4" class="lista-resultados">
+          @for (p of pacientesEncontrados(); track p._id) {
+            <option [value]="p._id">{{ p.nombre }} {{ p.apellido }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="odontologo">Odontólogo *</label>
+        <select id="odontologo" formControlName="odontologo">
+          <option value="" disabled>Seleccione...</option>
+          @for (o of odontologos(); track o._id) {
+            <option [value]="o._id">{{ o.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="fecha">Fecha *</label>
+          <input id="fecha" type="date" formControlName="fecha" />
+        </div>
+        <div class="campo">
+          <label for="hora">Hora *</label>
+          <input id="hora" type="time" formControlName="hora" />
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="duracion">Duración *</label>
+        <select id="duracion" formControlName="duracion">
+          <option [value]="30">30 minutos</option>
+          <option [value]="45">45 minutos</option>
+          <option [value]="60">60 minutos</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="motivo">Motivo *</label>
+        <textarea id="motivo" formControlName="motivo" rows="3"></textarea>
+      </div>
+
+      @if (error()) {
+        <div class="estado-error">{{ error() }}</div>
+      }
+
+      <div class="acciones">
+        <button type="button" class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-primario" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>
