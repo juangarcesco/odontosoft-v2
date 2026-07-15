@@ -1,0 +1,130 @@
+.contenedor-form {
+  background: white;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 1.25rem;
+  font-family: sans-serif;
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: #2c3e50;
+  }
+}
+
+.campo {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: #34495e;
+    margin-bottom: 0.35rem;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #dcdfe3;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+}
+
+.seccion-tratamientos {
+  margin-bottom: 1rem;
+
+  > label {
+    display: block;
+    font-size: 0.85rem;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.fila-tratamiento {
+  display: grid;
+  grid-template-columns: 70px 1.5fr 1fr auto;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+
+  input {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #dcdfe3;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+  }
+}
+
+.btn-quitar {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem;
+}
+
+.btn-agregar {
+  background: none;
+  border: 1px dashed #dcdfe3;
+  color: #2980b9;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}
+
+.estado-error {
+  background: #fdecea;
+  color: #e74c3c;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-primario {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background: #2471a3;
+  }
+}
+
+.btn-secundario {
+  background: white;
+  border: 1px solid #dcdfe3;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}
