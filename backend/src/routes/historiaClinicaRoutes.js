@@ -1,10 +1,13 @@
 const express = require('express');
+
 const {
   crear,
   obtenerPorPaciente,
   actualizarOdontograma,
   crearEvolucion,
+  editarAntecedentes,
 } = require('../controllers/historiaClinicaController');
+
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
 
@@ -30,6 +33,13 @@ router.post(
   verificarToken,
   permitirRoles('ODONTOLOGO'),
   crearEvolucion
+);
+
+router.patch(
+  '/paciente/:pacienteId/antecedentes',
+  verificarToken,
+  permitirRoles('ODONTOLOGO'),
+  editarAntecedentes
 );
 
 module.exports = router;

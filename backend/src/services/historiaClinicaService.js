@@ -75,9 +75,20 @@ async function agregarEvolucion(pacienteId, datosEvolucion, odontologoId) {
   return historia;
 }
 
+async function actualizarAntecedentes(pacienteId, antecedentesMedicos) {
+  const historia = await HistoriaClinica.findOneAndUpdate(
+    { paciente: pacienteId },
+    { antecedentesMedicos },
+    { new: true, runValidators: true }
+  );
+
+  return historia;
+}
+
 module.exports = {
   crearHistoriaClinica,
   obtenerHistoriaPorPaciente,
   actualizarDiente,
   agregarEvolucion,
+  actualizarAntecedentes,
 };

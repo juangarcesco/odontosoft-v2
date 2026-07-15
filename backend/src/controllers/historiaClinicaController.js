@@ -3,6 +3,7 @@ const {
   obtenerHistoriaPorPaciente,
   actualizarDiente,
   agregarEvolucion,
+  actualizarAntecedentes,
 } = require('../services/historiaClinicaService');
 
 async function crear(req, res) {
@@ -90,4 +91,31 @@ async function crearEvolucion(req, res) {
   }
 }
 
-module.exports = { crear, obtenerPorPaciente, actualizarOdontograma, crearEvolucion };
+async function editarAntecedentes(req, res) {
+  try {
+    const { pacienteId } = req.params;
+    const { antecedentesMedicos } = req.body;
+
+    const historia = await actualizarAntecedentes(pacienteId, antecedentesMedicos);
+
+    if (!historia) {
+      return res.status(404).json({ mensaje: 'Este paciente no tiene historia clínica creada' });
+    }
+
+    return res.status(200).json({ mensaje: 'Antecedentes actualizados exitosamente', historia });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al actualizar antecedentes:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = {
+  crear,
+  obtenerPorPaciente,
+  actualizarOdontograma,
+  crearEvolucion,
+  editarAntecedentes,
+};
