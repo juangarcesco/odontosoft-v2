@@ -1,4 +1,4 @@
-const { crearHistoriaClinica } = require('../services/historiaClinicaService');
+const { crearHistoriaClinica, obtenerHistoriaPorPaciente } = require('../services/historiaClinicaService');
 
 async function crear(req, res) {
   try {
@@ -20,4 +20,24 @@ async function crear(req, res) {
   }
 }
 
-module.exports = { crear };
+async function obtenerPorPaciente(req, res) {
+  try {
+    const { pacienteId } = req.params;
+    const historia = await obtenerHistoriaPorPaciente(pacienteId);
+
+    if (!historia) {
+      return res.status(404).json({ mensaje: 'Este paciente no tiene historia clínica creada' });
+    }
+
+    // Filtrar evoluciones desactivadas de la vista "vigente" para roles no-ODONTOLOGO... (ver nota abajo)
+    return res.status(200).json({ historia });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al obtener historia clínica:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, obtenerPorPaciente };

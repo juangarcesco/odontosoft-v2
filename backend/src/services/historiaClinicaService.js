@@ -17,4 +17,11 @@ async function crearHistoriaClinica(pacienteId, usuarioId) {
   return historia;
 }
 
-module.exports = { crearHistoriaClinica };
+async function obtenerHistoriaPorPaciente(pacienteId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId })
+    .populate('evoluciones.odontologo', 'nombre')
+    .populate('adjuntos.subidoPor', 'nombre');
+  return historia;
+}
+
+module.exports = { crearHistoriaClinica, obtenerHistoriaPorPaciente };
