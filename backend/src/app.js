@@ -5,7 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const pacienteRoutes = require('./routes/pacienteRoutes');
 const citaRoutes = require('./routes/citaRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
-
+const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use('/api/pacientes', pacienteRoutes);
 app.use('/api/citas', citaRoutes);
-
+app.use('/api/historias-clinicas', historiaClinicaRoutes);
 
 
 app.get('/api/health', (req, res) => {
