@@ -1,0 +1,78 @@
+<div class="odontograma-contenedor">
+  <div class="arcada">
+    <span class="etiqueta-arcada">Arcada superior</span>
+    <div class="fila-dientes">
+      @for (diente of arcadaSuperior(); track diente.numero) {
+        <button
+          type="button"
+          class="diente"
+          [class.solo-lectura]="soloLectura"
+          [class.seleccionado]="dienteSeleccionado()?.numero === diente.numero"
+          [style.background-color]="colorDeEstado(diente.estado)"
+          [style.color]="diente.estado === 'SANO' ? '#2c3e50' : '#ffffff'"
+          [title]="'Diente ' + diente.numero + ' — ' + etiquetaDeEstado(diente.estado)"
+          (click)="seleccionarDiente(diente)"
+        >
+          {{ diente.numero }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="arcada">
+    <div class="fila-dientes">
+      @for (diente of arcadaInferior(); track diente.numero) {
+        <button
+          type="button"
+          class="diente"
+          [class.solo-lectura]="soloLectura"
+          [class.seleccionado]="dienteSeleccionado()?.numero === diente.numero"
+          [style.background-color]="colorDeEstado(diente.estado)"
+          [style.color]="diente.estado === 'SANO' ? '#2c3e50' : '#ffffff'"
+          [title]="'Diente ' + diente.numero + ' — ' + etiquetaDeEstado(diente.estado)"
+          (click)="seleccionarDiente(diente)"
+        >
+          {{ diente.numero }}
+        </button>
+      }
+    </div>
+    <span class="etiqueta-arcada">Arcada inferior</span>
+  </div>
+
+  <div class="leyenda">
+    @for (estado of estadosDisponibles; track estado) {
+      <div class="item-leyenda">
+        <span class="muestra-color" [style.background-color]="colorDeEstado(estado)"></span>
+        <span>{{ etiquetaDeEstado(estado) }}</span>
+      </div>
+    }
+  </div>
+
+  @if (dienteSeleccionado(); as diente) {
+    <div class="panel-edicion">
+      <div class="encabezado-panel">
+        <h3>Diente {{ diente.numero }}</h3>
+        <button type="button" class="cerrar" (click)="cerrarPanel()">✕</button>
+      </div>
+
+      <div class="campo">
+        <label>Estado</label>
+        <select [(ngModel)]="estadoEditando">
+          @for (estado of estadosDisponibles; track estado) {
+            <option [value]="estado">{{ etiquetaDeEstado(estado) }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Observaciones</label>
+        <textarea [(ngModel)]="observacionesEditando" rows="3"></textarea>
+      </div>
+
+      <div class="acciones-panel">
+        <button type="button" class="btn-secundario" (click)="cerrarPanel()">Cancelar</button>
+        <button type="button" class="btn-primario" (click)="guardarCambio()">Guardar</button>
+      </div>
+    </div>
+  }
+</div>
