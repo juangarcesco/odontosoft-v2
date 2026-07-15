@@ -5,7 +5,9 @@ const {
   agregarEvolucion,
   actualizarAntecedentes,
   desactivarEvolucion,
+  agregarAdjunto,
 } = require('../services/historiaClinicaService');
+
 
 async function crear(req, res) {
   try {
@@ -134,6 +136,29 @@ async function desactivarEvolucionClinica(req, res) {
   }
 }
 
+async function subirAdjunto(req, res) {
+  try {
+    const { pacienteId } = req.params;
+    const { tipo } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ mensaje: 'No se recibió ningún archivo' });
+    }
+
+    const historia = await agregarAdjunto(pacienteId, req.file, tipo, req.usuario.id);
+    return res.status(201).json({ mensaje: 'Adjunto subido exitosamente', historia });
+  } catch (error) {
+    if (error.codigo === 'HISTORIA_NO_EXISTE') {
+      return res.status(404).json({ mensaje: error.message });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al subir adjunto:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
 module.exports = {
   crear,
   obtenerPorPaciente,
@@ -141,4 +166,5 @@ module.exports = {
   crearEvolucion,
   editarAntecedentes,
   desactivarEvolucionClinica,
-};
+  subirAdjunto,
+}

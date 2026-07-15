@@ -9,6 +9,8 @@ const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
 
 const app = express();
 
+const path = require('path');
+
 app.set('trust proxy', 1); // necesario en Codespaces / detrás de proxy
 
 app.use(cors());
@@ -17,7 +19,7 @@ app.use(morgan('dev'));
 app.use('/api/pacientes', pacienteRoutes);
 app.use('/api/citas', citaRoutes);
 app.use('/api/historias-clinicas', historiaClinicaRoutes);
-
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'OdontoSoft API' });

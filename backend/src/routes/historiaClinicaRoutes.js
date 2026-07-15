@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { upload } = require('../middlewares/uploadMiddleware');
 const {
   crear,
   obtenerPorPaciente,
@@ -7,6 +7,7 @@ const {
   crearEvolucion,
   editarAntecedentes,
   desactivarEvolucionClinica,
+  subirAdjunto,
 } = require('../controllers/historiaClinicaController');
 
 
@@ -50,6 +51,15 @@ router.patch(
   verificarToken,
   permitirRoles('ADMIN'),
   desactivarEvolucionClinica
+);
+
+// RF-30: adjuntar imágenes es contenido clínico, exclusivo de ODONTOLOGO (RN-03)
+router.post(
+  '/paciente/:pacienteId/adjuntos',
+  verificarToken,
+  permitirRoles('ODONTOLOGO'),
+  upload.single('archivo'),
+  subirAdjunto
 );
 
 module.exports = router;

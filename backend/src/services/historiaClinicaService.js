@@ -1,6 +1,11 @@
 const HistoriaClinica = require('../models/HistoriaClinica');
 const Paciente = require('../models/Paciente');
 
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+
 async function crearHistoriaClinica(pacienteId, usuarioId) {
   const paciente = await Paciente.findById(pacienteId);
   if (!paciente) {
@@ -117,6 +122,37 @@ async function desactivarEvolucion(pacienteId, evolucionId, adminId) {
   return historia;
 }
 
+async function agregarAdjunto(pacienteId, archivo, tipo, usuarioId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  // RNF-09: optimizar la imagen antes de guardarla (redimensionar + comprimir)
+  const nombreUnico = `${crypto.randomUUID()}.webp`;
+  const rutaDestino = path.join(__dirname, '../../uploads/historias-clinicas', nombreUnico);
+
+  await sharp(archivo.buffer)
+    .resize({ width: 1600, withoutEnlargement: true }) // no agranda imágenes pequeñas
+    .webp({ quality: 80 })
+    .toFile(rutaDestino);
+
+  const nuevoAdjunto = {
+    nombreArchivo: archivo.originalname,
+    url: `/uploads/historias-clinicas/${nombreUnico}`,
+    tipo: tipo || 'OTRO',
+    subidoPor: usuarioId,
+  };
+
+  historia.adjuntos.push(nuevoAdjunto);
+  await historia.save();
+
+  return historia;
+}
+
 module.exports = {
   crearHistoriaClinica,
   obtenerHistoriaPorPaciente,
@@ -124,4 +160,5 @@ module.exports = {
   agregarEvolucion,
   actualizarAntecedentes,
   desactivarEvolucion,
+  agregarAdjunto,
 };
