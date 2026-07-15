@@ -127,7 +127,7 @@ ng serve --host 0.0.0.0
 
 > **Nota para Codespaces:** el navegador se ejecuta en la máquina local del usuario, no dentro del Codespace. Usar `http://localhost:3000` en `environment.ts` no funcionará — debe usarse la URL pública reenviada (`https://<nombre-codespace>-3000.app.github.dev`).
 
-### Rutina de arranque rápido (sesiones posteriores)
+### <mark>Rutina de arranque rápido (sesiones posteriores)</mark>
 
 Cada vez que se retome el proyecto tras una pausa, el contenedor de Mongo puede haberse detenido. Ejecutar en orden:
 
