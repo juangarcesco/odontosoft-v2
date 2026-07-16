@@ -1,0 +1,57 @@
+<div class="contenedor-form">
+  <h3>Nueva evolución clínica</h3>
+
+  <form [formGroup]="evolucionForm" (ngSubmit)="onSubmit()">
+    <div class="campo">
+      <label for="descripcion">Descripción *</label>
+      <textarea id="descripcion" formControlName="descripcion" rows="3" placeholder="Describa lo realizado en la consulta..."></textarea>
+    </div>
+
+    <div class="seccion-tratamientos">
+      <label>Tratamientos realizados</label>
+
+      <div formArrayName="tratamientos">
+        @for (tratamiento of tratamientos.controls; track $index; let i = $index) {
+          <div class="fila-tratamiento" [formGroupName]="i">
+            <input
+              type="number"
+              formControlName="diente"
+              placeholder="Diente #"
+              min="1"
+              max="32"
+              class="campo-diente"
+            />
+            <input
+              type="text"
+              formControlName="procedimiento"
+              placeholder="Procedimiento realizado *"
+              class="campo-procedimiento"
+            />
+            <input
+              type="text"
+              formControlName="observaciones"
+              placeholder="Observaciones"
+              class="campo-observaciones"
+            />
+            @if (tratamientos.length > 1) {
+              <button type="button" class="btn-quitar" (click)="quitarTratamiento(i)">✕</button>
+            }
+          </div>
+        }
+      </div>
+
+      <button type="button" class="btn-agregar" (click)="agregarTratamiento()">+ Agregar tratamiento</button>
+    </div>
+
+    @if (error()) {
+      <div class="estado-error">{{ error() }}</div>
+    }
+
+    <div class="acciones">
+      <button type="button" class="btn-secundario" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="btn-primario" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar evolución' }}
+      </button>
+    </div>
+  </form>
+</div>

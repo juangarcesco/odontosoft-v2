@@ -50,5 +50,12 @@ export const routes: Routes = [
   loadComponent: () => import('./features/citas/form-cita/form-cita').then((m) => m.FormCita),
 },
 
+{
+  path: 'pacientes/:pacienteId/historia-clinica',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/historia-clinica/vista-historia/vista-historia').then((m) => m.VistaHistoria),
+},
+
 ];
 
