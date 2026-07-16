@@ -12,6 +12,7 @@ import {
 import { AuthService } from '../../../core/auth';
 import { Odontograma } from '../odontograma/odontograma';
 import { FormEvolucion } from '../form-evolucion/form-evolucion';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-vista-historia',
@@ -58,7 +59,7 @@ export class VistaHistoria implements OnInit {
       },
       error: (err) => {
         if (err.status === 404) {
-          this.historia.set(null); // no existe historia todavía
+          this.historia.set(null);
         } else {
           this.error.set('Error al cargar la historia clínica');
         }
@@ -140,6 +141,11 @@ export class VistaHistoria implements OnInit {
         input.value = '';
       },
     });
+  }
+
+  urlCompleta(rutaRelativa: string): string {
+    const baseUrl = environment.apiUrl.replace('/api', '');
+    return `${baseUrl}${rutaRelativa}`;
   }
 
   nombreUsuario(valor: string | UsuarioResumen | null | undefined): string {
