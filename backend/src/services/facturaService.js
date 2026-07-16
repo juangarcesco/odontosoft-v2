@@ -1,7 +1,7 @@
 const HistoriaClinica = require('../models/HistoriaClinica');
 const Factura = require('../models/Factura');
 const METODOS_PAGO_VALIDOS = ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA'];
-
+const PDFDocument = require('pdfkit');
 
 
 async function obtenerTratamientosFacturables(pacienteId) {
@@ -138,10 +138,93 @@ async function listarFacturasPorPaciente(pacienteId) {
   return facturas;
 }
 
+async function generarPdfFactura(facturaId) {
+  const factura = await Factura.findById(facturaId)
+    .populate('paciente', 'nombre apellido tipoDocumento numeroDocumento')
+    .populate('creadoPor', 'nombre');
+
+  if (!factura) {
+    const error = new Error('Factura no encontrada');
+    error.codigo = 'FACTURA_NO_EXISTE';
+    throw error;
+  }
+
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ margin: 50 });
+    const buffers = [];
+
+    doc.on('data', (chunk) => buffers.push(chunk));
+    doc.on('end', () => resolve(Buffer.concat(buffers)));
+    doc.on('error', reject);
+
+    const paciente = factura.paciente;
+
+    // Encabezado
+    doc.fontSize(18).text('OdontoSoft', { align: 'left' });
+    doc.fontSize(10).fillColor('#7f8c8d').text('Factura de servicios odontológicos', { align: 'left' });
+    doc.moveDown();
+
+    // Datos de la factura
+    doc.fillColor('#000000').fontSize(11);
+    doc.text(`Factura N°: ${factura._id}`);
+    doc.text(`Fecha de emisión: ${factura.createdAt.toLocaleDateString('es-CO')}`);
+    doc.text(`Estado: ${factura.estado}`);
+    doc.moveDown();
+
+    doc.text(`Paciente: ${paciente.nombre} ${paciente.apellido}`);
+    doc.text(`Documento: ${paciente.tipoDocumento} ${paciente.numeroDocumento}`);
+    doc.moveDown();
+
+    // Tabla de ítems
+    doc.fontSize(12).text('Tratamientos realizados', { underline: true });
+    doc.moveDown(0.5);
+
+    factura.items.forEach((item) => {
+      const dienteTexto = item.diente ? `Diente ${item.diente} — ` : '';
+      doc.fontSize(10).text(
+        `${dienteTexto}${item.procedimiento}`,
+        { continued: true, width: 350 }
+      );
+      doc.text(`$${item.valor.toLocaleString('es-CO')}`, { align: 'right' });
+    });
+
+    doc.moveDown();
+    doc.fontSize(10).text(`IVA: $${factura.iva.toLocaleString('es-CO')}`, { align: 'right' });
+    doc.fontSize(12).text(`TOTAL: $${factura.valorTotal.toLocaleString('es-CO')}`, { align: 'right' });
+    doc.moveDown(0.5);
+
+    // Historial de pagos
+    if (factura.pagos.length > 0) {
+      doc.fontSize(12).text('Pagos registrados', { underline: true });
+      doc.moveDown(0.3);
+      factura.pagos.forEach((pago) => {
+        doc.fontSize(9).text(
+          `${new Date(pago.fecha).toLocaleDateString('es-CO')} — ${pago.metodoPago} — $${pago.monto.toLocaleString('es-CO')}`
+        );
+      });
+      doc.moveDown();
+    }
+
+    doc.fontSize(11).fillColor(factura.saldoPendiente > 0 ? '#e74c3c' : '#27ae60')
+      .text(`Saldo pendiente: $${factura.saldoPendiente.toLocaleString('es-CO')}`, { align: 'right' });
+
+    if (factura.estado === 'ANULADA') {
+      doc.moveDown();
+      doc.fillColor('#e74c3c').fontSize(11).text(
+        `** FACTURA ANULADA — Motivo: ${factura.motivoAnulacion} **`,
+        { align: 'center' }
+      );
+    }
+
+    doc.end();
+  });
+}
+
 module.exports = {
   obtenerTratamientosFacturables,
   crearFactura,
   registrarPago,
   anularFactura,
   listarFacturasPorPaciente,
+  generarPdfFactura,
 };

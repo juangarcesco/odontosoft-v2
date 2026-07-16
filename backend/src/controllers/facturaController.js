@@ -4,6 +4,7 @@ const {
   registrarPago,
   anularFactura,
   listarFacturasPorPaciente,
+  generarPdfFactura,
 } = require('../services/facturaService');
 
 async function tratamientosFacturables(req, res) {
@@ -102,4 +103,28 @@ async function listarPorPaciente(req, res) {
   }
 }
 
-module.exports = { tratamientosFacturables, crear, pagar, anular, listarPorPaciente };
+async function descargarPdf(req, res) {
+  try {
+    const { id } = req.params;
+    const bufferPdf = await generarPdfFactura(id);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=factura-${id}.pdf`,
+      'Content-Length': bufferPdf.length,
+    });
+
+    return res.send(bufferPdf);
+  } catch (error) {
+    if (error.codigo === 'FACTURA_NO_EXISTE') {
+      return res.status(404).json({ mensaje: error.message });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de factura inválido' });
+    }
+    console.error('Error al generar PDF de factura:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { tratamientosFacturables, crear, pagar, anular, listarPorPaciente, descargarPdf };

@@ -6,6 +6,7 @@ const {
   pagar,
   anular,
   listarPorPaciente,
+  descargarPdf,
 } = require('../controllers/facturaController');
 
 const { verificarToken } = require('../middlewares/authMiddleware');
@@ -34,5 +35,13 @@ router.get(
 router.patch('/:id/pagar', verificarToken, permitirRoles('RECEPCIONISTA'), pagar);
 
 router.patch('/:id/anular', verificarToken, permitirRoles('RECEPCIONISTA'), anular);
+
+// Lectura de PDF: mismos permisos que consultar el historial
+router.get(
+  '/:id/pdf',
+  verificarToken,
+  permitirRoles('ADMIN', 'ODONTOLOGO', 'RECEPCIONISTA'),
+  descargarPdf
+);
 
 module.exports = router;
