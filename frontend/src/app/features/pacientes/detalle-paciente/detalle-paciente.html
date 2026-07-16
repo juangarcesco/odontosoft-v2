@@ -17,6 +17,7 @@
         </span>
       </div>
       <div class="acciones-encabezado">
+        <a [routerLink]="['/pacientes', p._id, 'historia-clinica']" class="btn-secundario">Historia clínica</a>
         <a [routerLink]="['/pacientes', p._id, 'editar']" class="btn-secundario">Editar</a>
         @if (p.estado === 'ACTIVO') {
           <button

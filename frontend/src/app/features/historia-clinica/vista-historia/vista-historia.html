@@ -1,0 +1,123 @@
+<div class="contenedor">
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && !historia()) {
+    <div class="sin-historia">
+      <p>Este paciente aún no tiene historia clínica creada.</p>
+      @if (esOdontologo()) {
+        <button class="btn-primario" [disabled]="creandoHistoria()" (click)="crearHistoria()">
+          {{ creandoHistoria() ? 'Creando...' : 'Crear historia clínica' }}
+        </button>
+      }
+    </div>
+  }
+
+  @if (historia(); as h) {
+    <h1>Historia Clínica</h1>
+
+    <section class="tarjeta">
+      <h2>Antecedentes médicos</h2>
+      <textarea
+        [(ngModel)]="antecedentesEditando"
+        rows="3"
+        [disabled]="!esOdontologo()"
+        placeholder="Sin antecedentes registrados"
+      ></textarea>
+      @if (esOdontologo()) {
+        <button class="btn-secundario" [disabled]="guardandoAntecedentes()" (click)="guardarAntecedentes()">
+          {{ guardandoAntecedentes() ? 'Guardando...' : 'Guardar antecedentes' }}
+        </button>
+      }
+    </section>
+
+    <section class="tarjeta">
+      <h2>Odontograma</h2>
+      <app-odontograma
+        [dientes]="h.odontograma"
+        [soloLectura]="!esOdontologo()"
+        (cambiarDiente)="onCambiarDiente($event)"
+      />
+    </section>
+
+    <section class="tarjeta">
+      <div class="encabezado-seccion">
+        <h2>Evoluciones clínicas</h2>
+        @if (esOdontologo() && !mostrandoFormEvolucion()) {
+          <button class="btn-primario" (click)="mostrandoFormEvolucion.set(true)">+ Nueva evolución</button>
+        }
+      </div>
+
+      @if (mostrandoFormEvolucion()) {
+        <app-form-evolucion
+          [pacienteId]="pacienteId()"
+          (evolucionGuardada)="onEvolucionGuardada()"
+          (cancelado)="mostrandoFormEvolucion.set(false)"
+        />
+      }
+
+      @if (h.evoluciones.length === 0) {
+        <p class="estado-info">No hay evoluciones registradas.</p>
+      }
+
+      <div class="lista-evoluciones">
+        @for (evolucion of h.evoluciones; track evolucion._id) {
+          <div class="evolucion" [class.desactivada]="!evolucion.activo">
+            <div class="encabezado-evolucion">
+              <span class="fecha">{{ evolucion.fecha | date: 'mediumDate' }}</span>
+              <span class="odontologo">{{ nombreUsuario(evolucion.odontologo) }}</span>
+              @if (!evolucion.activo) {
+                <span class="badge-desactivada">
+                  Desactivada por {{ nombreUsuario(evolucion.desactivadoPor) }} el {{ evolucion.fechaDesactivacion | date: 'short' }}
+                </span>
+              }
+              @if (esAdmin() && evolucion.activo) {
+                <button class="btn-desactivar" (click)="desactivarEvolucion(evolucion._id)">Desactivar</button>
+              }
+            </div>
+            <p class="descripcion">{{ evolucion.descripcion }}</p>
+            @if (evolucion.tratamientosRealizados.length > 0) {
+              <ul class="lista-tratamientos">
+                @for (t of evolucion.tratamientosRealizados; track $index) {
+                  <li>
+                    @if (t.diente) { <strong>Diente {{ t.diente }}:</strong> }
+                    {{ t.procedimiento }}
+                    @if (t.observaciones) { <span class="obs"> — {{ t.observaciones }}</span> }
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Adjuntos</h2>
+      @if (esOdontologo()) {
+        <input type="file" accept="image/*" (change)="onSeleccionarArchivo($event)" [disabled]="subiendoAdjunto()" />
+        @if (subiendoAdjunto()) {
+          <p class="estado-info">Subiendo...</p>
+        }
+      }
+      @if (h.adjuntos.length === 0) {
+        <p class="estado-info">No hay adjuntos.</p>
+      }
+      <div class="grid-adjuntos">
+        @for (adjunto of h.adjuntos; track adjunto._id) {
+          <a [href]="urlCompleta(adjunto.url)" target="_blank" class="adjunto">
+            <img [src]="urlCompleta(adjunto.url)" [alt]="adjunto.nombreArchivo" />
+            <span>{{ adjunto.tipo }}</span>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <a [routerLink]="['/pacientes', pacienteId()]" class="volver">← Volver al paciente</a>
+</div>

@@ -20,7 +20,7 @@ const dienteSchema = new mongoose.Schema(
       default: '',
     },
   },
-  { _id: false } // no necesita su propio _id, se identifica por "numero"
+  { _id: false }
 );
 
 // --- Subdocumento: Tratamiento realizado dentro de una evolución ---
@@ -78,7 +78,7 @@ const evolucionSchema = new mongoose.Schema(
     tratamientosRealizados: [tratamientoRealizadoSchema],
     activo: {
       type: Boolean,
-      default: true, // false = desactivado por ADMIN (RN-10), sin eliminarse
+      default: true,
     },
     desactivadoPor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -100,7 +100,7 @@ const historiaClinicaSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Paciente',
       required: true,
-      unique: true, // RF-25: una historia clínica única por paciente
+      unique: true,
     },
     antecedentesMedicos: {
       type: String,
@@ -112,14 +112,8 @@ const historiaClinicaSchema = new mongoose.Schema(
       default: () =>
         Array.from({ length: 32 }, (_, i) => ({ numero: i + 1, estado: 'SANO', observaciones: '' })),
     },
-    evoluciones: {
-      type: [evolucionSchema],
-      default: [],
-    },
-    adjuntos: {
-      type: [adjuntoSchema],
-      default: [],
-    },
+    evoluciones: [evolucionSchema],
+    adjuntos: [adjuntoSchema],
     creadoPor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Usuario',

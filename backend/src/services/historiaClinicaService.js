@@ -1,0 +1,164 @@
+const HistoriaClinica = require('../models/HistoriaClinica');
+const Paciente = require('../models/Paciente');
+
+const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+
+async function crearHistoriaClinica(pacienteId, usuarioId) {
+  const paciente = await Paciente.findById(pacienteId);
+  if (!paciente) {
+    const error = new Error('El paciente no existe');
+    error.codigo = 'PACIENTE_NO_EXISTE';
+    throw error;
+  }
+
+  const historia = await HistoriaClinica.create({
+    paciente: pacienteId,
+    creadoPor: usuarioId,
+  });
+
+  return historia;
+}
+
+async function obtenerHistoriaPorPaciente(pacienteId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId })
+    .populate('evoluciones.odontologo', 'nombre')
+    .populate('adjuntos.subidoPor', 'nombre');
+  return historia;
+}
+
+async function actualizarDiente(pacienteId, numeroDiente, datosActualizados) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const diente = historia.odontograma.find((d) => d.numero === Number(numeroDiente));
+
+  if (!diente) {
+    const error = new Error('Número de diente inválido');
+    error.codigo = 'DIENTE_INVALIDO';
+    throw error;
+  }
+
+  if (datosActualizados.estado !== undefined) {
+    diente.estado = datosActualizados.estado;
+  }
+  if (datosActualizados.observaciones !== undefined) {
+    diente.observaciones = datosActualizados.observaciones;
+  }
+
+  await historia.save();
+
+  return historia;
+}
+
+async function agregarEvolucion(pacienteId, datosEvolucion, odontologoId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const nuevaEvolucion = {
+    fecha: datosEvolucion.fecha || new Date(),
+    odontologo: odontologoId, // RN-09: queda registrado quién la realizó
+    descripcion: datosEvolucion.descripcion,
+    tratamientosRealizados: datosEvolucion.tratamientosRealizados || [],
+  };
+
+  historia.evoluciones.push(nuevaEvolucion);
+  await historia.save();
+
+  return historia;
+}
+
+async function actualizarAntecedentes(pacienteId, antecedentesMedicos) {
+  const historia = await HistoriaClinica.findOneAndUpdate(
+    { paciente: pacienteId },
+    { antecedentesMedicos },
+    { new: true, runValidators: true }
+  );
+
+  return historia;
+}
+
+async function desactivarEvolucion(pacienteId, evolucionId, adminId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  const evolucion = historia.evoluciones.id(evolucionId);
+
+  if (!evolucion) {
+    const error = new Error('Evolución clínica no encontrada');
+    error.codigo = 'EVOLUCION_NO_EXISTE';
+    throw error;
+  }
+
+  if (!evolucion.activo) {
+    const error = new Error('Esta evolución ya se encuentra desactivada');
+    error.codigo = 'YA_DESACTIVADA';
+    throw error;
+  }
+
+  evolucion.activo = false;
+  evolucion.desactivadoPor = adminId;
+  evolucion.fechaDesactivacion = new Date();
+
+  await historia.save();
+
+  return historia;
+}
+
+async function agregarAdjunto(pacienteId, archivo, tipo, usuarioId) {
+  const historia = await HistoriaClinica.findOne({ paciente: pacienteId });
+
+  if (!historia) {
+    const error = new Error('Este paciente no tiene historia clínica creada');
+    error.codigo = 'HISTORIA_NO_EXISTE';
+    throw error;
+  }
+
+  // RNF-09: optimizar la imagen antes de guardarla (redimensionar + comprimir)
+  const nombreUnico = `${crypto.randomUUID()}.webp`;
+  const rutaDestino = path.join(__dirname, '../../uploads/historias-clinicas', nombreUnico);
+
+  await sharp(archivo.buffer)
+    .resize({ width: 1600, withoutEnlargement: true }) // no agranda imágenes pequeñas
+    .webp({ quality: 80 })
+    .toFile(rutaDestino);
+
+  const nuevoAdjunto = {
+    nombreArchivo: archivo.originalname,
+    url: `/uploads/historias-clinicas/${nombreUnico}`,
+    tipo: tipo || 'OTRO',
+    subidoPor: usuarioId,
+  };
+
+  historia.adjuntos.push(nuevoAdjunto);
+  await historia.save();
+
+  return historia;
+}
+
+module.exports = {
+  crearHistoriaClinica,
+  obtenerHistoriaPorPaciente,
+  actualizarDiente,
+  agregarEvolucion,
+  actualizarAntecedentes,
+  desactivarEvolucion,
+  agregarAdjunto,
+};
