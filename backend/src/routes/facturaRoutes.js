@@ -1,5 +1,5 @@
 const express = require('express');
-const { tratamientosFacturables } = require('../controllers/facturaController');
+const { tratamientosFacturables, crear, pagar } = require('../controllers/facturaController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
 
@@ -12,5 +12,9 @@ router.get(
   permitirRoles('RECEPCIONISTA'),
   tratamientosFacturables
 );
+
+router.post('/', verificarToken, permitirRoles('RECEPCIONISTA'), crear);
+
+router.patch('/:id/pagar', verificarToken, permitirRoles('RECEPCIONISTA'), pagar);
 
 module.exports = router;
