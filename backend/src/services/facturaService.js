@@ -98,4 +98,35 @@ async function registrarPago(facturaId, monto, metodoPago, usuarioId) {
   return factura;
 }
 
-module.exports = { obtenerTratamientosFacturables, crearFactura, registrarPago };
+async function anularFactura(facturaId, motivo, usuarioId) {
+  const factura = await Factura.findById(facturaId);
+
+  if (!factura) {
+    const error = new Error('Factura no encontrada');
+    error.codigo = 'FACTURA_NO_EXISTE';
+    throw error;
+  }
+
+  if (factura.estado === 'ANULADA') {
+    const error = new Error('Esta factura ya se encuentra anulada');
+    error.codigo = 'YA_ANULADA';
+    throw error;
+  }
+
+  if (!motivo || motivo.trim() === '') {
+    const error = new Error('El motivo de anulación es obligatorio');
+    error.codigo = 'MOTIVO_REQUERIDO';
+    throw error;
+  }
+
+  factura.estado = 'ANULADA';
+  factura.motivoAnulacion = motivo;
+  factura.anuladaPor = usuarioId;
+  factura.fechaAnulacion = new Date();
+
+  await factura.save();
+
+  return factura;
+}
+
+module.exports = { obtenerTratamientosFacturables, crearFactura, registrarPago, anularFactura };
