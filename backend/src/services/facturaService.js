@@ -129,4 +129,19 @@ async function anularFactura(facturaId, motivo, usuarioId) {
   return factura;
 }
 
-module.exports = { obtenerTratamientosFacturables, crearFactura, registrarPago, anularFactura };
+async function listarFacturasPorPaciente(pacienteId) {
+  const facturas = await Factura.find({ paciente: pacienteId })
+    .populate('creadoPor', 'nombre')
+    .populate('pagos.registradoPor', 'nombre')
+    .sort({ createdAt: -1 });
+
+  return facturas;
+}
+
+module.exports = {
+  obtenerTratamientosFacturables,
+  crearFactura,
+  registrarPago,
+  anularFactura,
+  listarFacturasPorPaciente,
+};

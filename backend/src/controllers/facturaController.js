@@ -3,6 +3,7 @@ const {
   crearFactura,
   registrarPago,
   anularFactura,
+  listarFacturasPorPaciente,
 } = require('../services/facturaService');
 
 async function tratamientosFacturables(req, res) {
@@ -87,4 +88,18 @@ async function anular(req, res) {
   }
 }
 
-module.exports = { tratamientosFacturables, crear, pagar, anular };
+async function listarPorPaciente(req, res) {
+  try {
+    const { pacienteId } = req.params;
+    const facturas = await listarFacturasPorPaciente(pacienteId);
+    return res.status(200).json({ facturas });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de paciente inválido' });
+    }
+    console.error('Error al listar facturas:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { tratamientosFacturables, crear, pagar, anular, listarPorPaciente };
