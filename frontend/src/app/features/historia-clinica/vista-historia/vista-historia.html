@@ -110,8 +110,8 @@
       }
       <div class="grid-adjuntos">
         @for (adjunto of h.adjuntos; track adjunto._id) {
-          <a [href]="adjunto.url" target="_blank" class="adjunto">
-            <img [src]="adjunto.url" [alt]="adjunto.nombreArchivo" />
+          <a [href]="urlCompleta(adjunto.url)" target="_blank" class="adjunto">
+            <img [src]="urlCompleta(adjunto.url)" [alt]="adjunto.nombreArchivo" />
             <span>{{ adjunto.tipo }}</span>
           </a>
         }
