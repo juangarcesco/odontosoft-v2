@@ -61,9 +61,33 @@ async function enviarEmail(cita, mensaje) {
   }
 }
 
+async function enviarWhatsApp(cita, mensaje) {
+  if (!cita.paciente.telefono) {
+    return { exito: false, error: 'El paciente no tiene teléfono registrado' };
+  }
+
+  // SIMULACIÓN: aquí iría la integración real con un proveedor
+  // como Twilio (WhatsApp Business API). La interfaz de esta función
+  // (recibe cita + mensaje, devuelve { exito, error? }) es la misma
+  // que tendría una integración real, para que conectar un proveedor
+  // verdadero en el futuro no requiera cambiar el resto del sistema.
+
+  console.log(`[SIMULADO] Enviando WhatsApp a ${cita.paciente.telefono}: "${mensaje}"`);
+
+  // Simula una pequeña posibilidad de fallo, como tendría cualquier envío real
+  const exito = Math.random() > 0.05; // 95% de éxito simulado
+
+  if (!exito) {
+    return { exito: false, error: 'Simulación: fallo de red al enviar WhatsApp' };
+  }
+
+  return { exito: true, mensajeSimulado: true };
+}
+
 module.exports = {
   obtenerCitasElegibles,
   ESTADOS_ELEGIBLES,
   reemplazarPlaceholders,
   enviarEmail,
+  enviarWhatsApp,
 };
