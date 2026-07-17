@@ -84,4 +84,8 @@ export class FacturaService {
   descargarPdfUrl(facturaId: string): string {
     return `${this.baseUrl}/${facturaId}/pdf`;
   }
+
+ descargarPdf(facturaId: string): Observable<Blob> {
+  return this.http.get(`${this.baseUrl}/${facturaId}/pdf`, { responseType: 'blob' });
+} 
 }
