@@ -17,7 +17,7 @@ Registro transversal de las reglas de negocio del SRS (sección de Reglas de Neg
 | RN-05 | El saldo pendiente de una factura se recalcula automáticamente cada vez que se registra un abono | Módulo 5 (Facturación) | `facturaService.js` → `registrarPago()`: `saldoPendiente` se recalcula restando el monto del valor almacenado, nunca se recibe del cliente | Prueba manual: abono parcial recalcula saldo correctamente; segundo abono lleva a `estado: PAGADA` al llegar a $0; rechazo de montos que excedan el saldo real | ✅ |
 | RN-06 | Un material no puede tener stock negativo; toda salida de inventario valida existencias antes de confirmarse | Módulo 6 (Inventario) | `materialService.js` → `registrarSalida()`: valida `cantidad > material.stock` antes de mutar el documento | Prueba manual: salida válida (200), intento de exceso de salida rechazado (409, stock: 20 disponible vs 9999 solicitado) | ✅ |
 | RN-07 | Un paciente inactivo no puede ser agendado para nuevas citas hasta que sea reactivado | Módulo 2 (Pacientes) + Módulo 3 (Citas) | `citaService.js` → `crearCita()` valida `paciente.estado === 'ACTIVO'` antes de crear | Prueba manual: crear cita con paciente desactivado devuelve 409 | ✅ |
-| RN-08 | El recordatorio automático solo se envía si la cita está en estado Programada o Confirmada | Módulo 7 (Recordatorios) | *(pendiente de desarrollo)* | — | ⏳ |
+| RN-08 | El recordatorio automático solo se envía si la cita está en estado Programada o Confirmada | Módulo 7 (Recordatorios) | `recordatorioService.js` → `obtenerCitasElegibles()`: filtro `estado: { $in: ['PROGRAMADA', 'CONFIRMADA'] }` sobre ventana de 24h | `test-e2e-recordatorios.sh` bloque 2 (cita elegible detectada correctamente); prueba manual confirmando exclusión de otros estados | ✅ |
 | RN-09 | Toda acción sobre la historia clínica (creación, edición) queda registrada con el usuario y la fecha/hora que la realizó | Módulo 4 (Historia Clínica) | `historiaClinicaService.js` → `agregarEvolucion()` toma `odontologoId` del JWT (`req.usuario.id`), nunca del body; `timestamps: true` en `evolucionSchema` | Revisión de respuesta: campo `odontologo` coincide con el usuario autenticado, no con datos enviados por el cliente | ✅ |
 | RN-10 | El ADMIN puede desactivar (no editar ni eliminar) una evolución clínica errónea, dejando constancia de quién y cuándo; el registro permanece visible para trazabilidad pero no como información vigente | Módulo 4 (Historia Clínica) | Campos `activo`, `desactivadoPor`, `fechaDesactivacion` en `evolucionSchema`; `desactivarEvolucion()` en el servicio | `test-e2e-historia-clinica.sh` bloques 12 (200 al desactivar), 13 (403 ODONTOLOGO), 14 (409 ya desactivada) | ✅ |
 
@@ -43,5 +43,6 @@ Registro transversal de las reglas de negocio del SRS (sección de Reglas de Neg
 
 | Estado | Cantidad |
 |---|---|
-| ✅ Implementada y verificada | 9 (RN-01, RN-02, RN-03, RN-04, RN-05, RN-06, RN-07, RN-09, RN-10) |
-| ⏳ Pendiente (módulo no desarrollado) | 1 (RN-08) |
+| ✅ Implementada y verificada | 10 de 10 (todas las reglas de negocio del SRS están completas) |
+
+🎉 **Con el cierre del Módulo 7, las 10 reglas de negocio del SRS quedan implementadas y verificadas.**
