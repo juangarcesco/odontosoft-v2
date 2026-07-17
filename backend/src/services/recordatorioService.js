@@ -1,5 +1,6 @@
 const Cita = require('../models/Cita');
 const Recordatorio = require('../models/Recordatorio');
+const ConfiguracionMensaje = require('../models/ConfiguracionMensaje');
 const nodemailer = require('nodemailer');
 
 const ESTADOS_ELEGIBLES = ['PROGRAMADA', 'CONFIRMADA'];
@@ -54,7 +55,6 @@ async function enviarEmail(cita, mensaje) {
       text: mensaje,
     });
 
-    // Ethereal genera una URL de vista previa del correo "enviado"
     return { exito: true, previewUrl: nodemailer.getTestMessageUrl(info) };
   } catch (error) {
     return { exito: false, error: error.message };
@@ -66,16 +66,9 @@ async function enviarWhatsApp(cita, mensaje) {
     return { exito: false, error: 'El paciente no tiene teléfono registrado' };
   }
 
-  // SIMULACIÓN: aquí iría la integración real con un proveedor
-  // como Twilio (WhatsApp Business API). La interfaz de esta función
-  // (recibe cita + mensaje, devuelve { exito, error? }) es la misma
-  // que tendría una integración real, para que conectar un proveedor
-  // verdadero en el futuro no requiera cambiar el resto del sistema.
-
   console.log(`[SIMULADO] Enviando WhatsApp a ${cita.paciente.telefono}: "${mensaje}"`);
 
-  // Simula una pequeña posibilidad de fallo, como tendría cualquier envío real
-  const exito = Math.random() > 0.05; // 95% de éxito simulado
+  const exito = Math.random() > 0.05;
 
   if (!exito) {
     return { exito: false, error: 'Simulación: fallo de red al enviar WhatsApp' };
@@ -84,10 +77,43 @@ async function enviarWhatsApp(cita, mensaje) {
   return { exito: true, mensajeSimulado: true };
 }
 
+async function obtenerConfiguracion() {
+  let config = await ConfiguracionMensaje.findOne();
+
+  // Si nunca se ha configurado, se crea con la plantilla por defecto
+  if (!config) {
+    config = await ConfiguracionMensaje.create({});
+  }
+
+  return config;
+}
+
+async function actualizarConfiguracion(plantilla, usuarioId) {
+  if (!plantilla || plantilla.trim() === '') {
+    const error = new Error('La plantilla no puede estar vacía');
+    error.codigo = 'PLANTILLA_VACIA';
+    throw error;
+  }
+
+  let config = await ConfiguracionMensaje.findOne();
+
+  if (!config) {
+    config = await ConfiguracionMensaje.create({ plantilla, actualizadoPor: usuarioId });
+  } else {
+    config.plantilla = plantilla;
+    config.actualizadoPor = usuarioId;
+    await config.save();
+  }
+
+  return config;
+}
+
 module.exports = {
   obtenerCitasElegibles,
   ESTADOS_ELEGIBLES,
   reemplazarPlaceholders,
   enviarEmail,
   enviarWhatsApp,
+  obtenerConfiguracion,
+  actualizarConfiguracion,
 };
