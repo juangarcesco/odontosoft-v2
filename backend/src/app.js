@@ -7,6 +7,7 @@ const citaRoutes = require('./routes/citaRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
 const facturaRoutes = require('./routes/facturaRoutes');
+const materialRoutes = require('./routes/materialRoutes');
 
 
 const app = express();
@@ -33,5 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 
 app.use('/api/facturas', facturaRoutes);
+
+app.use('/api/materiales', materialRoutes);
 
 module.exports = app;
