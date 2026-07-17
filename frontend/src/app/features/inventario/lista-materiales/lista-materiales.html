@@ -1,0 +1,60 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Inventario de Materiales</h1>
+    @if (esRecepcionista) {
+      <a routerLink="/inventario/nuevo" class="btn-primario">+ Nuevo material</a>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && cantidadStockBajo() > 0) {
+    <div class="alerta-stock-bajo">
+      ⚠️ {{ cantidadStockBajo() }} material(es) con stock por debajo del mínimo
+    </div>
+  }
+
+  @if (!cargando() && materiales().length === 0) {
+    <p class="estado-info">No hay materiales registrados.</p>
+  }
+
+  @if (materiales().length > 0) {
+    <table class="tabla-materiales">
+      <thead>
+        <tr>
+          <th>Material</th>
+          <th>Proveedor</th>
+          <th>Costo unitario</th>
+          <th>Stock</th>
+          <th>Stock mínimo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (material of materiales(); track material._id) {
+          <tr [class.fila-alerta]="material.stockBajo">
+            <td>{{ material.nombre }}</td>
+            <td>{{ material.proveedor || '—' }}</td>
+            <td>${{ formatearMoneda(material.costoUnitario) }}</td>
+            <td>
+              {{ material.stock }}
+              @if (material.stockBajo) {
+                <span class="badge-alerta">Bajo</span>
+              }
+            </td>
+            <td>{{ material.stockMinimo }}</td>
+            <td>
+              <a [routerLink]="['/inventario', material._id]">Ver</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

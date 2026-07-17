@@ -1,0 +1,94 @@
+.contenedor {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    color: #2c3e50;
+  }
+}
+
+.btn-primario {
+  background: #2980b9;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: #2471a3;
+  }
+}
+
+.estado-info,
+.estado-error {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 2rem 0;
+}
+
+.estado-error {
+  color: #e74c3c;
+}
+
+.alerta-stock-bajo {
+  background: #fff8e1;
+  color: #b7860b;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #f5d78e;
+}
+
+.tabla-materiales {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid #ecf0f1;
+    font-size: 0.85rem;
+  }
+
+  th {
+    color: #7f8c8d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.fila-alerta {
+  background: #fffaf0;
+}
+
+.badge-alerta {
+  background: #fdecea;
+  color: #e74c3c;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 8px;
+  margin-left: 0.4rem;
+}

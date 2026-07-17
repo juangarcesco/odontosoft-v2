@@ -71,5 +71,12 @@ export const routes: Routes = [
     import('./features/facturacion/lista-facturas/lista-facturas').then((m) => m.ListaFacturas),
 },
 
+{
+  path: 'inventario',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/inventario/lista-materiales/lista-materiales').then((m) => m.ListaMateriales),
+},
+
 ];
 
