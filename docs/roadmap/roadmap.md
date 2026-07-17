@@ -13,8 +13,8 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 | 1 | Autenticación y Control de Acceso | RF-01 a RF-08 | Must have | ✅ |
 | 2 | Gestión de Pacientes | RF-09 a RF-16 | Must have | ✅ |
 | 3 | Citas y Agenda | RF-17 a RF-24 | Must have | ✅ |
-| 4 | Historia Clínica y Odontograma | RF-25 a RF-32 | Must have | 🔵 |
-| 5 | Facturación y Pagos | RF-33 a RF-40 | Must have | ⏳ |
+| 4 | Historia Clínica y Odontograma | RF-25 a RF-32 | Must have | ✅ |
+| 5 | Facturación y Pagos | RF-33 a RF-40 | Must have | ✅ |
 | 6 | Inventario de Materiales | RF-41 a RF-45 | Must/Should/Could | ⏳ |
 | 7 | Recordatorios Automáticos | RF-46 a RF-49 | Should/Could | ⏳ |
 | 8 | Reportes y Estadísticas | RF-50 a RF-55 | Must/Should/Could | ⏳ |
@@ -64,70 +64,78 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 
 ---
 
-## Módulo 4 — Historia Clínica y Odontograma 🔵
+## Módulo 4 — Historia Clínica y Odontograma ✅
 
-**Rama:** `feature/modulo4-historia-clinica` (en progreso)
+**Rama:** `feature/modulo4-historia-clinica` (probado end-to-end, pendiente de PR/merge)
 **Requisitos:** RF-25 a RF-32
-**Reglas de negocio críticas:** RN-03, RN-09, RN-10
+**Reglas de negocio:** RN-03, RN-09, RN-10
 **RNF relacionadas:** RNF-05 (acceso restringido), RNF-09 (optimización de imágenes)
+**Documentación:** `docs/Documentacion_Modulo4_HistoriaClinica.md`
 
-### Permisos (matriz del SRS)
+- Modelo `HistoriaClinica` con odontograma (32 dientes), evoluciones y adjuntos como **subdocumentos embebidos** (decisión explícita del SRS)
+- Odontograma interactivo en frontend (clic en diente → cambiar estado)
+- Registro de evoluciones clínicas con tratamientos por diente (`FormArray` dinámico)
+- Antecedentes médicos editables
+- Adjuntos (imágenes/radiografías) con optimización automática (Sharp → WebP)
+- Desactivación administrativa de evoluciones erróneas (RN-10), sin edición ni eliminación
+- **Permisos:** ODONTOLOGO con CRUD exclusivo sobre contenido clínico; ADMIN solo lectura + desactivar evoluciones; RECEPCIONISTA sin ningún acceso (único módulo donde este rol queda completamente excluido)
 
-| Acción | ADMIN | ODONTOLOGO | RECEPCIONISTA |
-|---|:---:|:---:|:---:|
-| Crear/editar contenido clínico (odontograma, evoluciones) | ❌ | ✅ CRUD | ❌ Sin acceso |
-| Desactivar evolución errónea (sin editar) | ✅ (RN-10) | ❌ | ❌ |
+### Roadmap de pasos (14/14 completados)
 
-### Roadmap de pasos
-
-| # | Paso | Requisitos | Estado |
-|---|---|---|---|
-| 1 | Modelo `HistoriaClinica` con odontograma (32 dientes) y evoluciones embebidas | RF-25, RF-26, RF-27, RF-31 | ✅ |
-| 2 | Endpoint: crear historia clínica | RF-25 | 🔵 |
-| 3 | Endpoint: obtener historia clínica de un paciente | RF-25, RNF-05 | ⏳ |
-| 4 | Endpoint: actualizar odontograma (solo ODONTOLOGO) | RF-26, RF-27, RN-03 | ⏳ |
-| 5 | Endpoint: agregar evolución clínica con tratamientos | RF-28, RF-31, RN-03, RN-09 | ⏳ |
-| 6 | Endpoint: antecedentes médicos | RF-29 | ⏳ |
-| 7 | Endpoint: desactivar evolución clínica (solo ADMIN) | RN-10 | ⏳ |
-| 8 | Adjuntar imágenes (radiografías/fotos) con optimización | RF-30, RNF-09 | ⏳ |
-| 9 | Pruebas end-to-end del backend completo | Todo | ⏳ |
-| 10 | Frontend: servicio Angular de historia clínica | — | ⏳ |
-| 11 | Frontend: odontograma interactivo (32 dientes) | RF-26, RF-27 | ⏳ |
-| 12 | Frontend: registro de evoluciones con tratamientos | RF-28, RF-31 | ⏳ |
-| 13 | Frontend: antecedentes médicos y vista general | RF-29, RF-25 | ⏳ |
-| 14 | Pruebas end-to-end del módulo completo | Todo | ⏳ |
-
-### Decisiones tomadas
-
-- Odontograma y evoluciones modelados como **subdocumentos embebidos** dentro de `HistoriaClinica` (no colecciones separadas), tal como especifica el SRS explícitamente.
-- RF-30 (adjuntar imágenes) incluido en el alcance de este módulo, pese a ser prioridad *Should have*, por decisión del usuario.
-- `historiaClinicaRoutes` bloquea `RECEPCIONISTA` por completo — es el primer módulo donde este rol no tiene ningún acceso.
+| # | Paso | Estado |
+|---|---|---|
+| 1 | Modelo `HistoriaClinica` con odontograma y evoluciones embebidas | ✅ |
+| 2 | Endpoint: crear historia clínica | ✅ |
+| 3 | Endpoint: obtener historia clínica de un paciente | ✅ |
+| 4 | Endpoint: actualizar odontograma (solo ODONTOLOGO) | ✅ |
+| 5 | Endpoint: agregar evolución clínica con tratamientos | ✅ |
+| 6 | Endpoint: antecedentes médicos | ✅ |
+| 7 | Endpoint: desactivar evolución clínica (solo ADMIN) | ✅ |
+| 8 | Adjuntar imágenes con optimización (Multer + Sharp) | ✅ |
+| 9 | Pruebas end-to-end del backend completo (16/16) | ✅ |
+| 10 | Frontend: servicio Angular de historia clínica | ✅ |
+| 11 | Frontend: odontograma interactivo (32 dientes) | ✅ |
+| 12 | Frontend: registro de evoluciones con tratamientos | ✅ |
+| 13 | Frontend: antecedentes médicos y vista general | ✅ |
+| 14 | Pruebas end-to-end del módulo completo (16/16, verificado dos veces) | ✅ |
 
 ---
 
-## Módulo 5 — Facturación y Pagos ⏳
+## Módulo 5 — Facturación y Pagos ✅
 
+**Rama:** `feature/modulo5-facturacion` (probada end-to-end, pendiente de PR/merge)
 **Requisitos:** RF-33 a RF-40
-**Reglas de negocio relacionadas:** RN-04 (factura no se elimina, solo se anula), RN-05 (saldo se recalcula automáticamente con cada abono)
+**Reglas de negocio:** RN-04, RN-05
+**Documentación:** `docs/Documentacion_Modulo5_Facturacion.md`
 
-### Permisos (matriz del SRS)
+- Modelo `Factura` con ítems y pagos como subdocumentos embebidos
+- Endpoint de "tratamientos facturables" con vista limitada de historia clínica, respetando RNF-05
+- Cálculo de `valorTotal` y `saldoPendiente` siempre en el servidor, nunca recibidos del cliente
+- Anulación de factura sin eliminación física (RN-04)
+- Exportación a PDF con `pdfkit`, descarga autenticada vía blob en el frontend
+- **Permisos:** RECEPCIONISTA con CRUD; ADMIN y ODONTOLOGO con lectura del historial y PDF
 
-| Acción | ADMIN | ODONTOLOGO | RECEPCIONISTA |
-|---|:---:|:---:|:---:|
-| Facturación y pagos | Lectura (reportes) | Lectura | CRUD |
+### Roadmap de pasos (13/13 completados)
 
-### Alcance según el SRS
+| # | Paso | Estado |
+|---|---|---|
+| 1 | Modelo `Factura` (ítems, pagos, saldo, estado) | ✅ |
+| 2 | Endpoint: tratamientos facturables (vista limitada) | ✅ |
+| 3 | Endpoint: crear factura | ✅ |
+| 4 | Endpoint: registrar abono/pago (RN-05) | ✅ |
+| 5 | Endpoint: anular factura (RN-04) | ✅ |
+| 6 | Endpoint: listar facturas / historial por paciente | ✅ |
+| 7 | Exportar factura a PDF | ✅ |
+| 8 | Pruebas end-to-end del backend completo (17/17) | ✅ |
+| 9 | Frontend: servicio Angular de facturación | ✅ |
+| 10 | Frontend: crear factura seleccionando tratamientos | ✅ |
+| 11 | Frontend: registrar pagos/abonos | ✅ |
+| 12 | Frontend: historial de facturas y pagos por paciente | ✅ |
+| 13 | Pruebas end-to-end del módulo completo (17/17, verificado dos veces) | ✅ |
 
-- Crear factura por atención, con tratamientos realizados y valor en COP
-- Registrar pagos parciales (abonos) y calcular saldo pendiente automáticamente
-- Métodos de pago: efectivo, transferencia, tarjeta
-- Exportar/imprimir factura en PDF (Should have)
-- Manejo de IVA (servicios de salud exentos en Colombia) (Should have)
-- Historial de pagos por paciente
+### Herramienta de soporte creada
 
-### Dependencias
-
-- Requiere el Módulo 4 completo, ya que las facturas muestran "tratamientos realizados" (provenientes de las evoluciones clínicas).
+`scripts/dev-start.sh`: arranca Mongo, backend y frontend, y guarda tokens de los 3 roles de prueba en `.tokens.env` para agilizar el trabajo tras reinicios del Codespace.
 
 ---
 
@@ -196,7 +204,7 @@ Este módulo es independiente de los anteriores — puede desarrollarse en paral
 
 ### Dependencias
 
-- Requiere Módulos 2, 3, 4 y 5 completos, ya que agrega datos de todos ellos.
+- Requiere Módulos 2, 3, 4 y 5 (✅ todos cumplidos), ya que agrega datos de todos ellos.
 
 ---
 
@@ -216,7 +224,7 @@ Este módulo es independiente de los anteriores — puede desarrollarse en paral
 
 ### Dependencias
 
-- Requiere Módulos 2 (pacientes), 4 (historia clínica/tratamientos) y 5 (facturación) completos, ya que el RIPS se construye a partir de esos datos.
+- Requiere Módulos 2 (✅), 4 (✅) y 5 (✅) completos, ya que el RIPS se construye a partir de esos datos.
 
 ---
 
@@ -225,6 +233,8 @@ Este módulo es independiente de los anteriores — puede desarrollarse en paral
 | Fecha (sesión) | Módulo afectado | Corrección |
 |---|---|---|
 | Post Módulo 2 | Pacientes | Se corrigió la política de permisos: ADMIN pasó de CRUD a solo lectura, alineado con la matriz de permisos del SRS (sección 3.1) que no se había revisado antes de la implementación inicial |
+| Durante Módulo 4 | Historia Clínica | Corrección de sintaxis en el modelo: `evoluciones`/`adjuntos` definidos como `{ type: [...], default: [] }` impedían el `populate()` de Mongoose sobre paths anidados; corregido a la sintaxis directa `campo: [subSchema]` |
+| Al iniciar Módulo 5 | Sincronización de ramas | El `main` local y el remoto divergieron tras el cierre del Módulo 4; se resolvió con `git fetch origin` + `git reset --hard origin/main`, sincronizando el local exactamente con el remoto |
 
 ---
 
