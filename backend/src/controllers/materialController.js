@@ -1,4 +1,9 @@
-const { crearMaterial, listarMateriales, registrarEntrada } = require('../services/materialService');
+const {
+  crearMaterial,
+  listarMateriales,
+  registrarEntrada,
+  registrarSalida,
+} = require('../services/materialService');
 
 async function crear(req, res) {
   try {
@@ -46,4 +51,29 @@ async function entrada(req, res) {
   }
 }
 
-module.exports = { crear, listar, entrada };
+async function salida(req, res) {
+  try {
+    const { id } = req.params;
+    const { cantidad, motivo } = req.body;
+
+    const material = await registrarSalida(id, cantidad, motivo, req.usuario.id);
+    return res.status(200).json({ mensaje: 'Salida registrada exitosamente', material });
+  } catch (error) {
+    if (error.codigo === 'CANTIDAD_INVALIDA') {
+      return res.status(400).json({ mensaje: error.message });
+    }
+    if (error.codigo === 'STOCK_INSUFICIENTE') {
+      return res.status(409).json({ mensaje: error.message });
+    }
+    if (error.codigo === 'MATERIAL_NO_EXISTE') {
+      return res.status(404).json({ mensaje: error.message });
+    }
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de material inválido' });
+    }
+    console.error('Error al registrar salida:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, entrada, salida };
