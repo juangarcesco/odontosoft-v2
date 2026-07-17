@@ -1,0 +1,57 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Historial de Recordatorios</h1>
+    <a routerLink="/recordatorios" class="btn-secundario">← Configuración</a>
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && recordatorios().length > 0) {
+    <div class="resumen">
+      <span class="resumen-item resumen-enviados">{{ contadorEnviados() }} enviados</span>
+      @if (contadorFallidos() > 0) {
+        <span class="resumen-item resumen-fallidos">{{ contadorFallidos() }} fallidos</span>
+      }
+    </div>
+  }
+
+  @if (!cargando() && recordatorios().length === 0) {
+    <p class="estado-info">Aún no se han enviado recordatorios.</p>
+  }
+
+  @if (recordatorios().length > 0) {
+    <table class="tabla-recordatorios">
+      <thead>
+        <tr>
+          <th>Paciente</th>
+          <th>Cita</th>
+          <th>Canal</th>
+          <th>Estado</th>
+          <th>Fecha de envío</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of recordatorios(); track r._id) {
+          <tr>
+            <td>{{ r.paciente.nombre }} {{ r.paciente.apellido }}</td>
+            <td>{{ r.cita.fecha | date: 'shortDate' }} {{ r.cita.hora }}</td>
+            <td><span class="badge-canal" [class]="claseCanal(r.canal)">{{ r.canal }}</span></td>
+            <td>
+              <span class="badge-estado" [class]="claseEstado(r.estado)">{{ r.estado }}</span>
+              @if (r.estado === 'FALLIDO' && r.detalleError) {
+                <span class="detalle-error" [title]="r.detalleError">ⓘ</span>
+              }
+            </td>
+            <td>{{ r.fechaEnvio | date: 'short' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

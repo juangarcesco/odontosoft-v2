@@ -1,0 +1,113 @@
+.contenedor {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+
+  h1 {
+    margin: 0;
+    color: #2c3e50;
+  }
+}
+
+.btn-secundario {
+  color: #2980b9;
+  text-decoration: none;
+  font-size: 0.85rem;
+
+  &:hover { text-decoration: underline; }
+}
+
+.estado-info,
+.estado-error {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 2rem 0;
+}
+
+.estado-error {
+  color: #e74c3c;
+}
+
+.resumen {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.resumen-item {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.resumen-enviados {
+  background: #eafaf1;
+  color: #27ae60;
+}
+
+.resumen-fallidos {
+  background: #fdecea;
+  color: #e74c3c;
+}
+
+.tabla-recordatorios {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    text-align: left;
+    padding: 0.7rem;
+    border-bottom: 1px solid #ecf0f1;
+    font-size: 0.85rem;
+  }
+
+  th {
+    color: #7f8c8d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+}
+
+.badge-canal,
+.badge-estado {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.canal-email {
+  background: #eaf4fb;
+  color: #2980b9;
+}
+
+.canal-whatsapp {
+  background: #eafaf1;
+  color: #27ae60;
+}
+
+.estado-enviado {
+  background: #eafaf1;
+  color: #27ae60;
+}
+
+.estado-fallido {
+  background: #fdecea;
+  color: #e74c3c;
+}
+
+.detalle-error {
+  margin-left: 0.3rem;
+  color: #e74c3c;
+  cursor: help;
+  font-size: 0.75rem;
+}

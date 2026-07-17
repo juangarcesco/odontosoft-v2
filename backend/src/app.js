@@ -8,6 +8,7 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
 const facturaRoutes = require('./routes/facturaRoutes');
 const materialRoutes = require('./routes/materialRoutes');
+const recordatorioRoutes = require('./routes/recordatorioRoutes');
 
 
 const app = express();
@@ -36,5 +37,7 @@ app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/facturas', facturaRoutes);
 
 app.use('/api/materiales', materialRoutes);
+
+app.use('/api/recordatorios', recordatorioRoutes);
 
 module.exports = app;

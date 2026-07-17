@@ -103,4 +103,21 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./features/inventario/detalle-material/detalle-material').then((m) => m.DetalleMaterial),
 },
+
+{
+  path: 'recordatorios',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/recordatorios/config-mensaje/config-mensaje').then((m) => m.ConfigMensaje),
+},
+
+{
+  path: 'recordatorios/historial',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/recordatorios/historial-recordatorios/historial-recordatorios').then(
+      (m) => m.HistorialRecordatorios
+    ),
+},
+
 ];
