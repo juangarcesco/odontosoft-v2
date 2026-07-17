@@ -1,0 +1,91 @@
+.contenedor-pago {
+  background: #f9fafb;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 1rem;
+
+  h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: #2c3e50;
+  }
+}
+
+.saldo-actual {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+
+  strong {
+    color: #e74c3c;
+  }
+}
+
+.campo {
+  margin-bottom: 0.75rem;
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: #34495e;
+    margin-bottom: 0.3rem;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #dcdfe3;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+  }
+}
+
+.estado-error {
+  background: #fdecea;
+  color: #e74c3c;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn-primario,
+.btn-secundario {
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: 1px solid #dcdfe3;
+}
+
+.btn-primario {
+  background: #2980b9;
+  color: white;
+  border-color: #2980b9;
+
+  &:disabled {
+    background: #95a5a6;
+    border-color: #95a5a6;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background: #2471a3;
+  }
+}
+
+.btn-secundario {
+  background: white;
+
+  &:hover {
+    background: #f4f6f8;
+  }
+}

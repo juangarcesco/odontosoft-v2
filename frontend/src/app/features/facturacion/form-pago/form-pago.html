@@ -1,0 +1,36 @@
+<div class="contenedor-pago">
+  <h4>Registrar abono</h4>
+  <p class="saldo-actual">Saldo pendiente: <strong>${{ saldoPendiente.toLocaleString('es-CO') }}</strong></p>
+
+  <div class="campo">
+    <label for="monto">Monto</label>
+    <input
+      id="monto"
+      type="number"
+      min="1"
+      [ngModel]="monto()"
+      (ngModelChange)="monto.set($event)"
+      placeholder="0"
+    />
+  </div>
+
+  <div class="campo">
+    <label for="metodoPago">Método de pago</label>
+    <select id="metodoPago" [ngModel]="metodoPago()" (ngModelChange)="metodoPago.set($event)">
+      <option value="EFECTIVO">Efectivo</option>
+      <option value="TRANSFERENCIA">Transferencia</option>
+      <option value="TARJETA">Tarjeta</option>
+    </select>
+  </div>
+
+  @if (error()) {
+    <div class="estado-error">{{ error() }}</div>
+  }
+
+  <div class="acciones">
+    <button type="button" class="btn-secundario" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="btn-primario" [disabled]="guardando()" (click)="onSubmit()">
+      {{ guardando() ? 'Guardando...' : 'Registrar pago' }}
+    </button>
+  </div>
+</div>

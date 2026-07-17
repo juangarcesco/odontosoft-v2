@@ -6,6 +6,8 @@ const pacienteRoutes = require('./routes/pacienteRoutes');
 const citaRoutes = require('./routes/citaRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
+const facturaRoutes = require('./routes/facturaRoutes');
+
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.use('/api/citas', citaRoutes);
 app.use('/api/historias-clinicas', historiaClinicaRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'OdontoSoft API' });
 });
@@ -29,5 +32,6 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/usuarios', usuarioRoutes);
 
+app.use('/api/facturas', facturaRoutes);
 
 module.exports = app;

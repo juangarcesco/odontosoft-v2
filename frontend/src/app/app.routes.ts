@@ -57,5 +57,19 @@ export const routes: Routes = [
     import('./features/historia-clinica/vista-historia/vista-historia').then((m) => m.VistaHistoria),
 },
 
+{
+  path: 'pacientes/:pacienteId/facturacion/nueva',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/facturacion/form-factura/form-factura').then((m) => m.FormFactura),
+},
+
+{
+  path: 'pacientes/:pacienteId/facturacion',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/facturacion/lista-facturas/lista-facturas').then((m) => m.ListaFacturas),
+},
+
 ];
 
