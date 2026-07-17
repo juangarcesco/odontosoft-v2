@@ -1,0 +1,88 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Historial de facturación</h1>
+    <a [routerLink]="['/pacientes', pacienteId(), 'facturacion', 'nueva']" class="btn-primario">+ Nueva factura</a>
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && facturas().length === 0) {
+    <p class="estado-info">Este paciente no tiene facturas registradas.</p>
+  }
+
+  <div class="lista-facturas">
+    @for (factura of facturas(); track factura._id) {
+      <div class="tarjeta-factura" [class]="claseEstado(factura.estado)">
+        <div class="encabezado-factura">
+          <div>
+            <span class="fecha">{{ factura.createdAt | date: 'mediumDate' }}</span>
+            <span class="badge-estado">{{ factura.estado }}</span>
+          </div>
+          <div class="montos">
+            <span class="total">Total: ${{ formatearMoneda(factura.valorTotal) }}</span>
+            @if (factura.estado !== 'ANULADA') {
+              <span class="saldo" [class.saldo-cero]="factura.saldoPendiente === 0">
+                Saldo: ${{ formatearMoneda(factura.saldoPendiente) }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <ul class="lista-items">
+          @for (item of factura.items; track $index) {
+            <li>
+              @if (item.diente) { <strong>Diente {{ item.diente }}:</strong> }
+              {{ item.procedimiento }} — ${{ formatearMoneda(item.valor) }}
+            </li>
+          }
+        </ul>
+
+        @if (factura.pagos.length > 0) {
+          <div class="pagos">
+            <span class="titulo-pagos">Pagos:</span>
+            @for (pago of factura.pagos; track $index) {
+              <div class="pago-item">
+                {{ pago.fecha | date: 'shortDate' }} — {{ pago.metodoPago }} — ${{ formatearMoneda(pago.monto) }}
+                <span class="registrado-por">({{ nombreUsuario(pago.registradoPor) }})</span>
+              </div>
+            }
+          </div>
+        }
+
+        @if (factura.estado === 'ANULADA') {
+          <p class="motivo-anulacion">
+            Anulada por {{ nombreUsuario(factura.anuladaPor) }} el {{ factura.fechaAnulacion | date: 'short' }} — Motivo: {{ factura.motivoAnulacion }}
+          </p>
+        }
+
+        <div class="acciones-factura">
+          <button class="btn-link" [disabled]="descargandoPdfId() === factura._id" (click)="descargarPdf(factura._id)">
+            {{ descargandoPdfId() === factura._id ? 'Descargando...' : '📄 Descargar PDF' }}
+          </button>
+
+          @if (esRecepcionista && factura.estado === 'PENDIENTE') {
+            <button class="btn-link" (click)="mostrarFormPago(factura._id)">💰 Registrar pago</button>
+            <button class="btn-link btn-peligro" (click)="anularFactura(factura._id)">Anular</button>
+          }
+        </div>
+
+        @if (facturaAbonando() === factura._id) {
+          <app-form-pago
+            [facturaId]="factura._id!"
+            [saldoPendiente]="factura.saldoPendiente"
+            (pagoRegistrado)="onPagoRegistrado()"
+            (cancelado)="facturaAbonando.set(null)"
+          />
+        }
+      </div>
+    }
+  </div>
+
+  <a [routerLink]="['/pacientes', pacienteId()]" class="volver">← Volver al paciente</a>
+</div>
