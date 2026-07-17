@@ -15,7 +15,7 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 | 3 | Citas y Agenda | RF-17 a RF-24 | Must have | ✅ |
 | 4 | Historia Clínica y Odontograma | RF-25 a RF-32 | Must have | ✅ |
 | 5 | Facturación y Pagos | RF-33 a RF-40 | Must have | ✅ |
-| 6 | Inventario de Materiales | RF-41 a RF-45 | Must/Should/Could | ✅ |
+| 6 | Inventario de Materiales | RF-41 a RF-45 | Must/Should/Could | ⏳ |
 | 7 | Recordatorios Automáticos | RF-46 a RF-49 | Should/Could | ⏳ |
 | 8 | Reportes y Estadísticas | RF-50 a RF-55 | Must/Should/Could | ⏳ |
 | 9 | Integración con RIPS | RF-56 a RF-59 | Must/Should | ⏳ |
@@ -139,38 +139,26 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 
 ---
 
-## Módulo 6 — Inventario de Materiales ✅
+## Módulo 6 — Inventario de Materiales ⏳
 
-**Rama:** `feature/modulo6-inventario` (probada end-to-end, pendiente de PR/merge)
 **Requisitos:** RF-41 a RF-45
-**Regla de negocio:** RN-06
-**Documentación:** `docs/Documentacion_Modulo6_Inventario.md`
 
-- Modelo `Material` con movimientos (entradas/salidas) como subdocumentos embebidos
-- Alerta de stock bajo calculada al vuelo (`stockBajo`), no almacenada
-- Edición de material excluye explícitamente el campo `stock` (solo cambia vía entrada/salida)
-- **Permisos:** RECEPCIONISTA con CRUD; ADMIN solo lectura; ODONTOLOGO sin ningún acceso (único módulo, junto con Historia Clínica, donde un rol queda completamente excluido)
+### Permisos (matriz del SRS)
 
-### Roadmap de pasos (12/12 completados)
+| Acción | ADMIN | ODONTOLOGO | RECEPCIONISTA |
+|---|:---:|:---:|:---:|
+| Inventario | Lectura (reportes) | Sin acceso | CRUD |
 
-| # | Paso | Estado |
-|---|---|---|
-| 1 | Modelo `Material` (movimientos embebidos) | ✅ |
-| 2 | Endpoint: crear material | ✅ |
-| 3 | Endpoint: listar materiales (indicador de stock bajo) | ✅ |
-| 4 | Endpoint: registrar entrada de stock | ✅ |
-| 5 | Endpoint: registrar salida de stock (RN-06) | ✅ |
-| 6 | Endpoint: editar datos del material | ✅ |
-| 7 | Pruebas end-to-end del backend completo (15/15) | ✅ |
-| 8 | Frontend: servicio Angular de inventario | ✅ |
-| 9 | Frontend: listado con alerta visual de stock bajo | ✅ |
-| 10 | Frontend: formulario de registro/edición | ✅ |
-| 11 | Frontend: registrar entradas/salidas de stock | ✅ |
-| 12 | Pruebas end-to-end del módulo completo (15/15, verificado dos veces) | ✅ |
+### Alcance según el SRS
 
-### Nota sobre este módulo
+- Registrar materiales e insumos, con costo en COP
+- Control de stock (entradas y salidas), sin permitir stock negativo (RN-06)
+- Alerta de stock por debajo del mínimo (Should have)
+- Registro de proveedor por material (Could have)
 
-Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo el proyecto), todos relacionados con pérdida de funciones al editar archivos existentes de forma fragmentada. A partir de este módulo, la práctica adoptada es entregar siempre el archivo completo cuando se modifica un archivo ya existente.
+### Nota
+
+Este módulo es independiente de los anteriores — puede desarrollarse en paralelo si se requiere reordenar el roadmap.
 
 ---
 
@@ -216,7 +204,7 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 
 ### Dependencias
 
-- Requiere Módulos 2, 3, 4, 5 (✅ todos cumplidos) y 6 (✅), ya que agrega datos de todos ellos.
+- Requiere Módulos 2, 3, 4 y 5 (✅ todos cumplidos), ya que agrega datos de todos ellos.
 
 ---
 
@@ -247,7 +235,6 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 | Post Módulo 2 | Pacientes | Se corrigió la política de permisos: ADMIN pasó de CRUD a solo lectura, alineado con la matriz de permisos del SRS (sección 3.1) que no se había revisado antes de la implementación inicial |
 | Durante Módulo 4 | Historia Clínica | Corrección de sintaxis en el modelo: `evoluciones`/`adjuntos` definidos como `{ type: [...], default: [] }` impedían el `populate()` de Mongoose sobre paths anidados; corregido a la sintaxis directa `campo: [subSchema]` |
 | Al iniciar Módulo 5 | Sincronización de ramas | El `main` local y el remoto divergieron tras el cierre del Módulo 4; se resolvió con `git fetch origin` + `git reset --hard origin/main`, sincronizando el local exactamente con el remoto |
-| Durante Módulo 6 | Inventario | Patrón recurrente de funciones perdidas al agregar código a archivos existentes (3 incidentes); se adoptó la práctica de entregar siempre el archivo completo al modificar un archivo ya existente |
 
 ---
 

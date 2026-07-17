@@ -1,0 +1,96 @@
+<div class="contenedor">
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error() && !mostrandoFormMovimiento()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (material(); as m) {
+    <div class="encabezado">
+      <div>
+        <h1>{{ m.nombre }}</h1>
+        @if (m.stockBajo) {
+          <span class="badge-alerta">⚠️ Stock bajo</span>
+        }
+      </div>
+      @if (esRecepcionista) {
+        <a [routerLink]="['/inventario', m._id, 'editar']" class="btn-secundario">Editar</a>
+      }
+    </div>
+
+    <section class="tarjeta">
+      <dl>
+        <dt>Descripción</dt>
+        <dd>{{ m.descripcion || '—' }}</dd>
+
+        <dt>Proveedor</dt>
+        <dd>{{ m.proveedor || '—' }}</dd>
+
+        <dt>Costo unitario</dt>
+        <dd>${{ formatearMoneda(m.costoUnitario) }}</dd>
+
+        <dt>Stock actual</dt>
+        <dd class="stock-actual" [class.stock-bajo]="m.stockBajo">{{ m.stock }}</dd>
+
+        <dt>Stock mínimo</dt>
+        <dd>{{ m.stockMinimo }}</dd>
+      </dl>
+
+      @if (esRecepcionista) {
+        <div class="acciones-stock">
+          <button class="btn-entrada" (click)="abrirFormMovimiento('ENTRADA')">+ Registrar entrada</button>
+          <button class="btn-salida" (click)="abrirFormMovimiento('SALIDA')">− Registrar salida</button>
+        </div>
+      }
+
+      @if (mostrandoFormMovimiento(); as tipo) {
+        <div class="form-movimiento">
+          <h4>{{ tipo === 'ENTRADA' ? 'Registrar entrada' : 'Registrar salida' }}</h4>
+
+          <div class="campo">
+            <label>Cantidad</label>
+            <input type="number" min="1" [ngModel]="cantidad()" (ngModelChange)="cantidad.set($event)" />
+          </div>
+
+          <div class="campo">
+            <label>Motivo</label>
+            <input type="text" [ngModel]="motivo()" (ngModelChange)="motivo.set($event)" placeholder="Opcional" />
+          </div>
+
+          @if (error()) {
+            <div class="estado-error">{{ error() }}</div>
+          }
+
+          <div class="acciones-form">
+            <button class="btn-secundario" (click)="cancelarMovimiento()">Cancelar</button>
+            <button class="btn-primario" [disabled]="guardandoMovimiento()" (click)="confirmarMovimiento()">
+              {{ guardandoMovimiento() ? 'Guardando...' : 'Confirmar' }}
+            </button>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="tarjeta">
+      <h2>Historial de movimientos</h2>
+      @if (m.movimientos.length === 0) {
+        <p class="estado-info">Sin movimientos registrados.</p>
+      }
+      <div class="lista-movimientos">
+        @for (mov of movimientosOrdenados(); track $index) {
+          <div class="movimiento" [class]="mov.tipo === 'ENTRADA' ? 'mov-entrada' : 'mov-salida'">
+            <span class="tipo">{{ mov.tipo === 'ENTRADA' ? '+ Entrada' : '− Salida' }}</span>
+            <span class="cantidad">{{ mov.cantidad }}</span>
+            <span class="motivo">{{ mov.motivo || '—' }}</span>
+            <span class="fecha">{{ mov.fecha | date: 'short' }}</span>
+            <span class="usuario">{{ nombreUsuario(mov.registradoPor) }}</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <a routerLink="/inventario" class="volver">← Volver al inventario</a>
+  }
+</div>
