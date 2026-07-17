@@ -153,6 +153,15 @@ async function ejecutarEnvioRecordatorios() {
   return resultados;
 }
 
+async function listarRecordatorios() {
+  const recordatorios = await Recordatorio.find()
+    .populate('paciente', 'nombre apellido')
+    .populate('cita', 'fecha hora motivo')
+    .sort({ createdAt: -1 });
+
+  return recordatorios;
+}
+
 module.exports = {
   obtenerCitasElegibles,
   ESTADOS_ELEGIBLES,
@@ -162,4 +171,5 @@ module.exports = {
   obtenerConfiguracion,
   actualizarConfiguracion,
   ejecutarEnvioRecordatorios,
+  listarRecordatorios,
 };
