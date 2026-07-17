@@ -3,6 +3,7 @@ const {
   listarMateriales,
   registrarEntrada,
   registrarSalida,
+  actualizarMaterial,
 } = require('../services/materialService');
 
 async function crear(req, res) {
@@ -76,4 +77,27 @@ async function salida(req, res) {
   }
 }
 
-module.exports = { crear, listar, entrada, salida };
+async function actualizar(req, res) {
+  try {
+    const { id } = req.params;
+    const material = await actualizarMaterial(id, req.body);
+
+    if (!material) {
+      return res.status(404).json({ mensaje: 'Material no encontrado' });
+    }
+
+    return res.status(200).json({ mensaje: 'Material actualizado exitosamente', material });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ mensaje: 'ID de material inválido' });
+    }
+    if (error.name === 'ValidationError') {
+      const errores = Object.values(error.errors).map((e) => e.message);
+      return res.status(400).json({ mensaje: 'Datos inválidos', errores });
+    }
+    console.error('Error al actualizar material:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { crear, listar, entrada, salida, actualizar };

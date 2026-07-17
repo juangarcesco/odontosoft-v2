@@ -61,7 +61,6 @@ async function registrarSalida(materialId, cantidad, motivo, usuarioId) {
     throw error;
   }
 
-  // RN-06: el stock nunca puede quedar negativo
   if (cantidad > material.stock) {
     const error = new Error(
       `No hay stock suficiente. Disponible: ${material.stock}, solicitado: ${cantidad}`
@@ -84,9 +83,21 @@ async function registrarSalida(materialId, cantidad, motivo, usuarioId) {
   return material;
 }
 
+async function actualizarMaterial(materialId, datos) {
+  const { stock, movimientos, creadoPor, _id, ...datosPermitidos } = datos;
+
+  const material = await Material.findByIdAndUpdate(materialId, datosPermitidos, {
+    new: true,
+    runValidators: true,
+  });
+
+  return material;
+}
+
 module.exports = {
   crearMaterial,
   listarMateriales,
   registrarEntrada,
   registrarSalida,
+  actualizarMaterial,
 };
