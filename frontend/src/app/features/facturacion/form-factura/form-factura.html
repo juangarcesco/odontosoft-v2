@@ -1,0 +1,72 @@
+<div class="contenedor">
+  <h1>Nueva factura</h1>
+
+  @if (paciente(); as p) {
+    <p class="info-paciente">
+      Paciente: <strong>{{ p.nombre }} {{ p.apellido }}</strong> — {{ p.tipoDocumento }} {{ p.numeroDocumento }}
+    </p>
+  }
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando tratamientos...</p>
+  }
+
+  @if (!cargando() && tratamientos().length === 0) {
+    <p class="estado-info">Este paciente no tiene tratamientos registrados en su historia clínica para facturar.</p>
+  }
+
+  @if (tratamientos().length > 0) {
+    <table class="tabla-tratamientos">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Diente</th>
+          <th>Procedimiento</th>
+          <th>Valor (COP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of tratamientos(); track $index; let i = $index) {
+          <tr [class.seleccionado]="t.seleccionado">
+            <td>
+              <input type="checkbox" [checked]="t.seleccionado" (change)="onToggleSeleccion(i)" />
+            </td>
+            <td>{{ t.diente || '—' }}</td>
+            <td>{{ t.procedimiento }}</td>
+            <td>
+              <input
+                type="number"
+                min="0"
+                step="1000"
+                [value]="t.valor"
+                (input)="onCambiarValor(i, $any($event.target).value)"
+                [disabled]="!t.seleccionado"
+                class="input-valor"
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (error()) {
+      <div class="estado-error">{{ error() }}</div>
+    }
+
+    <div class="resumen">
+      <span>Total a facturar:</span>
+      <strong>${{ formatearMoneda(totalFactura()) }}</strong>
+    </div>
+
+    <div class="acciones">
+      <a [routerLink]="['/pacientes', pacienteId()]" class="btn-secundario">Cancelar</a>
+      <button
+        class="btn-primario"
+        [disabled]="guardando() || itemsSeleccionados().length === 0"
+        (click)="crearFactura()"
+      >
+        {{ guardando() ? 'Guardando...' : 'Crear factura' }}
+      </button>
+    </div>
+  }
+</div>
