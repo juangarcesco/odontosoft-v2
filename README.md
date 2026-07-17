@@ -12,6 +12,7 @@ Sistema de gestión clínica odontológica desarrollado con el stack **MEAN** (M
 - [Usuarios de prueba (seed)](#usuarios-de-prueba-seed)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Pruebas](#pruebas)
+- [Solución de problemas comunes](#solución-de-problemas-comunes)
 - [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
 - [Documentación por módulo](#documentación-por-módulo)
 
@@ -256,6 +257,87 @@ cd backend
 ```
 
 > Los scripts incluyen un paso de limpieza de datos de prueba al inicio, por lo que pueden ejecutarse repetidamente sin generar conflictos por datos duplicados.
+
+---
+
+## Solución de problemas comunes
+
+Problemas recurrentes durante el desarrollo en Codespaces, con su causa y solución rápida.
+
+### `{"mensaje":"Token no proporcionado"}` o `401` en pruebas que antes funcionaban
+
+**Causa:** las variables de shell (`$TOKEN_RECEP`, `$TOKEN_ODONTO`, `$TOKEN_ADMIN`, `$PACIENTE_ID`, etc.) **no persisten entre pestañas de terminal distintas**, ni sobreviven a un reinicio de terminal. Si el login se hizo en una pestaña y el `curl` se corre en otra, la variable llega vacía.
+
+**Solución:** volver a loguearse y capturar las variables necesarias en la **misma** ejecución de comando donde se van a usar, encadenando con `&&`:
+
+```bash
+cd /workspaces/odontosoft-v2/backend && TOKEN_RECEP=$(curl -s -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"recepcion@odontosoft.com","password":"Recepcion123!"}' | node -pe "JSON.parse(require('fs').readFileSync(0,'utf8')).token") && echo "Token: ${TOKEN_RECEP:0:15}..."
+```
+
+Verificar siempre con `echo $TOKEN_X` antes de asumir que un endpoint falló por otra causa.
+
+### `Unexpected end of JSON input` al parsear la respuesta de `curl`
+
+**Causa:** el backend no devolvió nada (probablemente crasheó), no necesariamente un bug de lógica.
+
+**Solución:** verificar primero que el backend esté vivo antes de seguir depurando:
+
+```bash
+curl -s -o /dev/null -w "Status: %{http_code}\n" http://localhost:3000/api/health
+```
+
+Si da `000` o no responde, revisar la terminal de `npm run dev` en busca de un stack trace de crash.
+
+### `ReferenceError: express is not defined` / `verificarToken is not defined` / `upload is not defined` al reiniciar el backend
+
+**Causa recurrente en este proyecto:** al reemplazar un archivo de rutas completo durante una edición, se pierde accidentalmente algún `require(...)` del inicio del archivo (más común con `const express = require('express');`).
+
+**Solución:** antes de asumir que un archivo quedó bien tras una edición, verificar con:
+
+```bash
+head -10 backend/src/routes/<archivo>.js
+```
+
+y confirmar que todos los `require` necesarios (Express, middlewares, controlador) sigan presentes.
+
+### `Cannot GET /uploads/...` o una imagen que no carga en el frontend
+
+**Causa:** las URLs de archivos servidos por Express (adjuntos de historia clínica) se guardan como rutas **relativas** (`/uploads/historias-clinicas/....webp`), pensadas para el backend (puerto 3000). Si el frontend (puerto 4200) las usa tal cual en un `<img src="...">`, el navegador las resuelve contra el dominio del frontend, no del backend.
+
+**Solución:** construir la URL completa a partir de `environment.apiUrl`, quitando el sufijo `/api`:
+
+```typescript
+urlCompleta(rutaRelativa: string): string {
+  const baseUrl = environment.apiUrl.replace('/api', '');
+  return `${baseUrl}${rutaRelativa}`;
+}
+```
+
+y usar `urlCompleta(adjunto.url)` en el template en vez de `adjunto.url` directo.
+
+### MongoDB no conecta (`ECONNREFUSED ::1:27017`) al retomar el proyecto
+
+**Causa:** el contenedor Docker de Mongo se detiene cuando el Codespace queda inactivo por un tiempo.
+
+**Solución:**
+
+```bash
+docker compose up -d
+docker ps   # confirmar que odontosoft-mongo aparece corriendo
+```
+
+### `main` local y remoto divergen tras varias sesiones de trabajo (`have X and Y different commits`)
+
+**Causa:** un merge parcial o un commit local aislado que no llegó a subirse antes de que otros cambios se mergearan en GitHub.
+
+**Solución (si se confirma que el remoto tiene la versión correcta y completa):**
+
+```bash
+git fetch origin
+git reset --hard origin/main
+```
+
+⚠️ Esto descarta cualquier commit local en esa rama que no esté en GitHub — usar solo tras confirmar que el trabajo real ya vive en el remoto.
 
 ---
 
