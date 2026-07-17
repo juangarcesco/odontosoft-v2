@@ -1,0 +1,68 @@
+<div class="contenedor">
+  <h1>Configuración de Recordatorios</h1>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (!cargando()) {
+    <section class="tarjeta">
+      <h2>Plantilla del mensaje</h2>
+      <p class="ayuda">
+        Usa <code>{{ '{nombrePaciente}' }}</code>, <code>{{ '{fecha}' }}</code> y <code>{{ '{hora}' }}</code>
+        para personalizar el mensaje automáticamente.
+      </p>
+
+      <textarea
+        [ngModel]="plantilla()"
+        (ngModelChange)="plantilla.set($event)"
+        rows="4"
+        [disabled]="!esRecepcionista"
+      ></textarea>
+
+      @if (error()) {
+        <div class="estado-error">{{ error() }}</div>
+      }
+
+      @if (mensajeExito()) {
+        <div class="estado-exito">{{ mensajeExito() }}</div>
+      }
+
+      @if (esRecepcionista) {
+        <button class="btn-primario" [disabled]="guardando()" (click)="guardarPlantilla()">
+          {{ guardando() ? 'Guardando...' : 'Guardar plantilla' }}
+        </button>
+      }
+    </section>
+
+    @if (esRecepcionista) {
+      <section class="tarjeta">
+        <h2>Envío manual</h2>
+        <p class="ayuda">
+          El sistema envía recordatorios automáticamente cada hora. Usa este botón para forzar
+          el envío inmediato de las citas elegibles (Programadas o Confirmadas, dentro de las próximas 24h).
+        </p>
+
+        <button class="btn-secundario" [disabled]="ejecutando()" (click)="ejecutarEnvioManual()">
+          {{ ejecutando() ? 'Enviando...' : 'Ejecutar envío ahora' }}
+        </button>
+
+        @if (resultadosEnvio().length > 0) {
+          <div class="lista-resultados">
+            @for (r of resultadosEnvio(); track $index) {
+              <div class="resultado" [class.resultado-omitido]="r.omitido" [class.resultado-fallido]="r.estado === 'FALLIDO'">
+                <span class="canal">{{ r.canal }}</span>
+                <span class="estado">
+                  {{ r.omitido ? 'Ya enviado' : r.estado }}
+                </span>
+                @if (r.previewUrl) {
+                  <a [href]="r.previewUrl" target="_blank">Ver correo →</a>
+                }
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+  }
+</div>
