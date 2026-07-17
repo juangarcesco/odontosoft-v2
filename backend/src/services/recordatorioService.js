@@ -80,7 +80,6 @@ async function enviarWhatsApp(cita, mensaje) {
 async function obtenerConfiguracion() {
   let config = await ConfiguracionMensaje.findOne();
 
-  // Si nunca se ha configurado, se crea con la plantilla por defecto
   if (!config) {
     config = await ConfiguracionMensaje.create({});
   }
@@ -108,6 +107,52 @@ async function actualizarConfiguracion(plantilla, usuarioId) {
   return config;
 }
 
+async function ejecutarEnvioRecordatorios() {
+  const citas = await obtenerCitasElegibles();
+  const config = await obtenerConfiguracion();
+
+  const resultados = [];
+
+  for (const cita of citas) {
+    const mensaje = reemplazarPlaceholders(config.plantilla, cita);
+
+    for (const canal of ['EMAIL', 'WHATSAPP']) {
+      // Evita reenviar si ya existe un recordatorio para esta cita+canal (índice único del modelo)
+      const yaExiste = await Recordatorio.findOne({ cita: cita._id, canal });
+      if (yaExiste) {
+        resultados.push({ cita: cita._id, canal, omitido: true, motivo: 'Ya enviado previamente' });
+        continue;
+      }
+
+      const resultadoEnvio =
+        canal === 'EMAIL' ? await enviarEmail(cita, mensaje) : await enviarWhatsApp(cita, mensaje);
+
+      try {
+        const recordatorio = await Recordatorio.create({
+          cita: cita._id,
+          paciente: cita.paciente._id,
+          canal,
+          mensaje,
+          estado: resultadoEnvio.exito ? 'ENVIADO' : 'FALLIDO',
+          detalleError: resultadoEnvio.error || '',
+        });
+
+        resultados.push({
+          cita: cita._id,
+          canal,
+          estado: recordatorio.estado,
+          previewUrl: resultadoEnvio.previewUrl,
+        });
+      } catch (error) {
+        // Si el índice único rechaza (carrera entre ejecuciones simultáneas), se omite sin romper el flujo
+        resultados.push({ cita: cita._id, canal, omitido: true, motivo: 'Conflicto de duplicado' });
+      }
+    }
+  }
+
+  return resultados;
+}
+
 module.exports = {
   obtenerCitasElegibles,
   ESTADOS_ELEGIBLES,
@@ -116,4 +161,5 @@ module.exports = {
   enviarWhatsApp,
   obtenerConfiguracion,
   actualizarConfiguracion,
+  ejecutarEnvioRecordatorios,
 };

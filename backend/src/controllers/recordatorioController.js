@@ -1,4 +1,8 @@
-const { obtenerConfiguracion, actualizarConfiguracion } = require('../services/recordatorioService');
+const {
+  obtenerConfiguracion,
+  actualizarConfiguracion,
+  ejecutarEnvioRecordatorios,
+} = require('../services/recordatorioService');
 
 async function obtenerConfig(req, res) {
   try {
@@ -24,4 +28,14 @@ async function actualizarConfig(req, res) {
   }
 }
 
-module.exports = { obtenerConfig, actualizarConfig };
+async function ejecutarEnvio(req, res) {
+  try {
+    const resultados = await ejecutarEnvioRecordatorios();
+    return res.status(200).json({ mensaje: 'Proceso de envío ejecutado', resultados });
+  } catch (error) {
+    console.error('Error al ejecutar envío de recordatorios:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { obtenerConfig, actualizarConfig, ejecutarEnvio };
