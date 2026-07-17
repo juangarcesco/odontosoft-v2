@@ -1,0 +1,59 @@
+<div class="contenedor">
+  <h1>{{ modoEdicion() ? 'Editar material' : 'Nuevo material' }}</h1>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (!cargando()) {
+    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+      <div class="campo">
+        <label for="nombre">Nombre *</label>
+        <input id="nombre" type="text" formControlName="nombre" />
+      </div>
+
+      <div class="campo">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" formControlName="descripcion" rows="2"></textarea>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="costoUnitario">Costo unitario (COP) *</label>
+          <input id="costoUnitario" type="number" min="0" formControlName="costoUnitario" />
+        </div>
+        <div class="campo">
+          <label for="stockMinimo">Stock mínimo *</label>
+          <input id="stockMinimo" type="number" min="0" formControlName="stockMinimo" />
+        </div>
+      </div>
+
+      @if (!modoEdicion()) {
+        <div class="campo">
+          <label for="stock">Stock inicial</label>
+          <input id="stock" type="number" min="0" formControlName="stock" />
+        </div>
+      } @else {
+        <p class="nota-stock">
+          El stock actual se gestiona desde "Registrar entrada" o "Registrar salida" en el detalle del material.
+        </p>
+      }
+
+      <div class="campo">
+        <label for="proveedor">Proveedor</label>
+        <input id="proveedor" type="text" formControlName="proveedor" />
+      </div>
+
+      @if (error()) {
+        <div class="estado-error">{{ error() }}</div>
+      }
+
+      <div class="acciones">
+        <button type="button" class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-primario" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>
