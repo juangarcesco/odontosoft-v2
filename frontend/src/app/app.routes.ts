@@ -111,4 +111,13 @@ export const routes: Routes = [
     import('./features/recordatorios/config-mensaje/config-mensaje').then((m) => m.ConfigMensaje),
 },
 
+{
+  path: 'recordatorios/historial',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/recordatorios/historial-recordatorios/historial-recordatorios').then(
+      (m) => m.HistorialRecordatorios
+    ),
+},
+
 ];
