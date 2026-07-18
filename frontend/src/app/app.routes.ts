@@ -134,4 +134,11 @@ export const routes: Routes = [
     import('./features/reportes/reporte-clinico/reporte-clinico').then((m) => m.ReporteClinico),
 },
 
+{
+  path: 'rips',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/rips/validacion-periodo/validacion-periodo').then((m) => m.ValidacionPeriodoComponent),
+},
+
 ];
