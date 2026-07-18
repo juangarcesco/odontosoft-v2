@@ -54,25 +54,54 @@ async function obtenerPacientesNuevosPorMes(meses = 6) {
 
 async function obtenerTratamientosMasRealizados(limite = 10) {
   const resultado = await HistoriaClinica.aggregate([
-    // 1. "Aplana" el array de evoluciones, un documento por cada evolución
     { $unwind: '$evoluciones' },
-    // 2. Solo evoluciones activas (respeta RN-10: las desactivadas no cuentan)
     { $match: { 'evoluciones.activo': true } },
-    // 3. "Aplana" el array de tratamientos dentro de cada evolución
     { $unwind: '$evoluciones.tratamientosRealizados' },
-    // 4. Agrupa por nombre de procedimiento y cuenta ocurrencias
     {
       $group: {
         _id: '$evoluciones.tratamientosRealizados.procedimiento',
         cantidad: { $sum: 1 },
       },
     },
-    // 5. Ordena de mayor a menor frecuencia
     { $sort: { cantidad: -1 } },
-    // 6. Limita a los N más frecuentes
     { $limit: limite },
-    // 7. Renombra _id a "procedimiento" para una respuesta más clara
     { $project: { _id: 0, procedimiento: '$_id', cantidad: 1 } },
+  ]);
+
+  return resultado;
+}
+
+async function obtenerPacientesConSaldoPendiente() {
+  const resultado = await Factura.aggregate([
+    { $match: { estado: 'PENDIENTE', saldoPendiente: { $gt: 0 } } },
+    {
+      $group: {
+        _id: '$paciente',
+        saldoTotal: { $sum: '$saldoPendiente' },
+        cantidadFacturas: { $sum: 1 },
+      },
+    },
+    { $sort: { saldoTotal: -1 } },
+    {
+      $lookup: {
+        from: 'pacientes',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'paciente',
+      },
+    },
+    { $unwind: '$paciente' },
+    {
+      $project: {
+        _id: 0,
+        pacienteId: '$paciente._id',
+        nombre: '$paciente.nombre',
+        apellido: '$paciente.apellido',
+        telefono: '$paciente.telefono',
+        saldoTotal: 1,
+        cantidadFacturas: 1,
+      },
+    },
   ]);
 
   return resultado;
@@ -82,4 +111,5 @@ module.exports = {
   obtenerIngresosMesActual,
   obtenerPacientesNuevosPorMes,
   obtenerTratamientosMasRealizados,
+  obtenerPacientesConSaldoPendiente,
 };
