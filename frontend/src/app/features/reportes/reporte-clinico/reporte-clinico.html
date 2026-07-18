@@ -1,0 +1,51 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Reporte Clínico</h1>
+      <p class="subtitulo">Tratamientos más realizados</p>
+    </div>
+    <a routerLink="/reportes" class="btn-secundario">← Volver a reportes</a>
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && tratamientos().length === 0) {
+    <p class="estado-info">No hay tratamientos registrados todavía.</p>
+  }
+
+  @if (tratamientos().length > 0) {
+    <div class="tarjeta">
+      <div class="acciones-descarga">
+        <button (click)="descargar('excel')" [disabled]="descargando() === 'excel'">
+          {{ descargando() === 'excel' ? 'Descargando...' : '📊 Excel' }}
+        </button>
+        <button (click)="descargar('pdf')" [disabled]="descargando() === 'pdf'">
+          {{ descargando() === 'pdf' ? 'Descargando...' : '📄 PDF' }}
+        </button>
+      </div>
+
+      <div class="lista-tratamientos">
+        @for (t of tratamientos(); track t.procedimiento; let i = $index) {
+          <div class="fila-tratamiento">
+            <span class="posicion">{{ i + 1 }}</span>
+            <div class="info-tratamiento">
+              <div class="nombre-cantidad">
+                <span class="nombre">{{ t.procedimiento }}</span>
+                <span class="cantidad">{{ t.cantidad }} vez(veces)</span>
+              </div>
+              <div class="barra-fondo">
+                <div class="barra-relleno" [style.width.%]="anchoBarra(t.cantidad)"></div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

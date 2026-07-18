@@ -9,7 +9,11 @@
     <a routerLink="/citas">Ver Agenda</a>
     <a routerLink="/inventario">Ver Inventario</a>
     <a routerLink="/recordatorios">Recordatorios</a>
-    <a routerLink="/reportes">Reportes</a>
+    @if (esOdontologo) {
+      <a routerLink="/reportes/clinicos">Reportes</a>
+    } @else {
+      <a routerLink="/reportes">Reportes</a>
+    }
   </nav>
 
   <section class="widget-citas-hoy">

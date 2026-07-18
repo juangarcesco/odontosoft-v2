@@ -18,6 +18,9 @@ export class Dashboard implements OnInit {
   cargandoCitas = signal(true);
   errorCitas = signal<string | null>(null);
 
+  esOdontologo = this.authService.getUsuario()?.rol === 'ODONTOLOGO';
+  esAdmin = this.authService.getUsuario()?.rol === 'ADMIN';
+
   ngOnInit(): void {
     this.cargarCitasDeHoy();
   }
