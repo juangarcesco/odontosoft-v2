@@ -141,4 +141,11 @@ export const routes: Routes = [
     import('./features/rips/validacion-periodo/validacion-periodo').then((m) => m.ValidacionPeriodoComponent),
 },
 
+{
+  path: 'rips/historial',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/rips/historial-rips/historial-rips').then((m) => m.HistorialRips),
+},
+
 ];

@@ -1,0 +1,41 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Histórico de Archivos RIPS</h1>
+    <a routerLink="/rips" class="btn-secundario">← Generar nuevo</a>
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && archivos().length === 0) {
+    <p class="estado-info">Aún no se han generado archivos RIPS.</p>
+  }
+
+  @if (archivos().length > 0) {
+    <table class="tabla-historial">
+      <thead>
+        <tr>
+          <th>Periodo</th>
+          <th>Atenciones incluidas</th>
+          <th>Generado por</th>
+          <th>Fecha de generación</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (a of archivos(); track a._id) {
+          <tr>
+            <td class="periodo">{{ formatearPeriodo(a.periodo) }}</td>
+            <td>{{ a.cantidadAtenciones }}</td>
+            <td>{{ nombreUsuario(a.generadoPor) }}</td>
+            <td>{{ a.createdAt | date: 'medium' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
