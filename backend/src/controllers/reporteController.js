@@ -5,6 +5,7 @@ const {
   obtenerPacientesConSaldoPendiente,
   obtenerTasaAsistencia,
   generarExcelReporte,
+  generarPdfReporteCompleto,
 } = require('../services/reporteService');
 
 async function ingresos(req, res) {
@@ -77,6 +78,26 @@ async function exportarExcel(req, res) {
   }
 }
 
+async function exportarPdf(req, res) {
+  try {
+    const { tipo } = req.params;
+    const buffer = await generarPdfReporteCompleto(tipo);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=reporte-${tipo}.pdf`,
+    });
+
+    return res.send(buffer);
+  } catch (error) {
+    if (error.codigo === 'TIPO_INVALIDO') {
+      return res.status(400).json({ mensaje: error.message });
+    }
+    console.error('Error al exportar reporte a PDF:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
 module.exports = {
   ingresos,
   pacientesNuevos,
@@ -84,4 +105,5 @@ module.exports = {
   saldoPendiente,
   tasaAsistencia,
   exportarExcel,
+  exportarPdf,
 };
