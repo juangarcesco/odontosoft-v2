@@ -5,6 +5,7 @@ const {
   tratamientosMasRealizados,
   saldoPendiente,
   tasaAsistencia,
+  exportarExcel,
 } = require('../controllers/reporteController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 const { permitirRoles } = require('../middlewares/roleMiddleware');
@@ -21,5 +22,8 @@ router.get('/tasa-asistencia', verificarToken, permitirRoles('ADMIN', 'RECEPCION
 
 // Clínico: ADMIN + ODONTOLOGO
 router.get('/tratamientos', verificarToken, permitirRoles('ADMIN', 'ODONTOLOGO'), tratamientosMasRealizados);
+
+router.get('/:tipo/excel', verificarToken, permitirRoles('ADMIN', 'ODONTOLOGO', 'RECEPCIONISTA'), exportarExcel);
+
 
 module.exports = router;

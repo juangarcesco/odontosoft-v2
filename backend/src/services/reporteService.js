@@ -2,6 +2,7 @@ const Factura = require('../models/Factura');
 const Paciente = require('../models/Paciente');
 const HistoriaClinica = require('../models/HistoriaClinica');
 const Cita = require('../models/Cita');
+const ExcelJS = require('exceljs');
 
 async function obtenerIngresosMesActual() {
   const ahora = new Date();
@@ -136,10 +137,90 @@ async function obtenerTasaAsistencia() {
   };
 }
 
+async function generarExcelReporte(tipoReporte) {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'OdontoSoft';
+  workbook.created = new Date();
+
+  const hoja = workbook.addWorksheet('Reporte');
+
+  switch (tipoReporte) {
+    case 'ingresos': {
+      const datos = await obtenerIngresosMesActual();
+      hoja.columns = [
+        { header: 'Mes', key: 'mes', width: 25 },
+        { header: 'Total de ingresos (COP)', key: 'totalIngresos', width: 25 },
+        { header: 'Cantidad de pagos', key: 'cantidadPagos', width: 20 },
+      ];
+      hoja.addRow(datos);
+      break;
+    }
+
+    case 'pacientes-nuevos': {
+      const datos = await obtenerPacientesNuevosPorMes();
+      hoja.columns = [
+        { header: 'Mes', key: 'mes', width: 20 },
+        { header: 'Pacientes nuevos', key: 'cantidad', width: 20 },
+      ];
+      hoja.addRows(datos);
+      break;
+    }
+
+    case 'tratamientos': {
+      const datos = await obtenerTratamientosMasRealizados();
+      hoja.columns = [
+        { header: 'Procedimiento', key: 'procedimiento', width: 35 },
+        { header: 'Cantidad realizada', key: 'cantidad', width: 20 },
+      ];
+      hoja.addRows(datos);
+      break;
+    }
+
+    case 'saldo-pendiente': {
+      const datos = await obtenerPacientesConSaldoPendiente();
+      hoja.columns = [
+        { header: 'Paciente', key: 'nombreCompleto', width: 30 },
+        { header: 'Teléfono', key: 'telefono', width: 18 },
+        { header: 'Facturas pendientes', key: 'cantidadFacturas', width: 20 },
+        { header: 'Saldo total (COP)', key: 'saldoTotal', width: 20 },
+      ];
+      hoja.addRows(
+        datos.map((d) => ({ ...d, nombreCompleto: `${d.nombre} ${d.apellido}` }))
+      );
+      break;
+    }
+
+    case 'tasa-asistencia': {
+      const datos = await obtenerTasaAsistencia();
+      hoja.columns = [
+        { header: 'Citas finalizadas', key: 'citasFinalizadas', width: 20 },
+        { header: 'Citas sin asistencia', key: 'citasNoAsistio', width: 22 },
+        { header: 'Total con desenlace', key: 'totalCitasConDesenlace', width: 22 },
+        { header: 'Tasa de asistencia (%)', key: 'tasaAsistencia', width: 22 },
+      ];
+      hoja.addRow(datos);
+      break;
+    }
+
+    default: {
+      const error = new Error('Tipo de reporte no reconocido');
+      error.codigo = 'TIPO_INVALIDO';
+      throw error;
+    }
+  }
+
+  // Encabezado en negrita, consistente en cualquier reporte generado
+  hoja.getRow(1).font = { bold: true };
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  return buffer;
+}
+
 module.exports = {
   obtenerIngresosMesActual,
   obtenerPacientesNuevosPorMes,
   obtenerTratamientosMasRealizados,
   obtenerPacientesConSaldoPendiente,
   obtenerTasaAsistencia,
+  generarExcelReporte,
 };

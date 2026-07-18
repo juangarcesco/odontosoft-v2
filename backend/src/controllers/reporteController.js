@@ -4,6 +4,7 @@ const {
   obtenerTratamientosMasRealizados,
   obtenerPacientesConSaldoPendiente,
   obtenerTasaAsistencia,
+  generarExcelReporte,
 } = require('../services/reporteService');
 
 async function ingresos(req, res) {
@@ -56,10 +57,31 @@ async function tasaAsistencia(req, res) {
   }
 }
 
+async function exportarExcel(req, res) {
+  try {
+    const { tipo } = req.params;
+    const buffer = await generarExcelReporte(tipo);
+
+    res.set({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename=reporte-${tipo}.xlsx`,
+    });
+
+    return res.send(buffer);
+  } catch (error) {
+    if (error.codigo === 'TIPO_INVALIDO') {
+      return res.status(400).json({ mensaje: error.message });
+    }
+    console.error('Error al exportar reporte a Excel:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
 module.exports = {
   ingresos,
   pacientesNuevos,
   tratamientosMasRealizados,
   saldoPendiente,
   tasaAsistencia,
+  exportarExcel,
 };
