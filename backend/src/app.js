@@ -9,6 +9,7 @@ const historiaClinicaRoutes = require('./routes/historiaClinicaRoutes');
 const facturaRoutes = require('./routes/facturaRoutes');
 const materialRoutes = require('./routes/materialRoutes');
 const recordatorioRoutes = require('./routes/recordatorioRoutes');
+const reporteRoutes = require('./routes/reporteRoutes');
 
 
 const app = express();
@@ -39,5 +40,7 @@ app.use('/api/facturas', facturaRoutes);
 app.use('/api/materiales', materialRoutes);
 
 app.use('/api/recordatorios', recordatorioRoutes);
+
+app.use('/api/reportes', reporteRoutes); 
 
 module.exports = app;

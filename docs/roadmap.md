@@ -17,7 +17,7 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 | 5 | Facturación y Pagos | RF-33 a RF-40 | Must have | ✅ |
 | 6 | Inventario de Materiales | RF-41 a RF-45 | Must/Should/Could | ✅ |
 | 7 | Recordatorios Automáticos | RF-46 a RF-49 | Should/Could | ✅ |
-| 8 | Reportes y Estadísticas | RF-50 a RF-55 | Must/Should/Could | ⏳ |
+| 8 | Reportes y Estadísticas | RF-50 a RF-55 | Must/Should/Could | ✅ |
 | 9 | Integración con RIPS | RF-56 a RF-59 | Must/Should | ⏳ |
 
 ---
@@ -208,30 +208,39 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 
 ---
 
-## Módulo 8 — Reportes y Estadísticas ⏳
+## Módulo 8 — Reportes y Estadísticas ✅
 
+**Rama:** `feature/modulo8-reportes` (probada end-to-end, pendiente de PR/merge)
 **Requisitos:** RF-50 a RF-55
+**Documentación:** `docs/Documentacion_Modulo8_Reportes.md`
 
-### Permisos (matriz del SRS)
+- Módulo de consultas analíticas (sin entidades ni reglas de negocio propias); agrega datos de Pacientes, Citas, Historia Clínica y Facturación
+- Ingresos del mes basado en pagos efectivos (no facturación bruta)
+- Pacientes nuevos en serie de 6 meses
+- Tratamientos más realizados vía pipeline de agregación de MongoDB, respetando RN-10 (excluye evoluciones desactivadas)
+- Pacientes con saldo pendiente consolidado por paciente (`$lookup`)
+- Tasa de asistencia (excluye citas sin desenlace conocido)
+- Exportación a Excel (exceljs) y PDF (pdfkit) para los 5 reportes
+- **Permisos:** el control de acceso más granular del proyecto — 3 categorías (financiero/administrativo → ADMIN+RECEPCIONISTA; clínico → ADMIN+ODONTOLOGO)
 
-| Rol | Acceso a reportes |
-|---|---|
-| ADMIN | Todos (inventario, financieros, clínicos agregados, administrativos) |
-| ODONTOLOGO | Clínicos |
-| RECEPCIONISTA | Administrativos, financieros, inventario |
+### Roadmap de pasos (14/14 completados)
 
-### Alcance según el SRS
-
-- Ingresos del mes en curso (Must have)
-- Pacientes nuevos por mes (Should have)
-- Tratamientos más realizados (Could have)
-- Pacientes con saldo pendiente (Must have)
-- Tasa de asistencia a citas (Could have)
-- Exportación a Excel o PDF (Should have)
-
-### Dependencias
-
-- Requiere Módulos 2, 3, 4, 5 (✅ todos cumplidos) y 6 (✅), ya que agrega datos de todos ellos.
+| # | Paso | Estado |
+|---|---|---|
+| 1 | Servicio: ingresos del mes en curso | ✅ |
+| 2 | Servicio: pacientes nuevos por mes | ✅ |
+| 3 | Servicio: tratamientos más realizados | ✅ |
+| 4 | Servicio: pacientes con saldo pendiente | ✅ |
+| 5 | Servicio: tasa de asistencia a citas | ✅ |
+| 6 | Endpoints con control de acceso diferenciado | ✅ |
+| 7 | Exportación a Excel | ✅ |
+| 8 | Exportación a PDF | ✅ |
+| 9 | Pruebas end-to-end del backend completo (10/10) | ✅ |
+| 10 | Frontend: servicio Angular de reportes | ✅ |
+| 11 | Frontend: dashboard financiero/administrativo | ✅ |
+| 12 | Frontend: reporte clínico | ✅ |
+| 13 | Frontend: botones de exportación | ✅ (integrado en 11 y 12) |
+| 14 | Pruebas end-to-end del módulo completo (10/10, verificado dos veces) | ✅ |
 
 ---
 
@@ -264,6 +273,7 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 | Al iniciar Módulo 5 | Sincronización de ramas | El `main` local y el remoto divergieron tras el cierre del Módulo 4; se resolvió con `git fetch origin` + `git reset --hard origin/main`, sincronizando el local exactamente con el remoto |
 | Durante Módulo 6 | Inventario | Patrón recurrente de funciones perdidas al agregar código a archivos existentes (3 incidentes); se adoptó la práctica de entregar siempre el archivo completo al modificar un archivo ya existente |
 | Durante Módulo 7 | Recordatorios | Se cerró accidentalmente el PR del Módulo 6 sin mergear (clic en cerrar en vez de "Merge pull request"); se resolvió reabriendo el PR y resolviendo el conflicto resultante en `docs/roadmap.md` |
+| Durante Módulo 8 | Reportes | Módulo más estable del proyecto — un solo incidente menor (dato de prueba vacío, no bug de lógica) al verificar el reporte de saldo pendiente |
 
 ---
 

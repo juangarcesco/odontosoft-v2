@@ -1,0 +1,126 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Reportes</h1>
+    @if (esAdmin) {
+      <a routerLink="/reportes/clinicos" class="btn-secundario">Ver reporte clínico →</a>
+    }
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-info">Cargando reportes...</p>
+  }
+
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+
+  @if (!cargando() && ingresos()) {
+    <div class="grid-reportes">
+      <!-- Ingresos del mes -->
+      <section class="tarjeta">
+        <div class="encabezado-tarjeta">
+          <h2>Ingresos de {{ ingresos()!.mes }}</h2>
+          <div class="acciones-descarga">
+            <button (click)="descargar('ingresos', 'excel')" [disabled]="descargando() === 'ingresos-excel'">
+              {{ descargando() === 'ingresos-excel' ? '...' : 'Excel' }}
+            </button>
+            <button (click)="descargar('ingresos', 'pdf')" [disabled]="descargando() === 'ingresos-pdf'">
+              {{ descargando() === 'ingresos-pdf' ? '...' : 'PDF' }}
+            </button>
+          </div>
+        </div>
+        <p class="cifra-grande">${{ formatearMoneda(ingresos()!.totalIngresos) }}</p>
+        <p class="detalle">{{ ingresos()!.cantidadPagos }} pago(s) registrado(s)</p>
+      </section>
+
+      <!-- Tasa de asistencia -->
+      <section class="tarjeta">
+        <div class="encabezado-tarjeta">
+          <h2>Tasa de asistencia</h2>
+          <div class="acciones-descarga">
+            <button (click)="descargar('tasa-asistencia', 'excel')" [disabled]="descargando() === 'tasa-asistencia-excel'">
+              {{ descargando() === 'tasa-asistencia-excel' ? '...' : 'Excel' }}
+            </button>
+            <button (click)="descargar('tasa-asistencia', 'pdf')" [disabled]="descargando() === 'tasa-asistencia-pdf'">
+              {{ descargando() === 'tasa-asistencia-pdf' ? '...' : 'PDF' }}
+            </button>
+          </div>
+        </div>
+        @if (tasaAsistencia()?.tasaAsistencia === null) {
+          <p class="estado-info">Sin datos suficientes todavía.</p>
+        } @else {
+          <p class="cifra-grande">{{ tasaAsistencia()!.tasaAsistencia }}%</p>
+          <p class="detalle">
+            {{ tasaAsistencia()!.citasFinalizadas }} finalizadas / {{ tasaAsistencia()!.citasNoAsistio }} sin asistencia
+          </p>
+        }
+      </section>
+
+      <!-- Pacientes nuevos por mes -->
+      <section class="tarjeta tarjeta-ancha">
+        <div class="encabezado-tarjeta">
+          <h2>Pacientes nuevos (últimos 6 meses)</h2>
+          <div class="acciones-descarga">
+            <button (click)="descargar('pacientes-nuevos', 'excel')" [disabled]="descargando() === 'pacientes-nuevos-excel'">
+              {{ descargando() === 'pacientes-nuevos-excel' ? '...' : 'Excel' }}
+            </button>
+            <button (click)="descargar('pacientes-nuevos', 'pdf')" [disabled]="descargando() === 'pacientes-nuevos-pdf'">
+              {{ descargando() === 'pacientes-nuevos-pdf' ? '...' : 'PDF' }}
+            </button>
+          </div>
+        </div>
+        <div class="grafico-barras">
+          @for (p of pacientesNuevos(); track p.mes) {
+            <div class="barra-contenedor">
+              <div class="barra" [style.height.%]="alturaBarra(p.cantidad)">
+                <span class="valor-barra">{{ p.cantidad }}</span>
+              </div>
+              <span class="etiqueta-barra">{{ p.mes }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Pacientes con saldo pendiente -->
+      <section class="tarjeta tarjeta-ancha">
+        <div class="encabezado-tarjeta">
+          <h2>Pacientes con saldo pendiente</h2>
+          <div class="acciones-descarga">
+            <button (click)="descargar('saldo-pendiente', 'excel')" [disabled]="descargando() === 'saldo-pendiente-excel'">
+              {{ descargando() === 'saldo-pendiente-excel' ? '...' : 'Excel' }}
+            </button>
+            <button (click)="descargar('saldo-pendiente', 'pdf')" [disabled]="descargando() === 'saldo-pendiente-pdf'">
+              {{ descargando() === 'saldo-pendiente-pdf' ? '...' : 'PDF' }}
+            </button>
+          </div>
+        </div>
+
+        @if (saldoPendiente().length === 0) {
+          <p class="estado-info">No hay pacientes con saldo pendiente.</p>
+        } @else {
+          <p class="detalle">Total pendiente: <strong>${{ formatearMoneda(totalSaldoPendiente()) }}</strong></p>
+          <table class="tabla-saldo">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Teléfono</th>
+                <th>Facturas</th>
+                <th>Saldo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of saldoPendiente(); track p.pacienteId) {
+                <tr>
+                  <td>{{ p.nombre }} {{ p.apellido }}</td>
+                  <td>{{ p.telefono }}</td>
+                  <td>{{ p.cantidadFacturas }}</td>
+                  <td>${{ formatearMoneda(p.saldoTotal) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    </div>
+  }
+</div>

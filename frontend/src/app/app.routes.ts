@@ -120,4 +120,18 @@ export const routes: Routes = [
     ),
 },
 
+{
+  path: 'reportes',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/reportes/dashboard-reportes/dashboard-reportes').then((m) => m.DashboardReportes),
+},
+
+{
+  path: 'reportes/clinicos',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/reportes/reporte-clinico/reporte-clinico').then((m) => m.ReporteClinico),
+},
+
 ];
