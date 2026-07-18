@@ -18,7 +18,9 @@ Registro de avance de todos los módulos del SRS. Se actualiza a medida que se c
 | 6 | Inventario de Materiales | RF-41 a RF-45 | Must/Should/Could | ✅ |
 | 7 | Recordatorios Automáticos | RF-46 a RF-49 | Should/Could | ✅ |
 | 8 | Reportes y Estadísticas | RF-50 a RF-55 | Must/Should/Could | ✅ |
-| 9 | Integración con RIPS | RF-56 a RF-59 | Must/Should | ⏳ |
+| 9 | Integración con RIPS | RF-56 a RF-59 | Must/Should | ✅ |
+
+## 🎉 Proyecto completado: 9/9 módulos, 59/59 requisitos funcionales, 10/10 reglas de negocio
 
 ---
 
@@ -244,23 +246,57 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 
 ---
 
-## Módulo 9 — Integración con RIPS ⏳
+## Módulo 9 — Integración con RIPS ✅
 
+**Rama:** `feature/modulo9-rips` (probada end-to-end, pendiente de PR/merge)
 **Requisitos:** RF-56 a RF-59
-**Marco normativo:** Resolución 948 de 2026 (Ministerio de Salud de Colombia)
+**Documentación:** `docs/Documentacion_Modulo9_RIPS.md`
 
-### Alcance y delimitación (según el SRS)
+- Extensión retrocompatible de `Factura.items` con `codigoCups` y `diagnostico`
+- Modelo `ArchivoRips` para histórico (N:N con Factura, según modelo conceptual del SRS)
+- Validación de datos obligatorios por periodo, con detalle de campos faltantes por atención
+- Generación de estructura JSON del RIPS (versión simplificada, alineada con la delimitación de alcance del SRS)
+- Descarga del archivo, bloqueada mientras existan atenciones incompletas
+- Histórico de archivos generados
+- **Permisos:** RECEPCIONISTA con acceso completo; ADMIN con lectura y generación; ODONTOLOGO sin acceso
 
-- Generar archivo RIPS en formato **JSON** (Must have), conforme a los Documentos Técnicos 1 y 2 del Ministerio
-- Validar datos obligatorios antes de generar (documento del paciente, código CUPS, diagnóstico, fecha de atención) y listar atenciones incompletas (Must have)
-- Descargar el archivo JSON generado para radicación manual o uso por facturador externo (Should have)
-- Histórico de archivos RIPS generados, con periodo, usuario y fecha (Should have)
+### Roadmap de pasos (13/13 completados)
 
-**Fuera de alcance explícito:** el envío automático al Mecanismo Único de Validación (MUV) y la obtención del Código Único de Validación (CUV) no forman parte de esta versión, ya que requieren facturación electrónica DIAN (fuera del alcance del proyecto).
+| # | Paso | Estado |
+|---|---|---|
+| 1 | Extender `Factura.items` con codigoCups y diagnostico | ✅ |
+| 2 | Modelo `ArchivoRips` | ✅ |
+| 3 | Servicio: validar atenciones completas/incompletas | ✅ |
+| 4 | Servicio: construir estructura JSON del RIPS | ✅ |
+| 5 | Endpoint: validar periodo | ✅ |
+| 6 | Endpoint: generar y descargar RIPS | ✅ |
+| 7 | Endpoint: histórico de archivos generados | ✅ |
+| 8 | Pruebas end-to-end del backend completo (12/12) | ✅ |
+| 9 | Frontend: servicio Angular de RIPS | ✅ |
+| 10 | Frontend: selector de periodo + validación | ✅ |
+| 11 | Frontend: generar y descargar RIPS | ✅ |
+| 12 | Frontend: histórico de archivos generados | ✅ |
+| 13 | Pruebas end-to-end del módulo completo (12/12, verificado dos veces) | ✅ |
 
-### Dependencias
+---
 
-- Requiere Módulos 2 (✅), 4 (✅) y 5 (✅) completos, ya que el RIPS se construye a partir de esos datos.
+# 🎉 CIERRE DEL PROYECTO — OdontoSoft completo
+
+Con el cierre del Módulo 9, **los 9 módulos del SRS quedan implementados, probados y documentados**:
+
+| Módulo | Requisitos | Estado |
+|---|---|---|
+| 1. Autenticación y Control de Acceso | RF-01 a RF-08 | ✅ |
+| 2. Gestión de Pacientes | RF-09 a RF-16 | ✅ |
+| 3. Citas y Agenda | RF-17 a RF-24 | ✅ |
+| 4. Historia Clínica y Odontograma | RF-25 a RF-32 | ✅ |
+| 5. Facturación y Pagos | RF-33 a RF-40 | ✅ |
+| 6. Inventario de Materiales | RF-41 a RF-45 | ✅ |
+| 7. Recordatorios Automáticos | RF-46 a RF-49 | ✅ |
+| 8. Reportes y Estadísticas | RF-50 a RF-55 | ✅ |
+| 9. Integración con RIPS | RF-56 a RF-59 | ✅ |
+
+**Totales:** 59 requisitos funcionales, 10 reglas de negocio, 9 scripts de pruebas end-to-end, 9 documentos de cierre de módulo, 1 roadmap maestro, 1 matriz de reglas de negocio, 1 README completo.
 
 ---
 
@@ -274,6 +310,7 @@ Fue el que más problemas recurrentes presentó (3 de los 6 documentados en todo
 | Durante Módulo 6 | Inventario | Patrón recurrente de funciones perdidas al agregar código a archivos existentes (3 incidentes); se adoptó la práctica de entregar siempre el archivo completo al modificar un archivo ya existente |
 | Durante Módulo 7 | Recordatorios | Se cerró accidentalmente el PR del Módulo 6 sin mergear (clic en cerrar en vez de "Merge pull request"); se resolvió reabriendo el PR y resolviendo el conflicto resultante en `docs/roadmap.md` |
 | Durante Módulo 8 | Reportes | Módulo más estable del proyecto — un solo incidente menor (dato de prueba vacío, no bug de lógica) al verificar el reporte de saldo pendiente |
+| Durante Módulo 9 | RIPS / Facturación | Extensión retrocompatible de `Factura.items` (Módulo 5, ya cerrado) con `codigoCups` y `diagnostico`, necesarios para RF-57; campos opcionales para no romper facturas ya existentes |
 
 ---
 

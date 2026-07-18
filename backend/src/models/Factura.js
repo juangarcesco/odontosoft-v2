@@ -7,6 +7,8 @@ const itemFacturaSchema = new mongoose.Schema(
     diente: { type: Number, min: 1, max: 32 },
     procedimiento: { type: String, required: true, trim: true },
     valor: { type: Number, required: true, min: 0 },
+    codigoCups: { type: String, trim: true, default: '' },
+    diagnostico: { type: String, trim: true, default: '' },
   },
   { _id: false }
 );

@@ -18,6 +18,8 @@ export interface ItemFactura {
   diente?: number;
   procedimiento: string;
   valor: number;
+  codigoCups?: string;
+  diagnostico?: string;
 }
 
 export interface UsuarioResumen {

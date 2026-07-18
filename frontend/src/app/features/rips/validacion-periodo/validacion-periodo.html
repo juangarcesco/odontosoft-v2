@@ -1,0 +1,74 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Generar RIPS</h1>
+    <a routerLink="/rips/historial" class="btn-secundario">Ver historial →</a>
+  </div>
+
+  <section class="tarjeta">
+    <h2>1. Selecciona el periodo a validar</h2>
+    <div class="fila-selector">
+      <input
+        type="month"
+        [ngModel]="periodo()"
+        (ngModelChange)="periodo.set($event)"
+      />
+      <button class="btn-primario" [disabled]="validando()" (click)="validar()">
+        {{ validando() ? 'Validando...' : 'Validar periodo' }}
+      </button>
+    </div>
+
+    @if (error()) {
+      <div class="estado-error">{{ error() }}</div>
+    }
+
+    @if (mensajeExito()) {
+      <div class="estado-exito">{{ mensajeExito() }}</div>
+    }
+  </section>
+
+  @if (validacion(); as v) {
+    <section class="tarjeta">
+      <h2>2. Resultado de la validación</h2>
+
+      <div class="resumen-validacion">
+        <span class="resumen-item">{{ v.totalFacturas }} atención(es) en total</span>
+        <span class="resumen-item resumen-ok">{{ v.completas }} completa(s)</span>
+        @if (v.incompletas.length > 0) {
+          <span class="resumen-item resumen-alerta">{{ v.incompletas.length }} incompleta(s)</span>
+        }
+      </div>
+
+      @if (v.incompletas.length === 0 && v.completas === 0) {
+        <p class="estado-info">No hay atenciones registradas en este periodo.</p>
+      }
+
+      @if (v.incompletas.length > 0) {
+        <div class="lista-incompletas">
+          <p class="titulo-incompletas">⚠️ Corrige estas atenciones antes de generar el RIPS:</p>
+          @for (item of v.incompletas; track item.facturaId) {
+            <div class="atencion-incompleta">
+              <span class="paciente-nombre">{{ item.paciente }}</span>
+              <ul>
+                @for (campo of item.camposFaltantes; track campo) {
+                  <li>{{ campo }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  @if (puedeGenerar()) {
+    <section class="tarjeta tarjeta-generar">
+      <h2>3. Generar archivo RIPS</h2>
+      <p class="listo-para-generar">
+        ✅ Todas las atenciones están completas. El archivo se descargará en formato JSON.
+      </p>
+      <button class="btn-primario" [disabled]="generando()" (click)="generar()">
+        {{ generando() ? 'Generando...' : '📥 Generar y descargar RIPS' }}
+      </button>
+    </section>
+  }
+</div>
