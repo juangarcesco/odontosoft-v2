@@ -10,6 +10,7 @@ const facturaRoutes = require('./routes/facturaRoutes');
 const materialRoutes = require('./routes/materialRoutes');
 const recordatorioRoutes = require('./routes/recordatorioRoutes');
 const reporteRoutes = require('./routes/reporteRoutes');
+const ripsRoutes = require('./routes/ripsRoutes');
 
 
 const app = express();
@@ -42,5 +43,8 @@ app.use('/api/materiales', materialRoutes);
 app.use('/api/recordatorios', recordatorioRoutes);
 
 app.use('/api/reportes', reporteRoutes); 
+
+app.use('/api/rips', ripsRoutes);
+
 
 module.exports = app;
