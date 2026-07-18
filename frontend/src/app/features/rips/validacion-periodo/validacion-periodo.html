@@ -20,6 +20,10 @@
     @if (error()) {
       <div class="estado-error">{{ error() }}</div>
     }
+
+    @if (mensajeExito()) {
+      <div class="estado-exito">{{ mensajeExito() }}</div>
+    }
   </section>
 
   @if (validacion(); as v) {
@@ -53,12 +57,18 @@
           }
         </div>
       }
+    </section>
+  }
 
-      @if (puedeGenerar()) {
-        <div class="listo-para-generar">
-          ✅ Todas las atenciones están completas. Puedes generar el archivo RIPS.
-        </div>
-      }
+  @if (puedeGenerar()) {
+    <section class="tarjeta tarjeta-generar">
+      <h2>3. Generar archivo RIPS</h2>
+      <p class="listo-para-generar">
+        ✅ Todas las atenciones están completas. El archivo se descargará en formato JSON.
+      </p>
+      <button class="btn-primario" [disabled]="generando()" (click)="generar()">
+        {{ generando() ? 'Generando...' : '📥 Generar y descargar RIPS' }}
+      </button>
     </section>
   }
 </div>

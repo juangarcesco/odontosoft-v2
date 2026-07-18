@@ -17,10 +17,11 @@ export class ValidacionPeriodoComponent implements OnInit {
   periodo = signal<string>('');
   validacion = signal<ValidacionPeriodo | null>(null);
   validando = signal(false);
+  generando = signal(false);
   error = signal<string | null>(null);
+  mensajeExito = signal<string | null>(null);
 
   ngOnInit(): void {
-    // Precarga el periodo actual (formato YYYY-MM) como punto de partida cómodo
     const ahora = new Date();
     const mesActual = String(ahora.getMonth() + 1).padStart(2, '0');
     this.periodo.set(`${ahora.getFullYear()}-${mesActual}`);
@@ -34,6 +35,7 @@ export class ValidacionPeriodoComponent implements OnInit {
 
     this.validando.set(true);
     this.error.set(null);
+    this.mensajeExito.set(null);
     this.validacion.set(null);
 
     this.ripsService.validarPeriodo(this.periodo()).subscribe({
@@ -51,5 +53,31 @@ export class ValidacionPeriodoComponent implements OnInit {
   puedeGenerar(): boolean {
     const v = this.validacion();
     return !!v && v.completas > 0 && v.incompletas.length === 0;
+  }
+
+  generar(): void {
+    this.generando.set(true);
+    this.error.set(null);
+    this.mensajeExito.set(null);
+
+    this.ripsService.generarRips(this.periodo()).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const enlace = document.createElement('a');
+        enlace.href = url;
+        enlace.download = `rips-${this.periodo()}.json`;
+        enlace.click();
+        window.URL.revokeObjectURL(url);
+
+        this.generando.set(false);
+        this.mensajeExito.set('Archivo RIPS generado y descargado exitosamente.');
+      },
+      error: (err) => {
+        this.generando.set(false);
+        // El error de "atenciones incompletas" viene con el mismo detalle que ya
+        // mostramos en la validación, así que se reutiliza el mensaje del backend
+        this.error.set(err.error?.mensaje || 'Error al generar el RIPS');
+      },
+    });
   }
 }
