@@ -1,6 +1,7 @@
 const Factura = require('../models/Factura');
 const Paciente = require('../models/Paciente');
 const HistoriaClinica = require('../models/HistoriaClinica');
+const Cita = require('../models/Cita');
 
 async function obtenerIngresosMesActual() {
   const ahora = new Date();
@@ -107,9 +108,38 @@ async function obtenerPacientesConSaldoPendiente() {
   return resultado;
 }
 
+async function obtenerTasaAsistencia() {
+  // Solo se consideran citas cuyo desenlace ya se conoce (no Programada/Confirmada, que aún están pendientes)
+  const ESTADOS_FINALIZADOS = ['FINALIZADA', 'NO_ASISTIO'];
+
+  const resultado = await Cita.aggregate([
+    { $match: { estado: { $in: ESTADOS_FINALIZADOS } } },
+    {
+      $group: {
+        _id: '$estado',
+        cantidad: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const finalizadas = resultado.find((r) => r._id === 'FINALIZADA')?.cantidad || 0;
+  const noAsistio = resultado.find((r) => r._id === 'NO_ASISTIO')?.cantidad || 0;
+  const total = finalizadas + noAsistio;
+
+  const tasaAsistencia = total > 0 ? Math.round((finalizadas / total) * 100) : null;
+
+  return {
+    citasFinalizadas: finalizadas,
+    citasNoAsistio: noAsistio,
+    totalCitasConDesenlace: total,
+    tasaAsistencia, // porcentaje, o null si no hay datos suficientes
+  };
+}
+
 module.exports = {
   obtenerIngresosMesActual,
   obtenerPacientesNuevosPorMes,
   obtenerTratamientosMasRealizados,
   obtenerPacientesConSaldoPendiente,
+  obtenerTasaAsistencia,
 };
