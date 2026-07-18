@@ -1,4 +1,4 @@
-const { validarPeriodo, generarYRegistrarRips } = require('../services/ripsService');
+const { validarPeriodo, generarYRegistrarRips, listarArchivosRips } = require('../services/ripsService');
 
 function validarFormatoPeriodo(periodo) {
   return /^\d{4}-(0[1-9]|1[0-2])$/.test(periodo);
@@ -28,7 +28,7 @@ async function generar(req, res) {
       return res.status(400).json({ mensaje: 'El periodo debe tener formato YYYY-MM, ej. 2026-07' });
     }
 
-    const { estructura, archivo } = await generarYRegistrarRips(periodo, req.usuario.id);
+    const { estructura } = await generarYRegistrarRips(periodo, req.usuario.id);
 
     res.set({
       'Content-Type': 'application/json',
@@ -48,4 +48,14 @@ async function generar(req, res) {
   }
 }
 
-module.exports = { validar, generar };
+async function listar(req, res) {
+  try {
+    const archivos = await listarArchivosRips();
+    return res.status(200).json({ archivos });
+  } catch (error) {
+    console.error('Error al listar archivos RIPS:', error);
+    return res.status(500).json({ mensaje: 'Error interno del servidor' });
+  }
+}
+
+module.exports = { validar, generar, listar };

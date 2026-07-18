@@ -67,19 +67,6 @@ async function validarPeriodo(periodo) {
   };
 }
 
-/**
- * Construye la estructura JSON del RIPS conforme a los campos exigidos
- * por los Documentos Técnicos 1 y 2 (Resolución 948 de 2026).
- *
- * Nota de alcance: esta es una estructura simplificada que cubre los
- * campos obligatorios mínimos exigidos por RF-57 (documento del paciente,
- * código CUPS, diagnóstico, fecha de atención). La estructura completa
- * y oficial del RIPS tiene secciones adicionales (transacción, usuarios,
- * consultas, procedimientos, facturación) que exceden el alcance de
- * validación de este proyecto — el archivo generado aquí sirve como base
- * estructural para que el consultorio o un facturador externo lo
- * complete/adapte antes de la radicación real.
- */
 async function generarEstructuraRips(periodo) {
   const { fechaInicio, fechaFin } = calcularRangoPeriodo(periodo);
 
@@ -96,11 +83,11 @@ async function generarEstructuraRips(periodo) {
 
     if (camposFaltantes.length > 0) {
       incompletas.push({ facturaId: factura._id.toString(), camposFaltantes });
-      return; // no se incluye en el RIPS si está incompleta
+      return;
     }
 
     const procedimientos = factura.items.map((item) => ({
-      codPrestador: 'PENDIENTE_HABILITACION', // código de habilitación del prestador (fuera de alcance de este proyecto)
+      codPrestador: 'PENDIENTE_HABILITACION',
       fechaAtencion: factura.createdAt.toISOString().substring(0, 10),
       codProcedimiento: item.codigoCups,
       diagnosticoPrincipal: item.diagnostico,
@@ -121,8 +108,8 @@ async function generarEstructuraRips(periodo) {
   });
 
   const estructura = {
-    numDocumentoIdObligado: 'PENDIENTE', // NIT del consultorio (fuera de alcance de este proyecto)
-    numFactura: null, // requiere integración con facturación electrónica DIAN (fuera de alcance)
+    numDocumentoIdObligado: 'PENDIENTE',
+    numFactura: null,
     tipoNota: null,
     numNota: null,
     usuarios,
@@ -168,10 +155,19 @@ async function generarYRegistrarRips(periodo, usuarioId) {
   return { estructura, archivo };
 }
 
+async function listarArchivosRips() {
+  const archivos = await ArchivoRips.find()
+    .populate('generadoPor', 'nombre')
+    .sort({ createdAt: -1 });
+
+  return archivos;
+}
+
 module.exports = {
   calcularRangoPeriodo,
   validarCamposObligatorios,
   validarPeriodo,
   generarEstructuraRips,
   generarYRegistrarRips,
+  listarArchivosRips,
 };
