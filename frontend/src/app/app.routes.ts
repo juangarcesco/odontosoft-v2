@@ -120,4 +120,11 @@ export const routes: Routes = [
     ),
 },
 
+{
+  path: 'reportes',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/reportes/dashboard-reportes/dashboard-reportes').then((m) => m.DashboardReportes),
+},
+
 ];

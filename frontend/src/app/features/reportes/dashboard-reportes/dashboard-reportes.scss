@@ -1,0 +1,147 @@
+.contenedor {
+  max-width: 950px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+  font-family: sans-serif;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 { margin: 0; color: #2c3e50; }
+}
+
+.btn-secundario {
+  color: #2980b9;
+  text-decoration: none;
+  font-size: 0.85rem;
+  &:hover { text-decoration: underline; }
+}
+
+.estado-info, .estado-error {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 2rem 0;
+}
+
+.estado-error { color: #e74c3c; }
+
+.grid-reportes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tarjeta {
+  background: white;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.tarjeta-ancha {
+  grid-column: 1 / -1;
+}
+
+.encabezado-tarjeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+
+  h2 { margin: 0; font-size: 0.95rem; color: #34495e; }
+}
+
+.acciones-descarga {
+  display: flex;
+  gap: 0.4rem;
+
+  button {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid #dcdfe3;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:hover:not(:disabled) { background: #f4f6f8; }
+  }
+}
+
+.cifra-grande {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2980b9;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.detalle {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.grafico-barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  height: 140px;
+  padding-top: 1rem;
+}
+
+.barra-contenedor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.barra {
+  width: 60%;
+  background: #2980b9;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.valor-barra {
+  position: absolute;
+  top: -1.2rem;
+  font-size: 0.7rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.etiqueta-barra {
+  font-size: 0.65rem;
+  color: #7f8c8d;
+  margin-top: 0.4rem;
+  text-transform: capitalize;
+}
+
+.tabla-saldo {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+
+  th, td {
+    text-align: left;
+    padding: 0.5rem;
+    border-bottom: 1px solid #ecf0f1;
+    font-size: 0.8rem;
+  }
+
+  th { color: #7f8c8d; font-size: 0.7rem; text-transform: uppercase; }
+}
+
+@media (max-width: 650px) {
+  .grid-reportes { grid-template-columns: 1fr; }
+}
