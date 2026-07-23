@@ -1,447 +1,549 @@
 # OdontoSoft
 
-Sistema de gestión clínica odontológica desarrollado con el stack **MEAN** (MongoDB · Express · Angular · Node.js), con enfoque en documentos embebidos de MongoDB para historias clínicas y odontogramas.
+**Sistema de Gestión Clínica Odontológica** — Aplicación web completa para consultorios dentales de tamaño mediano.
 
-**Proyecto completo: 9/9 módulos, 59/59 requisitos funcionales, 10/10 reglas de negocio.**
-
-## Tabla de contenidos
-
-- [Stack tecnológico](#stack-tecnológico)
-- [Estado del proyecto](#estado-del-proyecto)
-- [Requisitos previos](#requisitos-previos)
-- [Instalación y arranque](#instalación-y-arranque)
-- [Variables de entorno](#variables-de-entorno)
-- [Usuarios de prueba (seed)](#usuarios-de-prueba-seed)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Dependencias del proyecto](#dependencias-del-proyecto)
-- [Convención de códigos de estado HTTP](#convención-de-códigos-de-estado-http)
-- [Pruebas](#pruebas)
-- [Solución de problemas comunes](#solución-de-problemas-comunes)
-- [Flujo de trabajo con Git](#flujo-de-trabajo-con-git)
-- [Documentación por módulo](#documentación-por-módulo)
-- [Alcance y delimitaciones del proyecto](#alcance-y-delimitaciones-del-proyecto)
+![Estado](https://img.shields.io/badge/Estado-En%20producción-brightgreen)
+![Stack](https://img.shields.io/badge/Stack-MEAN-blue)
+![Node](https://img.shields.io/badge/Node.js-24.x-green)
+![Angular](https://img.shields.io/badge/Angular-20-red)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)
+![Licencia](https://img.shields.io/badge/Uso-Académico%20SENA-orange)
 
 ---
 
-## Stack tecnológico
+## 🌐 Sistema en Producción
 
-| Capa | Tecnología |
+| Componente | URL |
 |---|---|
-| Frontend | Angular (standalone components, signals) |
-| Backend | Node.js + Express |
-| Base de datos | MongoDB (Mongoose) |
-| Autenticación | JWT + bcrypt |
-| Procesamiento de imágenes | Sharp (optimización, RNF-09) |
-| Subida de archivos | Multer |
-| Email | Nodemailer + Ethereal (pruebas) |
-| Tareas programadas | node-cron |
-| Exportación de documentos | ExcelJS (Excel), PDFKit (PDF) |
-| Entorno de desarrollo | GitHub Codespaces + Docker |
+| **Frontend (Angular)** | https://odontosoft-frontend-3925.onrender.com |
+| **Backend (API REST)** | https://odontosoft-backend-dwes.onrender.com/api |
+| **Base de datos** | MongoDB Atlas · cluster `odontosoft-cluster` |
+| **Repositorio** | https://github.com/juangarcesco/odontosoft-v2 |
 
-## Estado del proyecto
-
-| Módulo | Descripción | Requisitos | Estado |
-|---|---|---|---|
-| 1 | Autenticación y control de acceso | RF-01 a RF-08 | ✅ Completado |
-| 2 | Gestión de pacientes | RF-09 a RF-16 | ✅ Completado |
-| 3 | Agenda / Citas | RF-17 a RF-24 | ✅ Completado |
-| 4 | Historia clínica y odontograma | RF-25 a RF-32 | ✅ Completado |
-| 5 | Facturación y pagos | RF-33 a RF-40 | ✅ Completado |
-| 6 | Inventario de materiales | RF-41 a RF-45 | ✅ Completado |
-| 7 | Recordatorios automáticos | RF-46 a RF-49 | ✅ Completado |
-| 8 | Reportes y estadísticas | RF-50 a RF-55 | ✅ Completado |
-| 9 | Integración con RIPS | RF-56 a RF-59 | ✅ Completado |
-
-Documentación detallada de cada módulo disponible en [`docs/`](./docs), incluyendo el [roadmap maestro](./docs/roadmap.md) y la [matriz de reglas de negocio](./docs/matriz_reglas_negocio.md) (10/10 reglas implementadas y verificadas).
+**Costo mensual de operación:** 0 USD (planes gratuitos).
 
 ---
 
-## Requisitos previos
+## 📖 Tabla de Contenidos
 
-- Node.js v24.x
-- Docker (para levantar MongoDB localmente)
-- Cuenta de GitHub con acceso al repositorio
+- [Descripción General](#-descripción-general)
+- [Contexto Académico](#-contexto-académico)
+- [Módulos del Sistema](#-módulos-del-sistema)
+- [Stack Tecnológico](#-stack-tecnológico)
+- [Arquitectura](#-arquitectura)
+- [Instalación Local](#-instalación-local)
+- [Despliegue en Producción](#-despliegue-en-producción)
+- [Documentación](#-documentación)
+- [Pruebas](#-pruebas)
+- [Métricas del Proyecto](#-métricas-del-proyecto)
+- [Autor](#-autor)
 
-Este proyecto está pensado para ejecutarse en **GitHub Codespaces**, donde Node y Docker ya vienen preinstalados. Si se ejecuta en un entorno local, verificar que ambos estén disponibles:
+---
 
-```bash
-node -v     # debe mostrar v24.x
-docker -v
+## 📋 Descripción General
+
+OdontoSoft digitaliza los procesos administrativos, clínicos y financieros de un consultorio odontológico:
+
+- **Gestión de pacientes** con validación de documento único
+- **Agenda de citas** con detección automática de conflictos de horario
+- **Historia clínica** con odontograma interactivo (32 dientes, notación FDI) y evoluciones cronológicas
+- **Facturación y pagos** con cálculo automático de saldos e IVA
+- **Inventario de materiales** con alertas de stock bajo
+- **Recordatorios automáticos** por email 24 horas antes de cada cita
+- **Reportes gerenciales** (ingresos, tratamientos, saldos, tasa de asistencia)
+- **Generación de RIPS** (Registros Individuales de Prestación de Servicios) conforme a normativa colombiana
+
+**Cliente:** Consultorio Odontológico OdontoSalud (Bogotá D.C.) — caso simulado con perfil realista de 15-25 pacientes/semana.
+
+---
+
+## 🎓 Contexto Académico
+
+Proyecto desarrollado como **Etapa Productiva** del programa **Análisis y Desarrollo de Software** del SENA, bajo la modalidad de **Proyecto Productivo**.
+
+- **Competencia técnica:** Análisis y Desarrollo de Software
+- **Duración:** 6 meses (6 entregables mensuales alineados a las Guías de Aprendizaje 1-6)
+- **Modalidad:** Individual con cliente simulado
+
+---
+
+## 🧩 Módulos del Sistema
+
+| # | Módulo | Requisitos Funcionales | Reglas de Negocio |
+|:---:|---|:---:|:---:|
+| 1 | Autenticación y control de acceso | RF-01 a RF-08 | RNF-01 a RNF-05 |
+| 2 | Pacientes | RF-09 a RF-16 | RN-02 |
+| 3 | Agenda y citas | RF-17 a RF-24 | RN-01, RN-07 |
+| 4 | Historia clínica y odontograma | RF-25 a RF-32 | RN-03, RN-09, RN-10 |
+| 5 | Facturación y pagos | RF-33 a RF-40 | RN-04, RN-05 |
+| 6 | Inventario | RF-41 a RF-45 | RN-06 |
+| 7 | Recordatorios automáticos | RF-46 a RF-49 | RN-08 |
+| 8 | Reportes y estadísticas | RF-50 a RF-55 | — |
+| 9 | Integración con RIPS | RF-56 a RF-59 | — |
+| **Total** | | **59 RF** | **10 RN** |
+
+**Cobertura:** 9/9 módulos · 59/59 RF · 10/10 RN · 14/14 RNF · 101/101 pruebas E2E pasando.
+
+---
+
+## 💻 Stack Tecnológico
+
+### Backend
+- **Runtime:** Node.js 24.x
+- **Framework:** Express 4.x
+- **ODM:** Mongoose 7.x
+- **Autenticación:** JWT (jsonwebtoken 9.x) + bcrypt 5.x
+- **Seguridad:** express-rate-limit 7.x, CORS 2.x
+- **Procesamiento:** Sharp (imágenes), PDFKit (PDFs), ExcelJS (Excel), Nodemailer (email)
+- **Tareas programadas:** node-cron 3.x
+
+### Frontend
+- **Framework:** Angular 20.x
+- **Lenguaje:** TypeScript 5.x
+- **Estado reactivo:** Signals (Angular nativo, no RxJS puro)
+- **Estilos:** SCSS con variables CSS
+- **HTTP:** HttpClient + Interceptors
+
+### Base de datos
+- **Motor:** MongoDB 8.0.x
+- **Hosting:** MongoDB Atlas (M0 Free, AWS us-east-1, Replica Set 3 nodos)
+- **11 colecciones + 22 índices activos**
+
+### Despliegue
+- **Backend:** Render — Web Service (plan Free, región Oregon)
+- **Frontend:** Render — Static Site (plan Free)
+- **CI/CD:** Auto-deploy nativo de Render (webhook en cada push a `main`)
+- **Repositorio:** GitHub
+
+---
+
+## 🏗️ Arquitectura
+
+### Alto nivel
+
+```
+    Usuario final (navegador)
+              │
+              │ HTTPS
+              ▼
+    ┌─────────────────────┐
+    │  FRONTEND (Angular) │  ← Render Static Site
+    │  SPA con signals    │
+    └─────────────────────┘
+              │
+              │ HTTPS (fetch API + JWT)
+              ▼
+    ┌─────────────────────┐
+    │  BACKEND (Node.js)  │  ← Render Web Service
+    │  Express + Mongoose │
+    └─────────────────────┘
+              │
+              │ mongodb+srv:// (TLS)
+              ▼
+    ┌─────────────────────┐
+    │  MongoDB Atlas      │  ← Replica Set (3 nodos)
+    │  cluster odontosoft │
+    └─────────────────────┘
+```
+
+### Backend — Arquitectura por Capas
+
+```
+Rutas          →  Definen endpoints + middlewares
+   ↓
+Controladores  →  Parsean request, retornan response
+   ↓
+Servicios      →  Lógica de negocio + reglas de negocio
+   ↓
+Modelos        →  Esquemas Mongoose + validaciones
+   ↓
+MongoDB Atlas
+```
+
+### Estructura de Carpetas
+
+```
+odontosoft-v2/
+├── backend/
+│   ├── src/
+│   │   ├── models/         # 12 modelos Mongoose
+│   │   ├── routes/         # 10 archivos de rutas
+│   │   ├── controllers/    # 10 controladores
+│   │   ├── services/       # 9 servicios (lógica de negocio)
+│   │   ├── middlewares/    # auth, roles, rate-limit, uploads
+│   │   ├── jobs/           # node-cron (recordatorios)
+│   │   ├── scripts/        # seedAdmin.js, seedRoles.js
+│   │   ├── config/         # conexión MongoDB
+│   │   ├── app.js
+│   │   └── server.js
+│   └── tests/              # 9 scripts E2E (101 pruebas)
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── core/       # servicios, guards, interceptor
+│   │   │   └── features/   # componentes por dominio
+│   │   ├── environments/
+│   │   └── styles.scss
+│   └── angular.json
+├── docs/                   # Documentación técnica por módulo
+└── docker-compose.yml      # Solo para desarrollo local
 ```
 
 ---
 
-## Instalación y arranque
+## 🚀 Instalación Local
 
-### 1. Clonar el repositorio (si no se usa Codespaces)
+### Requisitos
+
+- Node.js 24.x o superior
+- Docker + Docker Compose (para MongoDB local)
+- Git
+
+### Pasos
+
+**1. Clonar el repositorio**
 
 ```bash
 git clone https://github.com/juangarcesco/odontosoft-v2.git
 cd odontosoft-v2
 ```
 
-### 2. Levantar la base de datos (MongoDB vía Docker)
-
-Desde la raíz del repositorio:
+**2. Levantar MongoDB local**
 
 ```bash
-docker compose up -d
-docker ps   # confirmar que el contenedor odontosoft-mongo está corriendo
+docker-compose up -d
 ```
 
-### 3. Configurar variables de entorno del backend
+Esto inicia un contenedor MongoDB en `localhost:27017` con base de datos `odontosoft`.
+
+**3. Configurar el backend**
 
 ```bash
 cd backend
 cp .env.example .env
-```
-
-Editar `.env` y completar los valores (ver sección [Variables de entorno](#variables-de-entorno)).
-
-### 4. Instalar dependencias e iniciar el backend
-
-```bash
+# Editar .env con tus valores locales
 npm install
-npm run dev
 ```
 
-Debe mostrar:
-```
-✅ MongoDB conectado
-🚀 Servidor escuchando en puerto 3000
-✅ Job de recordatorios programado (cada hora, minuto 0)
+Contenido mínimo del `.env`:
+
+```env
+MONGO_URI=mongodb://localhost:27017/odontosoft
+JWT_SECRET=tu_secreto_de_al_menos_32_caracteres
+JWT_EXPIRES_IN=8h
+SEED_ADMIN_PASSWORD=Admin123!
+SEED_ODONTOLOGO_PASSWORD=Odonto123!
+SEED_RECEPCIONISTA_PASSWORD=Recepcion123!
+ETHEREAL_USER=tu_usuario_ethereal
+ETHEREAL_PASS=tu_password_ethereal
+PORT=3000
 ```
 
-Verificar que responde:
+**4. Sembrar datos iniciales**
+
 ```bash
-curl http://localhost:3000/api/health
-```
-
-### 5. Crear usuarios de prueba (seed)
-
-En otra terminal, con el backend corriendo:
-
-```bash
-cd backend
 node src/scripts/seedAdmin.js
 node src/scripts/seedRoles.js
 ```
 
-### 6. Instalar dependencias e iniciar el frontend
+Crea los usuarios `admin@odontosoft.com`, `odontologo@odontosoft.com`, `recepcion@odontosoft.com`.
 
-En una tercera terminal:
+**5. Iniciar el backend**
 
 ```bash
-cd frontend
+npm run dev    # con nodemon
+# o
+npm start      # producción
+```
+
+Backend disponible en `http://localhost:3000/api`.
+
+**6. Configurar el frontend**
+
+```bash
+cd ../frontend
 npm install
-ng serve --host 0.0.0.0
 ```
 
-### 7. Acceder a la aplicación
-
-- **En Codespaces:** usar la URL pública del puerto `4200` (pestaña **Puertos** de VS Code). El puerto `3000` (backend) también debe estar configurado como **Public** para que el frontend pueda comunicarse con él, y la variable `apiUrl` en `frontend/src/environments/environment.ts` debe apuntar a esa URL pública del puerto 3000, no a `localhost`.
-- **En local:** `http://localhost:4200`
-
-> **Nota para Codespaces:** el navegador se ejecuta en la máquina local del usuario, no dentro del Codespace. Usar `http://localhost:3000` en `environment.ts` no funcionará — debe usarse la URL pública reenviada (`https://<nombre-codespace>-3000.app.github.dev`). Esto también aplica a los archivos servidos estáticamente (adjuntos de historia clínica): sus URLs se construyen a partir de esa misma variable, quitando el sufijo `/api`.
-
-### Rutina de arranque rápido (sesiones posteriores)
-
-Cada vez que se retome el proyecto tras una pausa, el contenedor de Mongo puede haberse detenido. Ejecutar en orden:
-
-```bash
-docker compose up -d                      # Terminal 1 (una vez)
-cd backend && npm run dev                 # Terminal 2
-cd frontend && ng serve --host 0.0.0.0    # Terminal 3
-```
-
-O usar el script de arranque automático (levanta todo y captura tokens de los 3 roles de prueba):
-
-```bash
-./scripts/dev-start.sh
-source .tokens.env   # carga los tokens en la terminal actual
-```
-
-Se recomienda mantener terminales dedicadas para el backend y el frontend, y usar una terminal adicional para comandos sueltos (`curl`, `git`, `docker exec`, etc.), evitando interrumpir los procesos activos.
-
----
-
-## Variables de entorno
-
-Archivo `backend/.env` (no se versiona; ver plantilla en `backend/.env.example`):
-
-```
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/odontosoft
-JWT_SECRET=<secreto_largo_y_aleatorio>
-JWT_EXPIRES_IN=8h
-SEED_ADMIN_PASSWORD=<contraseña_para_el_admin_de_prueba>
-SEED_ODONTOLOGO_PASSWORD=<contraseña_para_el_odontologo_de_prueba>
-SEED_RECEPCIONISTA_PASSWORD=<contraseña_para_la_recepcionista_de_prueba>
-ETHEREAL_USER=<usuario_generado_por_nodemailer.createTestAccount()>
-ETHEREAL_PASS=<contraseña_generada_por_nodemailer.createTestAccount()>
-```
-
-> Para generar credenciales de Ethereal (envío de email de prueba, Módulo 7): `node -e "require('nodemailer').createTestAccount().then(c => console.log(c.user, c.pass))"`
-
-Archivo `frontend/src/environments/environment.ts`:
+Verificar que `src/environments/environment.ts` apunte al backend local (o a Render si prefieres):
 
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api', // ajustar a la URL pública en Codespaces
+  apiUrl: 'http://localhost:3000/api'
 };
 ```
 
----
+**7. Iniciar el frontend**
 
-## Usuarios de prueba (seed)
+```bash
+npm start
+```
 
-Tras ejecutar los scripts de seed, quedan disponibles los siguientes usuarios (contraseñas definidas en `.env`):
+Frontend disponible en `http://localhost:4200`.
 
-| Rol | Email | Contraseña (definida en `.env`) |
+### Credenciales de prueba (después del seed)
+
+| Rol | Email | Contraseña |
 |---|---|---|
-| ADMIN | admin@odontosoft.com | `SEED_ADMIN_PASSWORD` |
-| ODONTOLOGO | odontologo@odontosoft.com | `SEED_ODONTOLOGO_PASSWORD` |
-| RECEPCIONISTA | recepcion@odontosoft.com | `SEED_RECEPCIONISTA_PASSWORD` |
-
-### Matriz de permisos por módulo (según SRS, sección 3.1)
-
-| Módulo | ADMIN | ODONTOLOGO | RECEPCIONISTA |
-|---|:---:|:---:|:---:|
-| Usuarios y configuración | CRUD | — | — |
-| Pacientes | Lectura | Lectura | CRUD |
-| Citas y agenda | Lectura | Lectura / Actualizar estado | CRUD |
-| Historia clínica y odontograma | Sin acceso a edición (solo puede desactivar evoluciones erróneas) | CRUD | Sin acceso |
-| Facturación y pagos | Lectura (reportes) | Lectura | CRUD |
-| Inventario | Lectura (reportes) | Sin acceso | CRUD |
-| Recordatorios | Lectura del historial | Sin acceso | CRUD |
-| Reportes financieros/administrativos | Lectura | Sin acceso | Lectura |
-| Reportes clínicos | Lectura | Lectura | Sin acceso |
-| RIPS | Lectura y generación | Sin acceso | CRUD |
-
-> Nota: la política de permisos de Pacientes fue corregida durante el desarrollo del Módulo 2 para alinearse con esta matriz — ver `docs/roadmap.md`, sección "Historial de correcciones importantes".
+| ADMIN | `admin@odontosoft.com` | valor de `SEED_ADMIN_PASSWORD` |
+| ODONTOLOGO | `odontologo@odontosoft.com` | valor de `SEED_ODONTOLOGO_PASSWORD` |
+| RECEPCIONISTA | `recepcion@odontosoft.com` | valor de `SEED_RECEPCIONISTA_PASSWORD` |
 
 ---
 
-## Estructura del proyecto
+## ☁️ Despliegue en Producción
 
-```
-odontosoft-v2/
-├── docker-compose.yml
-├── README.md
-├── docs/
-│   ├── roadmap.md
-│   ├── matriz_reglas_negocio.md
-│   ├── Documentacion_Modulo1_Autenticacion.md
-│   ├── Documentacion_Modulo2_Pacientes.md
-│   ├── Documentacion_Modulo3_Citas.md
-│   ├── Documentacion_Modulo4_HistoriaClinica.md
-│   ├── Documentacion_Modulo5_Facturacion.md
-│   ├── Documentacion_Modulo6_Inventario.md
-│   ├── Documentacion_Modulo7_Recordatorios.md
-│   ├── Documentacion_Modulo8_Reportes.md
-│   ├── Documentacion_Modulo9_RIPS.md
-│   └── Modulo1_Autenticacion_PasoAPaso.md
-├── scripts/
-│   └── dev-start.sh          # arranque rápido con captura de tokens
-├── backend/
-│   ├── .env.example
-│   ├── uploads/               # archivos subidos (no versionado)
-│   ├── src/
-│   │   ├── config/            # Conexión a MongoDB
-│   │   ├── controllers/       # Lógica de request/response
-│   │   ├── middlewares/       # Autenticación, roles, rate limiting, uploads
-│   │   ├── models/            # Esquemas de Mongoose
-│   │   ├── routes/            # Definición de endpoints
-│   │   ├── services/          # Lógica de negocio
-│   │   ├── scripts/           # Seeds de datos iniciales
-│   │   ├── jobs/               # Tareas programadas (node-cron)
-│   │   ├── app.js
-│   │   └── server.js
-│   └── tests/                 # 9 scripts de pruebas end-to-end (uno por módulo)
-└── frontend/
-    └── src/
-        ├── environments/
-        └── app/
-            ├── core/           # Servicios transversales (auth, http interceptor, guards)
-            └── features/       # Componentes por dominio (login, dashboard, pacientes,
-                                 # citas, historia-clinica, facturacion, inventario,
-                                 # recordatorios, reportes, rips)
-```
+El sistema completo está desplegado en 3 componentes independientes.
 
-Arquitectura del backend organizada por capas: `routes → controllers → services → models`, cada una con una única responsabilidad. Odontograma, evoluciones clínicas, movimientos de inventario, pagos de factura y adjuntos se modelan como subdocumentos embebidos, siguiendo la decisión explícita del SRS de aprovechar el modelo de documentos de MongoDB para datos siempre consultados en conjunto.
+### 1. Base de datos — MongoDB Atlas
 
----
-
-## Dependencias del proyecto
-
-### Backend (`backend/package.json`)
-
-| Dependencia | Uso en el proyecto |
+| Parámetro | Valor |
 |---|---|
-| `express` | Framework del servidor HTTP |
-| `mongoose` | ODM para MongoDB (esquemas, validaciones, agregaciones) |
-| `dotenv` | Carga de variables de entorno desde `.env` |
-| `bcrypt` | Hash de contraseñas (Módulo 1) |
-| `jsonwebtoken` | Generación y verificación de JWT (Módulo 1) |
-| `cors` | Habilitación de CORS para el frontend |
-| `express-rate-limit` | Limitación de intentos de login (RNF-03, Módulo 1) |
-| `morgan` | Logging de peticiones HTTP en desarrollo |
-| `multer` | Subida de archivos multipart/form-data (adjuntos de historia clínica, Módulo 4) |
-| `sharp` | Optimización de imágenes subidas (RNF-09, Módulo 4) |
-| `pdfkit` | Generación de documentos PDF (facturas y reportes, Módulos 5 y 8) |
-| `nodemailer` | Envío de correos electrónicos (recordatorios, Módulo 7) |
-| `node-cron` | Programación de tareas periódicas (envío automático de recordatorios, Módulo 7) |
-| `exceljs` | Generación de archivos Excel (exportación de reportes, Módulo 8) |
-| `nodemon` (dev) | Reinicio automático del servidor en desarrollo |
+| Cluster | `odontosoft-cluster` |
+| Plan | M0 Free (512 MB) |
+| Región | AWS N. Virginia (us-east-1) |
+| Tipo | Replica Set (3 nodos) |
+| Versión | MongoDB 8.0.x |
 
-### Frontend (`frontend/package.json`)
+**Migración de datos del entorno local a Atlas:**
 
-| Dependencia | Uso en el proyecto |
+```bash
+# Dump desde Docker local
+docker exec odontosoft-mongo mongodump \
+  --db odontosoft --archive=/tmp/odontosoft-backup.archive
+
+# Copiar al host
+docker cp odontosoft-mongo:/tmp/odontosoft-backup.archive ./
+
+# Restaurar en Atlas
+mongorestore \
+  --uri="mongodb+srv://<user>:<pwd>@odontosoft-cluster.<hash>.mongodb.net/odontosoft" \
+  --archive=./odontosoft-backup.archive
+```
+
+### 2. Backend — Render (Web Service)
+
+| Parámetro | Valor |
 |---|---|
-| `@angular/core`, `@angular/common`, `@angular/router` | Framework Angular base |
-| `@angular/forms` | Formularios reactivos (ReactiveFormsModule, FormArray) |
-| `rxjs` | Manejo de observables (peticiones HTTP, debounce de búsqueda) |
-| `zone.js` | Detección de cambios de Angular (requerido según configuración del proyecto) |
+| Root Directory | `backend` |
+| Build Command | `npm install` |
+| Start Command | `node src/server.js` |
+| Runtime | Node.js 24.14.1 |
+| Plan | Free |
+| URL | `https://odontosoft-backend-dwes.onrender.com` |
 
-> El frontend no incorpora librerías de gráficos ni componentes UI de terceros — los gráficos de barras (reportes, Módulo 8) y todos los estilos están construidos con HTML/CSS/SCSS puro, priorizando un bundle liviano sobre funcionalidades avanzadas de visualización.
+**Variables de entorno configuradas en Render:**
+
+- `MONGO_URI` — cadena `mongodb+srv://` de Atlas
+- `JWT_SECRET`, `JWT_EXPIRES_IN`
+- `SEED_ADMIN_PASSWORD`, `SEED_ODONTOLOGO_PASSWORD`, `SEED_RECEPCIONISTA_PASSWORD`
+- `ETHEREAL_USER`, `ETHEREAL_PASS`
+- `PORT` (asignado automáticamente por Render)
+
+⚠️ **Cold start:** el plan Free duerme el servicio tras 15 min de inactividad. La primera petición tarda 30-60 seg en despertarlo.
+
+### 3. Frontend — Render (Static Site)
+
+| Parámetro | Valor |
+|---|---|
+| Root Directory | `frontend` |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `dist/frontend/browser` |
+| Rewrite Rule | `/* → /index.html` (Rewrite) |
+| Plan | Free |
+| URL | `https://odontosoft-frontend-3925.onrender.com` |
+
+⚠️ **Rewrite Rule crítico:** sin esta regla, cualquier ruta interna (`/pacientes`, `/citas`, etc.) dará 404 al recargar. La regla permite que Angular resuelva la navegación como SPA.
+
+### 4. CI/CD Automático
+
+Render tiene auto-deploy activado: cada `git push origin main` dispara un nuevo build y deploy tanto del backend como del frontend automáticamente. No requiere configuración adicional.
+
+Como mejora futura se documenta la posibilidad de agregar un pipeline de GitHub Actions con las pruebas E2E antes del deploy.
 
 ---
 
-## Convención de códigos de estado HTTP
+## 📚 Documentación
 
-Referencia rápida de cómo la API de OdontoSoft usa cada código de estado, consistente en los 9 módulos:
+### Documentos SENA — Entregables mensuales
 
-| Código | Significado | Cuándo lo devuelve la API |
-|---|---|---|
-| **200** | OK | Lectura exitosa (listar, obtener detalle) o actualización exitosa (editar, cambiar estado, registrar pago/movimiento) |
-| **201** | Created | Creación exitosa de un recurso nuevo (paciente, cita, historia clínica, evolución, factura, material, etc.) |
-| **400** | Bad Request | Datos inválidos: campo faltante, formato incorrecto, ID mal formado, estado/método no permitido, monto que excede un límite, formato de periodo inválido |
-| **401** | Unauthorized | No autenticado: falta el token, token inválido/expirado, o credenciales de login incorrectas |
-| **403** | Forbidden | Autenticado correctamente, pero el rol no tiene permiso para esa acción específica |
-| **404** | Not Found | El recurso con ese ID no existe, o no hay datos para generar lo solicitado (ej. RIPS de un periodo sin atenciones) |
-| **409** | Conflict | El estado actual del recurso impide la acción: documento duplicado, conflicto de horario, evolución ya desactivada, factura ya anulada, stock insuficiente, atenciones RIPS incompletas |
-| **429** | Too Many Requests | Rate limiting del login activado (RNF-03) |
-| **500** | Internal Server Error | Error no controlado del servidor (siempre logueado con `console.error` para diagnóstico) |
+| # | Documento | Alineación | Ubicación |
+|:---:|---|---|---|
+| 1 | **SRS e Inicio del Proyecto** | Guía 1 — Construcción de requisitos | `docs/Documento1_SRS_Mes1.md` |
+| 2 | **Lógica de Programación y Algoritmia** | Guía 2 — Solución de problemas con algoritmia | `docs/Documento2_Logica_Mes2.md` |
+| 3 | **Modelado e Implementación MongoDB** | Guía 3 — Implementar bases de datos | `docs/Documento3_MongoDB_Mes3.md` |
+| 4 | **Backend Node.js + API REST** | Guía 4 — Desarrollar backend con Node.js | `docs/Documento4_Backend_Mes4.md` |
+| 5 | **Infraestructura Cloud y DevOps** | Guía 5 — Desplegar aplicaciones en la nube | `docs/Documento5_Cloud_Mes5.md` |
+| 6 | **Frontend + Manual + Cierre** | Guía 6 — Desarrollar frontend y entrega final | `docs/Documento6_Cierre_Mes6.md` |
+
+### Documentación Técnica por Módulo
+
+Cada uno de los 9 módulos tiene su propio documento en `docs/`:
+
+- `Documentacion_Modulo1_Autenticacion.md`
+- `Documentacion_Modulo2_Pacientes.md`
+- `Documentacion_Modulo3_Citas.md`
+- `Documentacion_Modulo4_HistoriaClinica.md`
+- `Documentacion_Modulo5_Facturacion.md`
+- `Documentacion_Modulo6_Inventario.md`
+- `Documentacion_Modulo7_Recordatorios.md`
+- `Documentacion_Modulo8_Reportes.md`
+- `Documentacion_Modulo9_RIPS.md`
+
+### Otros
+
+- `SRS_OdontoSoft_v2.md` — Especificación completa de requisitos
+- `roadmap.md` — Plan maestro del proyecto
 
 ---
 
-## Pruebas
+## 🧪 Pruebas
 
-Cada módulo cuenta con un script de pruebas end-to-end en `backend/tests/`, que valida el flujo completo contra el backend real (requiere que el servidor esté corriendo).
+### Pruebas End-to-End Automatizadas
+
+Cada módulo cuenta con un script bash que valida el ciclo completo contra el backend real:
 
 ```bash
-cd backend
-./tests/test-e2e-auth.sh               # Módulo 1: login, roles, logout, rate limiting
-./tests/test-e2e-pacientes.sh          # Módulo 2: CRUD de pacientes, control de rol, duplicados
-./tests/test-e2e-citas.sh              # Módulo 3: agenda, conflictos de horario, estados
-./tests/test-e2e-historia-clinica.sh   # Módulo 4: odontograma, evoluciones, adjuntos, RN-10
-./tests/test-e2e-facturacion.sh        # Módulo 5: facturas, pagos, anulación, PDF
-./tests/test-e2e-inventario.sh         # Módulo 6: stock, entradas/salidas, RN-06
-./tests/test-e2e-recordatorios.sh      # Módulo 7: email real, WhatsApp simulado, cron
-./tests/test-e2e-reportes.sh           # Módulo 8: 5 reportes, exportación Excel/PDF
-./tests/test-e2e-rips.sh               # Módulo 9: validación, generación, historial RIPS
+cd backend/tests
+
+./test-e2e-auth.sh                    # 11/11 pruebas
+./test-e2e-pacientes.sh               # 11/11 pruebas
+./test-e2e-citas.sh                   # 12/12 pruebas
+./test-e2e-historia-clinica.sh        # 13/13 pruebas
+./test-e2e-facturacion.sh             # 12/12 pruebas
+./test-e2e-inventario.sh              # 11/11 pruebas
+./test-e2e-recordatorios.sh           # 9/9 pruebas
+./test-e2e-reportes.sh                # 10/10 pruebas
+./test-e2e-rips.sh                    # 12/12 pruebas
 ```
 
-> Los scripts incluyen un paso de limpieza de datos de prueba al inicio, por lo que pueden ejecutarse repetidamente sin generar conflictos por datos duplicados.
+**Total: 101 pruebas, todas pasando.**
 
----
+Los scripts validan:
 
-## Solución de problemas comunes
+- Obtención de tokens JWT por rol
+- Operaciones CRUD completas
+- Aplicación de reglas de negocio (RN-01 a RN-10)
+- Control de acceso por rol (HTTP 401/403)
+- Códigos HTTP correctos (200, 201, 400, 401, 403, 404, 409)
 
-Problemas recurrentes durante el desarrollo en Codespaces, con su causa y solución rápida.
+### Ejecución contra producción
 
-### `{"mensaje":"Token no proporcionado"}` o `401` en pruebas que antes funcionaban
+Los mismos scripts pueden ejecutarse contra el backend en Render cambiando la URL base:
 
-**Causa:** las variables de shell (`$TOKEN_RECEP`, `$TOKEN_ODONTO`, `$TOKEN_ADMIN`, `$PACIENTE_ID`, etc.) **no persisten entre pestañas de terminal distintas**, ni sobreviven a un reinicio de terminal. Si el login se hizo en una pestaña y el `curl` se corre en otra, la variable llega vacía.
-
-**Solución:** volver a loguearse y capturar las variables necesarias en la **misma** ejecución de comando donde se van a usar, encadenando con `&&`, o usar `./scripts/dev-start.sh` + `source .tokens.env`.
-
-### `Unexpected end of JSON input` al parsear la respuesta de `curl`
-
-**Causa:** el backend no devolvió nada (probablemente crasheó), no necesariamente un bug de lógica.
-
-**Solución:** verificar primero que el backend esté vivo:
 ```bash
-curl -s -o /dev/null -w "Status: %{http_code}\n" http://localhost:3000/api/health
+BASE_URL="https://odontosoft-backend-dwes.onrender.com/api" ./test-e2e-auth.sh
 ```
-
-### `ReferenceError: express is not defined` / funciones "perdidas" al reiniciar el backend
-
-**Causa recurrente en este proyecto:** al reemplazar un archivo de rutas/servicio/controlador completo durante una edición, se pierde accidentalmente algún `require(...)` o función definida previamente.
-
-**Solución:** antes de asumir que un archivo quedó bien tras una edición, verificar con `head`, `tail`, `grep` o `cat` que todo el contenido esperado siga presente.
-
-### `Cannot GET /uploads/...` o una imagen que no carga en el frontend
-
-**Causa:** las URLs de archivos servidos por Express (adjuntos de historia clínica) se guardan como rutas relativas, pensadas para el backend (puerto 3000). El frontend (puerto 4200) las resuelve contra su propio dominio si se usan tal cual.
-
-**Solución:** construir la URL completa a partir de `environment.apiUrl`, quitando el sufijo `/api`.
-
-### MongoDB no conecta (`ECONNREFUSED ::1:27017`) al retomar el proyecto
-
-**Causa:** el contenedor Docker de Mongo se detiene cuando el Codespace queda inactivo por un tiempo.
-
-**Solución:**
-```bash
-docker compose up -d
-docker ps
-```
-
-### `main` local y remoto divergen tras varias sesiones de trabajo
-
-**Causa:** un merge parcial, un PR cerrado accidentalmente sin mergear, o un commit local aislado que no llegó a subirse antes de que otros cambios se mergearan en GitHub.
-
-**Solución (tras confirmar que el remoto tiene la versión correcta y completa):**
-```bash
-git fetch origin
-git reset --hard origin/main
-```
-⚠️ Descarta cualquier commit local en esa rama que no esté en GitHub — usar solo tras confirmar que el trabajo real ya vive en el remoto.
-
-### Al mergear un Pull Request en GitHub
-
-Verificar siempre hacer clic específicamente en **"Merge pull request"**, no en un botón de cerrar — un clic equivocado puede cerrar el PR sin integrar los cambios ("Closed with unmerged commits"), requiriendo reabrirlo y resolver conflictos posteriores.
 
 ---
 
-## Flujo de trabajo con Git
+## 📊 Métricas del Proyecto
 
-- Una rama por módulo: `feature/moduloN-nombre`.
-- Convención de commits: `tipo(RF-XX,RNF-XX): descripción breve`, trazando cada cambio a un requisito del SRS. Ejemplos:
-  ```
-  feat(RF-01,RF-03): implementar endpoint de login con generación de JWT
-  fix(RN-10): implementar desactivación de evolución clínica, exclusiva de ADMIN
-  test: agregar script end-to-end de RIPS (12/12 exitosas)
-  ```
-- Cada módulo se cierra con un Pull Request hacia `main`, documentado con su matriz de trazabilidad.
-
----
-
-## Documentación por módulo
-
-Cada módulo cuenta con documentación detallada en [`docs/`](./docs), incluyendo matriz de trazabilidad de requisitos, evidencia de pruebas, arquitectura, decisiones técnicas justificadas y problemas encontrados durante el desarrollo:
-
-- [Roadmap maestro de todos los módulos](./docs/roadmap.md)
-- [Matriz de reglas de negocio (RN)](./docs/matriz_reglas_negocio.md)
-- [Documentación Módulo 1 — Autenticación](./docs/Documentacion_Modulo1_Autenticacion.md)
-- [Documentación Módulo 2 — Pacientes](./docs/Documentacion_Modulo2_Pacientes.md)
-- [Documentación Módulo 3 — Citas y Agenda](./docs/Documentacion_Modulo3_Citas.md)
-- [Documentación Módulo 4 — Historia Clínica y Odontograma](./docs/Documentacion_Modulo4_HistoriaClinica.md)
-- [Documentación Módulo 5 — Facturación y Pagos](./docs/Documentacion_Modulo5_Facturacion.md)
-- [Documentación Módulo 6 — Inventario de Materiales](./docs/Documentacion_Modulo6_Inventario.md)
-- [Documentación Módulo 7 — Recordatorios Automáticos](./docs/Documentacion_Modulo7_Recordatorios.md)
-- [Documentación Módulo 8 — Reportes y Estadísticas](./docs/Documentacion_Modulo8_Reportes.md)
-- [Documentación Módulo 9 — Integración con RIPS](./docs/Documentacion_Modulo9_RIPS.md)
+| Métrica | Valor |
+|---|:---:|
+| Módulos funcionales completados | **9 de 9 (100%)** |
+| Requisitos funcionales implementados | **59 de 59 (100%)** |
+| Reglas de negocio verificadas | **10 de 10 (100%)** |
+| Requisitos no funcionales cumplidos | **14 de 14 (100%)** |
+| Colecciones de MongoDB | 11 |
+| Índices activos | 22 |
+| Endpoints REST | 60+ |
+| Componentes Angular | 25+ |
+| Pruebas end-to-end | **101 (todas pasando)** |
+| Pull Requests fusionados | 9 |
+| Servicios en producción | 3 |
+| **Costo mensual** | **0 USD** |
 
 ---
 
-## Alcance y delimitaciones del proyecto
+## 🌳 Estrategia de Ramas y Commits
 
-Decisiones de alcance documentadas conscientemente, coherentes con la delimitación del propio SRS (sección 13):
+**Feature branch workflow:** `main` = producción, cada módulo en su rama `feature/moduloN-nombre`, se fusiona vía PR.
 
-- **WhatsApp (Módulo 7):** envío simulado, con la misma interfaz que tendría una integración real (Twilio u otro proveedor) — reemplazable sin tocar el resto del sistema.
-- **Email (Módulo 7):** envío real vía Ethereal (SMTP de pruebas), con vista previa verificable. En producción real requeriría un proveedor SMTP definitivo.
-- **RIPS (Módulo 9):** estructura JSON simplificada, cubriendo los campos obligatorios mínimos exigidos por RF-57. La estructura oficial completa (habilitación REPS, catálogos CIE-10/CUPS validados, CUFE de facturación electrónica) excede el alcance académico del proyecto.
-- **Facturación electrónica DIAN:** fuera de alcance en su totalidad — el envío del RIPS al Mecanismo Único de Validación (MUV) y la obtención del Código Único de Validación (CUV) dependen de esta integración, explícitamente excluida.
-- **Almacenamiento de archivos (Módulo 4):** disco local del servidor, no un servicio en la nube — suficiente para el alcance académico.
+**Convención de commits:**
+
+```
+tipo(RF-XX,RN-YY): descripción breve en presente
+```
+
+Donde `tipo` es `feat`, `fix`, `test`, `docs`, `refactor`.
+
+**Ejemplos reales:**
+
+```
+feat(RF-01,RF-03): implementar endpoint de login con generación de JWT
+fix(RN-10): implementar desactivación de evolución clínica, exclusiva de ADMIN
+feat(RF-57): implementar validación de atenciones completas/incompletas por periodo
+test: agregar script end-to-end de RIPS (12/12 exitosas)
+```
+
+Esta convención permite trazabilidad directa entre cada commit y el requisito del SRS que lo motivó.
+
+---
+
+## ⚠️ Delimitaciones del Alcance
+
+Se documentan explícitamente las decisiones de alcance del proyecto:
+
+- **Email:** vía Ethereal (SMTP de pruebas). No integrado con SendGrid/SES para envío real.
+- **WhatsApp:** simulado. No integrado con Twilio o Meta WhatsApp Business API.
+- **Archivos adjuntos:** almacenamiento en disco local del contenedor Render (efímero). No S3/R2.
+- **RIPS:** genera el archivo JSON pero no lo radica automáticamente ante el Ministerio de Salud (radicación manual).
+- **Dominio:** se usan las URLs `onrender.com` (no dominio propio).
+- **DIAN:** no integrado con facturación electrónica.
+
+---
+
+## 🔒 Seguridad
+
+- Contraseñas encriptadas con bcrypt (factor 10)
+- JWT con expiración configurable (8h por defecto)
+- Rate limiting en el endpoint de login (10 intentos por 15 min)
+- Control de acceso basado en roles (RBAC) en todos los endpoints
+- Trazabilidad: cada acción crítica registra usuario y fecha
+- Rotación de secretos aplicada tras la fase inicial de desarrollo
+- Variables sensibles nunca versionadas (uso estricto de `.env` + `.gitignore`)
+
+---
+
+## 🐛 Incidentes de Despliegue Documentados
+
+Durante el despliegue real se enfrentaron y resolvieron 4 incidentes técnicos, documentados con transparencia en el Documento 5:
+
+1. **Paquete `mongodb-database-tools` no disponible** en Ubuntu Noble → agregar repositorio oficial de MongoDB.
+2. **`mongorestore` fallaba con "authentication failed"** → carácter `>` extra en la contraseña + falta de `/odontosoft` en la URI.
+3. **Login válido devolvía "Credenciales inválidas" en producción** → `MONGO_URI` en Render apuntaba a `localhost` en vez de a Atlas.
+4. **Frontend en producción llamaba al Codespace en lugar del backend de Render** → `fileReplacements` de Angular no aplicó; solución: `environment.ts` directo a Render.
+
+---
+
+## 👤 Autor
+
+**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
+
+**Ficha SENA:** `[NÚMERO DE FICHA]`
+
+**Programa:** Análisis y Desarrollo de Software
+
+**Institución:** Servicio Nacional de Aprendizaje — SENA
+
+**Instructor:** `[NOMBRE DEL INSTRUCTOR]`
+
+**Contacto:** juangarcesco (GitHub)
+
+---
+
+## 📜 Licencia
+
+Proyecto académico desarrollado como Etapa Productiva del SENA. Uso educativo. El código puede ser consultado libremente como referencia de aprendizaje.
+
+---
+
+## 🙏 Agradecimientos
+
+Al SENA por el marco formativo del programa de Análisis y Desarrollo de Software. Al instructor por la orientación durante la etapa productiva. A la comunidad de código abierto que sustenta las tecnologías utilizadas (Node.js, MongoDB, Angular, Express y todas las dependencias que hacen posible este tipo de proyectos).
+
+---
+
+*Última actualización: Julio 2026 — Proyecto en producción y funcional.*
