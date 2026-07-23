@@ -1,0 +1,9 @@
+# .cbmignore
+node_modules/
+dist/
+uploads/
+*.log
+.env
+.env.example
+docs/
+docker-compose.yml
