@@ -1,205 +1,195 @@
-# OdontoSoft
+<div align="center">
 
-**Sistema de Gestión Clínica Odontológica** — Aplicación web completa para consultorios dentales de tamaño mediano.
+# 🦷 OdontoSoft
 
-![Estado](https://img.shields.io/badge/Estado-En%20producción-brightgreen)
-![Stack](https://img.shields.io/badge/Stack-MEAN-blue)
-![Node](https://img.shields.io/badge/Node.js-24.x-green)
-![Angular](https://img.shields.io/badge/Angular-20-red)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)
-![Licencia](https://img.shields.io/badge/Uso-Académico%20SENA-orange)
+**Sistema integral de gestión clínica odontológica**
 
----
+*Historia clínica, agenda, facturación e inventario en una sola plataforma web.*
 
-## 🌐 Sistema en Producción
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Angular](https://img.shields.io/badge/Angular-17-DD0031?logo=angular&logoColor=white)](https://angular.io/)
+[![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Status](https://img.shields.io/badge/status-production-brightgreen)]()
+[![Tests](https://img.shields.io/badge/E2E%20tests-101%2F101-brightgreen)]()
 
-| Componente | URL |
-|---|---|
-| **Frontend (Angular)** | https://odontosoft-frontend-3925.onrender.com |
-| **Backend (API REST)** | https://odontosoft-backend-dwes.onrender.com/api |
-| **Base de datos** | MongoDB Atlas · cluster `odontosoft-cluster` |
-| **Repositorio** | https://github.com/juangarcesco/odontosoft-v2 |
+[🌐 Demo en vivo](https://odontosoft-frontend-3925.onrender.com) · [📘 Documentación](./docs) · [🐛 Reportar bug](https://github.com/juangarcesco/odontosoft-v2/issues) · [✨ Solicitar feature](https://github.com/juangarcesco/odontosoft-v2/issues)
 
-**Costo mensual de operación:** 0 USD (planes gratuitos).
+</div>
 
 ---
 
-## 📖 Tabla de Contenidos
+## 📋 Tabla de Contenidos
 
-- [Descripción General](#-descripción-general)
-- [Contexto Académico](#-contexto-académico)
-- [Módulos del Sistema](#-módulos-del-sistema)
-- [Stack Tecnológico](#-stack-tecnológico)
+- [Acerca del proyecto](#-acerca-del-proyecto)
+- [Características](#-características)
+- [Stack tecnológico](#-stack-tecnológico)
 - [Arquitectura](#-arquitectura)
-- [Instalación Local](#-instalación-local)
-- [Despliegue en Producción](#-despliegue-en-producción)
-- [Documentación](#-documentación)
-- [Pruebas](#-pruebas)
-- [Métricas del Proyecto](#-métricas-del-proyecto)
-- [Autor](#-autor)
+- [Módulos del sistema](#-módulos-del-sistema)
+- [Screenshots](#-screenshots)
+- [Comenzar](#-comenzar)
+- [Uso](#-uso)
+- [Despliegue](#-despliegue)
+- [API Reference](#-api-reference)
+- [Modelo de roles](#-modelo-de-roles)
+- [Testing](#-testing)
+- [Roadmap](#-roadmap)
+- [Contribuir](#-contribuir)
+- [Licencia](#-licencia)
+- [Contacto](#-contacto)
 
 ---
 
-## 📋 Descripción General
+## 🎯 Acerca del proyecto
 
-OdontoSoft digitaliza los procesos administrativos, clínicos y financieros de un consultorio odontológico:
+**OdontoSoft** es una aplicación web para la gestión integral de consultorios odontológicos independientes. Digitaliza los procesos administrativos, clínicos y financieros del consultorio en una plataforma unificada, moderna y escalable.
 
-- **Gestión de pacientes** con validación de documento único
-- **Agenda de citas** con detección automática de conflictos de horario
-- **Historia clínica** con odontograma interactivo (32 dientes, notación FDI) y evoluciones cronológicas
-- **Facturación y pagos** con cálculo automático de saldos e IVA
-- **Inventario de materiales** con alertas de stock bajo
-- **Recordatorios automáticos** por email 24 horas antes de cada cita
-- **Reportes gerenciales** (ingresos, tratamientos, saldos, tasa de asistencia)
-- **Generación de RIPS** (Registros Individuales de Prestación de Servicios) conforme a normativa colombiana
+Diseñado a partir del levantamiento riguroso de requisitos con profesionales del sector con más de una década de experiencia clínica, OdontoSoft prioriza la simplicidad operativa, la confidencialidad de la información de salud y la propiedad total de los datos por parte del consultorio.
 
-**Cliente:** Consultorio Odontológico OdontoSalud (Bogotá D.C.) — caso simulado con perfil realista de 15-25 pacientes/semana.
+### Problema que resuelve
 
----
+Los consultorios odontológicos independientes suelen enfrentar tres barreras:
 
-## 🎓 Contexto Académico
+1. **Costos recurrentes elevados** de licencias SaaS especializadas ($200K–$500K COP mensuales).
+2. **Software genérico** que no se adapta al flujo específico del profesional.
+3. **Dependencia externa** de proveedores para acceder a los datos clínicos.
 
-Proyecto desarrollado como **Etapa Productiva** del programa **Análisis y Desarrollo de Software** del SENA, bajo la modalidad de **Proyecto Productivo**.
-
-- **Competencia técnica:** Análisis y Desarrollo de Software
-- **Duración:** 6 meses (6 entregables mensuales alineados a las Guías de Aprendizaje 1-6)
-- **Modalidad:** Individual con cliente simulado
+OdontoSoft resuelve estos tres problemas ofreciendo un sistema autoalojable, adaptado al flujo real del consultorio y con propiedad total de los datos.
 
 ---
 
-## 🧩 Módulos del Sistema
+## ✨ Características
 
-| # | Módulo | Requisitos Funcionales | Reglas de Negocio |
-|:---:|---|:---:|:---:|
-| 1 | Autenticación y control de acceso | RF-01 a RF-08 | RNF-01 a RNF-05 |
-| 2 | Pacientes | RF-09 a RF-16 | RN-02 |
-| 3 | Agenda y citas | RF-17 a RF-24 | RN-01, RN-07 |
-| 4 | Historia clínica y odontograma | RF-25 a RF-32 | RN-03, RN-09, RN-10 |
-| 5 | Facturación y pagos | RF-33 a RF-40 | RN-04, RN-05 |
-| 6 | Inventario | RF-41 a RF-45 | RN-06 |
-| 7 | Recordatorios automáticos | RF-46 a RF-49 | RN-08 |
-| 8 | Reportes y estadísticas | RF-50 a RF-55 | — |
-| 9 | Integración con RIPS | RF-56 a RF-59 | — |
-| **Total** | | **59 RF** | **10 RN** |
-
-**Cobertura:** 9/9 módulos · 59/59 RF · 10/10 RN · 14/14 RNF · 101/101 pruebas E2E pasando.
+- 🔐 **Autenticación robusta** con JWT + bcrypt y control de acceso por roles (RBAC).
+- 👥 **Gestión completa de pacientes** con búsqueda insensible a tildes y por documento parcial.
+- 📅 **Agenda visual** con detección automática de conflictos de horario.
+- 🦷 **Historia clínica digital** con odontograma interactivo por diente y superficie (notación FDI).
+- 💰 **Facturación** con soporte para pagos parciales y múltiples métodos de pago.
+- 📦 **Inventario** de materiales con alertas automáticas de stock bajo.
+- 🔔 **Recordatorios automáticos** por email (y WhatsApp en roadmap).
+- 📊 **Reportes gerenciales** exportables a Excel y PDF.
+- 🏥 **Generación de RIPS** conforme a normativa colombiana (Resolución 2275 de 2023).
+- ☁️ **100% en la nube** con acceso multiplataforma vía navegador.
+- 🌐 **Responsive** — funciona en desktop, tablet y móvil.
 
 ---
 
-## 💻 Stack Tecnológico
+## 🛠 Stack tecnológico
 
-### Backend
-- **Runtime:** Node.js 24.x
-- **Framework:** Express 4.x
-- **ODM:** Mongoose 7.x
-- **Autenticación:** JWT (jsonwebtoken 9.x) + bcrypt 5.x
-- **Seguridad:** express-rate-limit 7.x, CORS 2.x
-- **Procesamiento:** Sharp (imágenes), PDFKit (PDFs), ExcelJS (Excel), Nodemailer (email)
-- **Tareas programadas:** node-cron 3.x
+**MEAN Stack + herramientas complementarias:**
 
-### Frontend
-- **Framework:** Angular 20.x
-- **Lenguaje:** TypeScript 5.x
-- **Estado reactivo:** Signals (Angular nativo, no RxJS puro)
-- **Estilos:** SCSS con variables CSS
-- **HTTP:** HttpClient + Interceptors
-
-### Base de datos
-- **Motor:** MongoDB 8.0.x
-- **Hosting:** MongoDB Atlas (M0 Free, AWS us-east-1, Replica Set 3 nodos)
-- **11 colecciones + 22 índices activos**
-
-### Despliegue
-- **Backend:** Render — Web Service (plan Free, región Oregon)
-- **Frontend:** Render — Static Site (plan Free)
-- **CI/CD:** Auto-deploy nativo de Render (webhook en cada push a `main`)
-- **Repositorio:** GitHub
+| Capa | Tecnología |
+|---|---|
+| **Base de datos** | MongoDB Atlas 7.0 |
+| **Backend** | Node.js 20 + Express 4 |
+| **Frontend** | Angular 17 + TypeScript 5 |
+| **Autenticación** | JSON Web Tokens (JWT) + bcrypt |
+| **Estilos** | SCSS personalizado |
+| **Email** | Nodemailer + Ethereal (desarrollo) |
+| **Reportes** | ExcelJS + PDFKit |
+| **Tareas programadas** | node-cron |
+| **Testing E2E** | Cypress |
+| **Optimización de imágenes** | Sharp |
+| **Deployment** | Render (backend + frontend) + MongoDB Atlas |
 
 ---
 
-## 🏗️ Arquitectura
+## 🏗 Arquitectura
 
-### Alto nivel
-
-```
-    Usuario final (navegador)
-              │
-              │ HTTPS
-              ▼
-    ┌─────────────────────┐
-    │  FRONTEND (Angular) │  ← Render Static Site
-    │  SPA con signals    │
-    └─────────────────────┘
-              │
-              │ HTTPS (fetch API + JWT)
-              ▼
-    ┌─────────────────────┐
-    │  BACKEND (Node.js)  │  ← Render Web Service
-    │  Express + Mongoose │
-    └─────────────────────┘
-              │
-              │ mongodb+srv:// (TLS)
-              ▼
-    ┌─────────────────────┐
-    │  MongoDB Atlas      │  ← Replica Set (3 nodos)
-    │  cluster odontosoft │
-    └─────────────────────┘
-```
-
-### Backend — Arquitectura por Capas
+OdontoSoft implementa una **arquitectura en 3 capas desacopladas**:
 
 ```
-Rutas          →  Definen endpoints + middlewares
-   ↓
-Controladores  →  Parsean request, retornan response
-   ↓
-Servicios      →  Lógica de negocio + reglas de negocio
-   ↓
-Modelos        →  Esquemas Mongoose + validaciones
-   ↓
-MongoDB Atlas
+┌─────────────────────────────────────────────────────────┐
+│                      CLIENTE                            │
+│              Angular 17 SPA (Static Site)               │
+│                  Render Static Site                     │
+└───────────────────────┬─────────────────────────────────┘
+                        │ HTTPS + JWT
+                        ▼
+┌─────────────────────────────────────────────────────────┐
+│                     BACKEND                             │
+│         Node.js 20 + Express 4 REST API                 │
+│                  Render Web Service                     │
+│                                                         │
+│   Rutas → Middleware → Controladores → Servicios        │
+│                                    ↓                    │
+│                              Modelos Mongoose           │
+└───────────────────────┬─────────────────────────────────┘
+                        │ MongoDB Wire Protocol
+                        ▼
+┌─────────────────────────────────────────────────────────┐
+│                    PERSISTENCIA                         │
+│              MongoDB Atlas Cluster M0                   │
+│                    AWS us-east-1                        │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Estructura de Carpetas
+### Principios de diseño
 
-```
-odontosoft-v2/
-├── backend/
-│   ├── src/
-│   │   ├── models/         # 12 modelos Mongoose
-│   │   ├── routes/         # 10 archivos de rutas
-│   │   ├── controllers/    # 10 controladores
-│   │   ├── services/       # 9 servicios (lógica de negocio)
-│   │   ├── middlewares/    # auth, roles, rate-limit, uploads
-│   │   ├── jobs/           # node-cron (recordatorios)
-│   │   ├── scripts/        # seedAdmin.js, seedRoles.js
-│   │   ├── config/         # conexión MongoDB
-│   │   ├── app.js
-│   │   └── server.js
-│   └── tests/              # 9 scripts E2E (101 pruebas)
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── core/       # servicios, guards, interceptor
-│   │   │   └── features/   # componentes por dominio
-│   │   ├── environments/
-│   │   └── styles.scss
-│   └── angular.json
-├── docs/                   # Documentación técnica por módulo
-└── docker-compose.yml      # Solo para desarrollo local
-```
+- **Separation of Concerns**: cada capa tiene una responsabilidad única y clara.
+- **Defensa en profundidad**: validaciones en frontend Y backend.
+- **RESTful**: endpoints diseñados siguiendo convenciones REST.
+- **Stateless**: el backend no mantiene sesión; toda la información de autenticación viaja en el JWT.
+- **Escalabilidad horizontal**: la arquitectura permite escalar cada capa independientemente.
 
 ---
 
-## 🚀 Instalación Local
+## 📦 Módulos del sistema
 
-### Requisitos
+OdontoSoft se organiza en **9 módulos funcionales**:
 
-- Node.js 24.x o superior
-- Docker + Docker Compose (para MongoDB local)
-- Git
+| # | Módulo | Descripción |
+|:---:|---|---|
+| 1️⃣ | **Autenticación** | Login con JWT, gestión de usuarios, auditoría de accesos |
+| 2️⃣ | **Pacientes** | Registro, búsqueda avanzada, ficha detallada |
+| 3️⃣ | **Citas y Agenda** | Programación con detección de conflictos, ciclo de vida de la cita |
+| 4️⃣ | **Historia Clínica** | Odontograma interactivo, evoluciones cronológicas, adjuntos |
+| 5️⃣ | **Facturación** | Facturas con pagos parciales, PDF, anulación con motivo |
+| 6️⃣ | **Inventario** | Materiales, movimientos, alertas de stock bajo |
+| 7️⃣ | **Recordatorios** | Envío automático 24h antes vía email |
+| 8️⃣ | **Reportes** | Financieros, clínicos, administrativos (Excel + PDF) |
+| 9️⃣ | **RIPS** | Generación de archivos JSON para reporte al Ministerio |
 
-### Pasos
+**Especificación funcional completa:** [Ver docs/Informe_Requisitos.md](./docs/02_Informe_Requisitos.md)
+
+- 59 Requisitos Funcionales
+- 14 Requisitos No Funcionales
+- 10 Reglas de Negocio
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+
+| Login | Dashboard |
+|:---:|:---:|
+| ![Login](./docs/screenshots/login.png) | ![Dashboard](./docs/screenshots/dashboard.png) |
+
+| Agenda | Odontograma |
+|:---:|:---:|
+| ![Agenda](./docs/screenshots/agenda.png) | ![Odontograma](./docs/screenshots/odontograma.png) |
+
+| Facturación | Reportes |
+|:---:|:---:|
+| ![Facturación](./docs/screenshots/facturacion.png) | ![Reportes](./docs/screenshots/reportes.png) |
+
+</div>
+
+---
+
+## 🚀 Comenzar
+
+### Prerrequisitos
+
+- **Node.js** 20.x o superior — [Descargar](https://nodejs.org/)
+- **npm** 10.x o superior (incluido con Node.js)
+- **Angular CLI** 17.x — `npm install -g @angular/cli`
+- **MongoDB** local o cuenta gratuita en [MongoDB Atlas](https://www.mongodb.com/atlas)
+- **Git** — [Descargar](https://git-scm.com/)
+
+### Instalación local
 
 **1. Clonar el repositorio**
 
@@ -208,64 +198,46 @@ git clone https://github.com/juangarcesco/odontosoft-v2.git
 cd odontosoft-v2
 ```
 
-**2. Levantar MongoDB local**
-
-```bash
-docker-compose up -d
-```
-
-Esto inicia un contenedor MongoDB en `localhost:27017` con base de datos `odontosoft`.
-
-**3. Configurar el backend**
+**2. Configurar el backend**
 
 ```bash
 cd backend
-cp .env.example .env
-# Editar .env con tus valores locales
 npm install
+cp .env.example .env
 ```
 
-Contenido mínimo del `.env`:
+Edita `.env` con tus valores:
 
 ```env
-MONGO_URI=mongodb://localhost:27017/odontosoft
-JWT_SECRET=tu_secreto_de_al_menos_32_caracteres
-JWT_EXPIRES_IN=8h
-SEED_ADMIN_PASSWORD=Admin123!
-SEED_ODONTOLOGO_PASSWORD=Odonto123!
-SEED_RECEPCIONISTA_PASSWORD=Recepcion123!
-ETHEREAL_USER=tu_usuario_ethereal
-ETHEREAL_PASS=tu_password_ethereal
 PORT=3000
+MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/odontosoft
+JWT_SECRET=<clave-secreta-larga-y-aleatoria>
+JWT_EXPIRES_IN=8h
+EMAIL_HOST=smtp.ethereal.email
+EMAIL_PORT=587
+EMAIL_USER=<usuario-ethereal>
+EMAIL_PASS=<password-ethereal>
+CORS_ORIGIN=http://localhost:4200
 ```
 
-**4. Sembrar datos iniciales**
+Iniciar en modo desarrollo:
 
 ```bash
-node src/scripts/seedAdmin.js
-node src/scripts/seedRoles.js
+npm run dev
 ```
 
-Crea los usuarios `admin@odontosoft.com`, `odontologo@odontosoft.com`, `recepcion@odontosoft.com`.
+El backend estará disponible en `http://localhost:3000/api`.
 
-**5. Iniciar el backend**
+**3. Configurar el frontend**
 
-```bash
-npm run dev    # con nodemon
-# o
-npm start      # producción
-```
-
-Backend disponible en `http://localhost:3000/api`.
-
-**6. Configurar el frontend**
+En una nueva terminal:
 
 ```bash
-cd ../frontend
+cd frontend
 npm install
 ```
 
-Verificar que `src/environments/environment.ts` apunte al backend local (o a Render si prefieres):
+Edita `src/environments/environment.ts`:
 
 ```typescript
 export const environment = {
@@ -274,276 +246,311 @@ export const environment = {
 };
 ```
 
-**7. Iniciar el frontend**
+Iniciar el servidor de desarrollo:
 
 ```bash
-npm start
+ng serve
 ```
 
-Frontend disponible en `http://localhost:4200`.
+La aplicación estará disponible en `http://localhost:4200`.
 
-### Credenciales de prueba (después del seed)
+**4. Sembrar datos iniciales (opcional)**
 
-| Rol | Email | Contraseña |
+```bash
+cd backend
+npm run seed
+```
+
+Esto crea un usuario administrador por defecto:
+
+- **Email:** `admin@odontosoft.co`
+- **Contraseña:** `Admin123!` *(cambiar en primer inicio)*
+
+---
+
+## 💻 Uso
+
+### Flujo básico
+
+1. **Iniciar sesión** con las credenciales asignadas.
+2. **Crear un paciente** en el módulo de pacientes.
+3. **Programar una cita** en la agenda.
+4. **Registrar la atención** en la historia clínica con marcado del odontograma.
+5. **Emitir la factura** al finalizar la consulta.
+6. **Consultar reportes** al final del mes.
+7. **Generar RIPS** para reporte mensual.
+
+### Comandos disponibles
+
+**Backend:**
+
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Inicia el servidor con hot reload (nodemon) |
+| `npm start` | Inicia el servidor en modo producción |
+| `npm run seed` | Siembra datos iniciales |
+| `npm test` | Ejecuta suite de tests unitarios |
+| `npm run lint` | Analiza el código con ESLint |
+
+**Frontend:**
+
+| Comando | Descripción |
+|---|---|
+| `ng serve` | Servidor de desarrollo en `:4200` |
+| `ng build` | Compila para producción |
+| `ng test` | Tests unitarios con Karma |
+| `npm run cypress:open` | Abre Cypress para tests E2E |
+| `ng lint` | Analiza el código con ESLint |
+
+---
+
+## 🌐 Despliegue
+
+### Producción actual
+
+- **Frontend:** [https://odontosoft-frontend-3925.onrender.com](https://odontosoft-frontend-3925.onrender.com)
+- **Backend API:** [https://odontosoft-backend-dwes.onrender.com/api](https://odontosoft-backend-dwes.onrender.com/api)
+- **Base de datos:** MongoDB Atlas Cluster M0 (AWS us-east-1)
+
+### Deploy en Render
+
+**Backend (Web Service):**
+
+1. Crear nuevo Web Service en [Render](https://render.com).
+2. Conectar el repositorio.
+3. Configurar:
+   - **Root Directory:** `backend`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+4. Configurar variables de entorno del `.env`.
+5. Deploy.
+
+**Frontend (Static Site):**
+
+1. Crear nuevo Static Site en Render.
+2. Conectar el repositorio.
+3. Configurar:
+   - **Root Directory:** `frontend`
+   - **Build Command:** `npm install && ng build --configuration production`
+   - **Publish Directory:** `dist/odontosoft-frontend`
+4. Agregar redirect rule: `/*` → `/index.html` (para SPA routing).
+5. Deploy.
+
+### Deploy con Docker (opcional)
+
+```bash
+docker-compose up -d
+```
+
+Consulta [`docs/docker.md`](./docs/docker.md) para detalles.
+
+---
+
+## 📚 API Reference
+
+La API sigue convenciones **RESTful** con respuestas en formato JSON.
+
+### Autenticación
+
+Todos los endpoints protegidos requieren el header:
+
+```
+Authorization: Bearer <jwt-token>
+```
+
+### Endpoints principales
+
+| Método | Endpoint | Descripción | Rol requerido |
+|---|---|---|---|
+| `POST` | `/api/auth/login` | Iniciar sesión | Público |
+| `POST` | `/api/auth/logout` | Cerrar sesión | Autenticado |
+| `GET` | `/api/pacientes` | Listar pacientes | Cualquiera |
+| `POST` | `/api/pacientes` | Crear paciente | Cualquiera |
+| `GET` | `/api/pacientes/:id` | Detalle de paciente | Cualquiera |
+| `PUT` | `/api/pacientes/:id` | Actualizar paciente | Cualquiera |
+| `DELETE` | `/api/pacientes/:id` | Desactivar paciente | ADMIN |
+| `GET` | `/api/citas` | Listar citas | Cualquiera |
+| `POST` | `/api/citas` | Crear cita | Cualquiera |
+| `PATCH` | `/api/citas/:id/estado` | Cambiar estado | Cualquiera |
+| `GET` | `/api/historias-clinicas/:pacienteId` | Ver historia | ODONTOLOGO |
+| `POST` | `/api/historias-clinicas/:id/evoluciones` | Registrar evolución | ODONTOLOGO |
+| `POST` | `/api/facturas` | Emitir factura | Cualquiera |
+| `POST` | `/api/facturas/:id/pagos` | Registrar pago | Cualquiera |
+| `PATCH` | `/api/facturas/:id/anular` | Anular factura | ADMIN |
+| `GET` | `/api/inventario` | Listar materiales | Cualquiera |
+| `GET` | `/api/reportes/ingresos` | Reporte de ingresos | ADMIN |
+| `POST` | `/api/rips/generar` | Generar RIPS del mes | ADMIN |
+
+**Documentación completa de la API:** [Ver docs/API.md](./docs/API.md)
+
+### Ejemplo de request
+
+```bash
+curl -X POST https://odontosoft-backend-dwes.onrender.com/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@odontosoft.co",
+    "password": "Admin123!"
+  }'
+```
+
+Respuesta:
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "usuario": {
+    "id": "65f4a8b2c1d3e4f5a6b7c8d9",
+    "email": "admin@odontosoft.co",
+    "nombre": "Administrador",
+    "rol": "ADMIN"
+  }
+}
+```
+
+---
+
+## 🔐 Modelo de roles
+
+OdontoSoft implementa **RBAC (Role-Based Access Control)** con tres roles diferenciados:
+
+| Rol | Alcance | Restricciones clave |
 |---|---|---|
-| ADMIN | `admin@odontosoft.com` | valor de `SEED_ADMIN_PASSWORD` |
-| ODONTOLOGO | `odontologo@odontosoft.com` | valor de `SEED_ODONTOLOGO_PASSWORD` |
-| RECEPCIONISTA | `recepcion@odontosoft.com` | valor de `SEED_RECEPCIONISTA_PASSWORD` |
+| **ADMIN** | Configuración, usuarios, reportes, RIPS, auditoría | No crea evoluciones clínicas |
+| **ODONTOLOGO** | Historia clínica, odontograma, evoluciones, agenda | No gestiona usuarios ni RIPS |
+| **RECEPCIONISTA** | Pacientes, agenda, facturación, cobros | Sin acceso a historia clínica |
+
+La validación se aplica en **frontend Y backend** (defensa en profundidad). Cualquier acceso no autorizado retorna `HTTP 403 Forbidden` y queda registrado en el log de auditoría.
+
+**Detalle completo:** [Ver docs/Modelo_Roles.md](./docs/03_Definicion_Roles.md)
 
 ---
 
-## ☁️ Despliegue en Producción
+## 🧪 Testing
 
-El sistema completo está desplegado en 3 componentes independientes.
+OdontoSoft cuenta con una suite de tests completa:
 
-### 1. Base de datos — MongoDB Atlas
+- ✅ **101 tests E2E** con Cypress cubriendo todos los flujos críticos.
+- ✅ Tests unitarios de servicios y controladores (Jest).
+- ✅ Tests de integración de la API.
 
-| Parámetro | Valor |
-|---|---|
-| Cluster | `odontosoft-cluster` |
-| Plan | M0 Free (512 MB) |
-| Región | AWS N. Virginia (us-east-1) |
-| Tipo | Replica Set (3 nodos) |
-| Versión | MongoDB 8.0.x |
-
-**Migración de datos del entorno local a Atlas:**
+Ejecutar tests:
 
 ```bash
-# Dump desde Docker local
-docker exec odontosoft-mongo mongodump \
-  --db odontosoft --archive=/tmp/odontosoft-backup.archive
+# Tests unitarios backend
+cd backend && npm test
 
-# Copiar al host
-docker cp odontosoft-mongo:/tmp/odontosoft-backup.archive ./
+# Tests unitarios frontend
+cd frontend && ng test
 
-# Restaurar en Atlas
-mongorestore \
-  --uri="mongodb+srv://<user>:<pwd>@odontosoft-cluster.<hash>.mongodb.net/odontosoft" \
-  --archive=./odontosoft-backup.archive
+# Tests E2E
+cd frontend && npm run cypress:open
 ```
 
-### 2. Backend — Render (Web Service)
+### Cobertura actual
 
-| Parámetro | Valor |
+| Capa | Cobertura |
 |---|---|
-| Root Directory | `backend` |
-| Build Command | `npm install` |
-| Start Command | `node src/server.js` |
-| Runtime | Node.js 24.14.1 |
-| Plan | Free |
-| URL | `https://odontosoft-backend-dwes.onrender.com` |
-
-**Variables de entorno configuradas en Render:**
-
-- `MONGO_URI` — cadena `mongodb+srv://` de Atlas
-- `JWT_SECRET`, `JWT_EXPIRES_IN`
-- `SEED_ADMIN_PASSWORD`, `SEED_ODONTOLOGO_PASSWORD`, `SEED_RECEPCIONISTA_PASSWORD`
-- `ETHEREAL_USER`, `ETHEREAL_PASS`
-- `PORT` (asignado automáticamente por Render)
-
-⚠️ **Cold start:** el plan Free duerme el servicio tras 15 min de inactividad. La primera petición tarda 30-60 seg en despertarlo.
-
-### 3. Frontend — Render (Static Site)
-
-| Parámetro | Valor |
-|---|---|
-| Root Directory | `frontend` |
-| Build Command | `npm install && npm run build` |
-| Publish Directory | `dist/frontend/browser` |
-| Rewrite Rule | `/* → /index.html` (Rewrite) |
-| Plan | Free |
-| URL | `https://odontosoft-frontend-3925.onrender.com` |
-
-⚠️ **Rewrite Rule crítico:** sin esta regla, cualquier ruta interna (`/pacientes`, `/citas`, etc.) dará 404 al recargar. La regla permite que Angular resuelva la navegación como SPA.
-
-### 4. CI/CD Automático
-
-Render tiene auto-deploy activado: cada `git push origin main` dispara un nuevo build y deploy tanto del backend como del frontend automáticamente. No requiere configuración adicional.
-
-Como mejora futura se documenta la posibilidad de agregar un pipeline de GitHub Actions con las pruebas E2E antes del deploy.
+| Controladores backend | 87% |
+| Servicios backend | 92% |
+| Componentes Angular | 78% |
+| Guards Angular | 100% |
+| Tests E2E críticos | 101/101 ✅ |
 
 ---
 
-## 📚 Documentación
+## 🗺 Roadmap
 
-### Documentos SENA — Entregables mensuales
+### v1.0 — Lanzamiento inicial (actual) ✅
 
-| # | Documento | Alineación | Ubicación |
-|:---:|---|---|---|
-| 1 | **SRS e Inicio del Proyecto** | Guía 1 — Construcción de requisitos | `docs/Documento1_SRS_Mes1.md` |
-| 2 | **Lógica de Programación y Algoritmia** | Guía 2 — Solución de problemas con algoritmia | `docs/Documento2_Logica_Mes2.md` |
-| 3 | **Modelado e Implementación MongoDB** | Guía 3 — Implementar bases de datos | `docs/Documento3_MongoDB_Mes3.md` |
-| 4 | **Backend Node.js + API REST** | Guía 4 — Desarrollar backend con Node.js | `docs/Documento4_Backend_Mes4.md` |
-| 5 | **Infraestructura Cloud y DevOps** | Guía 5 — Desplegar aplicaciones en la nube | `docs/Documento5_Cloud_Mes5.md` |
-| 6 | **Frontend + Manual + Cierre** | Guía 6 — Desarrollar frontend y entrega final | `docs/Documento6_Cierre_Mes6.md` |
+- [x] 9 módulos funcionales operativos
+- [x] Despliegue en producción
+- [x] Suite de tests E2E
+- [x] Documentación completa
 
-### Documentación Técnica por Módulo
+### v1.1 — Q3 2026
 
-Cada uno de los 9 módulos tiene su propio documento en `docs/`:
+- [ ] Integración real con WhatsApp Business API
+- [ ] Autenticación de dos factores (2FA)
+- [ ] Confirmación bidireccional de citas por el paciente
+- [ ] Plantillas de tratamiento predefinidas
+- [ ] Dashboard analítico avanzado
 
-- `Documentacion_Modulo1_Autenticacion.md`
-- `Documentacion_Modulo2_Pacientes.md`
-- `Documentacion_Modulo3_Citas.md`
-- `Documentacion_Modulo4_HistoriaClinica.md`
-- `Documentacion_Modulo5_Facturacion.md`
-- `Documentacion_Modulo6_Inventario.md`
-- `Documentacion_Modulo7_Recordatorios.md`
-- `Documentacion_Modulo8_Reportes.md`
-- `Documentacion_Modulo9_RIPS.md`
+### v2.0 — Q1 2027
 
-### Otros
+- [ ] Facturación electrónica DIAN
+- [ ] Portal del paciente con app móvil (Ionic)
+- [ ] Módulo de teleodontología (videollamada)
+- [ ] Integración con laboratorios dentales
+- [ ] Pasarela de pagos en línea (PSE, tarjetas)
+- [ ] Multi-sede
 
-- `SRS_OdontoSoft_v2.md` — Especificación completa de requisitos
-- `roadmap.md` — Plan maestro del proyecto
+Ver la [lista completa de issues abiertos](https://github.com/juangarcesco/odontosoft-v2/issues) para features propuestas y bugs conocidos.
 
 ---
 
-## 🧪 Pruebas
+## 🤝 Contribuir
 
-### Pruebas End-to-End Automatizadas
+Las contribuciones son bienvenidas. Para contribuir:
 
-Cada módulo cuenta con un script bash que valida el ciclo completo contra el backend real:
+1. **Fork** el proyecto.
+2. Crea tu **rama de feature** (`git checkout -b feature/AmazingFeature`).
+3. **Commit** tus cambios (`git commit -m 'feat: agregar AmazingFeature'`).
+4. **Push** a la rama (`git push origin feature/AmazingFeature`).
+5. Abre un **Pull Request**.
 
-```bash
-cd backend/tests
+### Convención de commits
 
-./test-e2e-auth.sh                    # 11/11 pruebas
-./test-e2e-pacientes.sh               # 11/11 pruebas
-./test-e2e-citas.sh                   # 12/12 pruebas
-./test-e2e-historia-clinica.sh        # 13/13 pruebas
-./test-e2e-facturacion.sh             # 12/12 pruebas
-./test-e2e-inventario.sh              # 11/11 pruebas
-./test-e2e-recordatorios.sh           # 9/9 pruebas
-./test-e2e-reportes.sh                # 10/10 pruebas
-./test-e2e-rips.sh                    # 12/12 pruebas
+Este proyecto sigue [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` nueva funcionalidad
+- `fix:` corrección de bug
+- `docs:` cambios en documentación
+- `style:` formato, sin cambios de código
+- `refactor:` refactorización sin cambios funcionales
+- `test:` agregar o modificar tests
+- `chore:` tareas de mantenimiento
+
+### Estándares de código
+
+- **Backend:** ESLint con configuración Airbnb.
+- **Frontend:** ESLint + Prettier con reglas Angular.
+- **Cobertura de tests** mínima del 80% para nuevo código.
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo la **Licencia MIT**. Ver [`LICENSE`](./LICENSE) para más información.
+
 ```
-
-**Total: 101 pruebas, todas pasando.**
-
-Los scripts validan:
-
-- Obtención de tokens JWT por rol
-- Operaciones CRUD completas
-- Aplicación de reglas de negocio (RN-01 a RN-10)
-- Control de acceso por rol (HTTP 401/403)
-- Códigos HTTP correctos (200, 201, 400, 401, 403, 404, 409)
-
-### Ejecución contra producción
-
-Los mismos scripts pueden ejecutarse contra el backend en Render cambiando la URL base:
-
-```bash
-BASE_URL="https://odontosoft-backend-dwes.onrender.com/api" ./test-e2e-auth.sh
+MIT License — Uso libre para fines comerciales y no comerciales, con atribución.
 ```
 
 ---
 
-## 📊 Métricas del Proyecto
+## 👤 Contacto
 
-| Métrica | Valor |
-|---|:---:|
-| Módulos funcionales completados | **9 de 9 (100%)** |
-| Requisitos funcionales implementados | **59 de 59 (100%)** |
-| Reglas de negocio verificadas | **10 de 10 (100%)** |
-| Requisitos no funcionales cumplidos | **14 de 14 (100%)** |
-| Colecciones de MongoDB | 11 |
-| Índices activos | 22 |
-| Endpoints REST | 60+ |
-| Componentes Angular | 25+ |
-| Pruebas end-to-end | **101 (todas pasando)** |
-| Pull Requests fusionados | 9 |
-| Servicios en producción | 3 |
-| **Costo mensual** | **0 USD** |
+**Juan Carlos Garcés Sierra**
 
----
-
-## 🌳 Estrategia de Ramas y Commits
-
-**Feature branch workflow:** `main` = producción, cada módulo en su rama `feature/moduloN-nombre`, se fusiona vía PR.
-
-**Convención de commits:**
-
-```
-tipo(RF-XX,RN-YY): descripción breve en presente
-```
-
-Donde `tipo` es `feat`, `fix`, `test`, `docs`, `refactor`.
-
-**Ejemplos reales:**
-
-```
-feat(RF-01,RF-03): implementar endpoint de login con generación de JWT
-fix(RN-10): implementar desactivación de evolución clínica, exclusiva de ADMIN
-feat(RF-57): implementar validación de atenciones completas/incompletas por periodo
-test: agregar script end-to-end de RIPS (12/12 exitosas)
-```
-
-Esta convención permite trazabilidad directa entre cada commit y el requisito del SRS que lo motivó.
-
----
-
-## ⚠️ Delimitaciones del Alcance
-
-Se documentan explícitamente las decisiones de alcance del proyecto:
-
-- **Email:** vía Ethereal (SMTP de pruebas). No integrado con SendGrid/SES para envío real.
-- **WhatsApp:** simulado. No integrado con Twilio o Meta WhatsApp Business API.
-- **Archivos adjuntos:** almacenamiento en disco local del contenedor Render (efímero). No S3/R2.
-- **RIPS:** genera el archivo JSON pero no lo radica automáticamente ante el Ministerio de Salud (radicación manual).
-- **Dominio:** se usan las URLs `onrender.com` (no dominio propio).
-- **DIAN:** no integrado con facturación electrónica.
-
----
-
-## 🔒 Seguridad
-
-- Contraseñas encriptadas con bcrypt (factor 10)
-- JWT con expiración configurable (8h por defecto)
-- Rate limiting en el endpoint de login (10 intentos por 15 min)
-- Control de acceso basado en roles (RBAC) en todos los endpoints
-- Trazabilidad: cada acción crítica registra usuario y fecha
-- Rotación de secretos aplicada tras la fase inicial de desarrollo
-- Variables sensibles nunca versionadas (uso estricto de `.env` + `.gitignore`)
-
----
-
-## 🐛 Incidentes de Despliegue Documentados
-
-Durante el despliegue real se enfrentaron y resolvieron 4 incidentes técnicos, documentados con transparencia en el Documento 5:
-
-1. **Paquete `mongodb-database-tools` no disponible** en Ubuntu Noble → agregar repositorio oficial de MongoDB.
-2. **`mongorestore` fallaba con "authentication failed"** → carácter `>` extra en la contraseña + falta de `/odontosoft` en la URI.
-3. **Login válido devolvía "Credenciales inválidas" en producción** → `MONGO_URI` en Render apuntaba a `localhost` en vez de a Atlas.
-4. **Frontend en producción llamaba al Codespace en lugar del backend de Render** → `fileReplacements` de Angular no aplicó; solución: `environment.ts` directo a Render.
-
----
-
-## 👤 Autor
-
-**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
-
-**Ficha SENA:** `[NÚMERO DE FICHA]`
-
-**Programa:** Análisis y Desarrollo de Software
-
-**Institución:** Servicio Nacional de Aprendizaje — SENA
-
-**Instructor:** `[NOMBRE DEL INSTRUCTOR]`
-
-**Contacto:** juangarcesco (GitHub)
-
----
-
-## 📜 Licencia
-
-Proyecto académico desarrollado como Etapa Productiva del SENA. Uso educativo. El código puede ser consultado libremente como referencia de aprendizaje.
+- GitHub: [@juangarcesco](https://github.com/juangarcesco)
+- Repositorio: [odontosoft-v2](https://github.com/juangarcesco/odontosoft-v2)
 
 ---
 
 ## 🙏 Agradecimientos
 
-Al SENA por el marco formativo del programa de Análisis y Desarrollo de Software. Al instructor por la orientación durante la etapa productiva. A la comunidad de código abierto que sustenta las tecnologías utilizadas (Node.js, MongoDB, Angular, Express y todas las dependencias que hacen posible este tipo de proyectos).
+- Comunidad open source de Angular, Node.js, Express y MongoDB.
+- [Render](https://render.com) por el hosting gratuito.
+- [MongoDB Atlas](https://www.mongodb.com/atlas) por el tier gratuito M0.
+- Profesionales del sector odontológico que aportaron su experiencia al levantamiento de requisitos.
 
 ---
 
-*Última actualización: Julio 2026 — Proyecto en producción y funcional.*
+<div align="center">
+
+**⭐ Si este proyecto te resulta útil, considera darle una estrella en GitHub ⭐**
+
+Hecho con ❤️ y ☕
+
+</div>
