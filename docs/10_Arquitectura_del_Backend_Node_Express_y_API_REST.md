@@ -12,13 +12,13 @@
 
 **Cliente:** Consultorio Odontológico Dra. EM (Bogotá D.C.)
 
-**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
+**Aprendices:** Juan Carlos Garces Sierra, Juan Pablo Mendez Gil
 
-**Ficha SENA:** `[NÚMERO DE FICHA]`
+**Ficha SENA:** 3186265
 
-**Instructor:** `[NOMBRE DEL INSTRUCTOR]`
+**Instructor:** Nelson Armando Serrano Hincapie
 
-**Fecha de entrega:** `[FECHA]`
+**Fecha de entrega:** Agosto 2026
 
 ---
 
@@ -360,8 +360,8 @@ Esta integración demuestra que Mongoose actúa como capa de **mapeo objeto-docu
 
 **Elaborado por:**
 
-**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
+**Aprendices:** Juan Carlos Garces Sierra, Juan Pablo Mendez Gil
 
-**Ficha SENA:** `[NÚMERO DE FICHA]`
+**Ficha SENA:** 3186265
 
 **Fecha:** `[FECHA]`

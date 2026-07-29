@@ -12,13 +12,13 @@
 
 **Cliente:** Consultorio Odontológico Dra. EM (Bogotá D.C.)
 
-**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
+**Aprendices:** Juan Carlos Garces Sierra, Juan Pablo Mendez Gil
 
-**Ficha SENA:** `[NÚMERO DE FICHA]`
+**Ficha SENA:** 3186265
 
-**Instructor:** `[NOMBRE DEL INSTRUCTOR]`
+**Instructor:** Nelson Armando Serrano Hincapie
 
-**Fecha de entrega:** `[FECHA]`
+**Fecha de entrega:** Agosto 2026
 
 ---
 
@@ -229,9 +229,9 @@ El sistema OdontoSoft cumple, a nivel de arquitectura e implementación, con los
 
 **Elaborado por:**
 
-**Aprendiz:** `[NOMBRE COMPLETO DEL APRENDIZ]`
+**Aprendices:** Juan Carlos Garces Sierra, Juan Pablo Mendez Gil
 
-**Ficha SENA:** `[NÚMERO DE FICHA]`
+**Ficha SENA:** 3186265
 
 **Fecha:** `[FECHA]`
 
