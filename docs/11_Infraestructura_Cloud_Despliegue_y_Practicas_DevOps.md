@@ -6,7 +6,7 @@
 
 ---
 
-# Infraestructura Cloud, Despliegue y Prácticas DevOps
+# INFRAESTRUCTURA CLOUD, DESPLIEGUE Y PRÁCTICAS DEVOPS
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Planificación de Recursos Cloud
@@ -34,13 +34,13 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 Este documento describe la planificación de infraestructura, el proceso de despliegue y las prácticas DevOps adoptadas para llevar OdontoSoft de un entorno de desarrollo local a un entorno de producción accesible desde internet, manteniendo separación estricta entre configuración y código (principio de [The Twelve-Factor App](https://12factor.net/es/config)).
 
 ---
 
-## 2. Planificación de Recursos Cloud
+## 2. PLANIFICACIÓN DE RECURSOS CLOUD
 
 ### 2.1 Sistemas operativos
 
@@ -86,7 +86,7 @@ Toda configuración sensible o dependiente del entorno se inyecta por variables 
 
 ---
 
-## 3. Arquitectura de Despliegue
+## 3. ARQUITECTURA DE DESPLIEGUE
 
 ```mermaid
 flowchart TB
@@ -118,7 +118,7 @@ flowchart TB
 
 ---
 
-## 4. Evidencias del Despliegue en Producción
+## 4. EVIDENCIAS DEL DESPLIEGUE EN PRODUCCIÓN
 
 ### 4.1 Backend — Render Web Service
 
@@ -170,7 +170,7 @@ curl https://<url-backend-en-produccion>/api/health
 
 ---
 
-## 5. Despliegue Local con Docker (Desarrollo)
+## 5. DESPLIEGUE LOCAL CON DOCKER (DESARROLLO)
 
 El repositorio incluye `docker-compose.yml` para levantar MongoDB de forma reproducible en cualquier máquina de desarrollo, sin instalar MongoDB nativamente:
 
@@ -206,7 +206,7 @@ El volumen nombrado `mongo-data` persiste los datos entre reinicios del contened
 
 ---
 
-## 6. Configuración de Pipelines de Despliegue Continuo (CI/CD)
+## 6. CONFIGURACIÓN DE PIPELINES DE DESPLIEGUE CONTINUO (CI/CD)
 
 ### 6.1 Estado actual: Despliegue Continuo (CD) vía integración GitHub–Render
 
@@ -276,7 +276,7 @@ jobs:
 
 ---
 
-## 7. Buenas Prácticas DevOps Aplicadas
+## 7. BUENAS PRÁCTICAS DEVOPS APLICADAS
 
 - **Separación config/código (12-Factor):** ningún secreto (`JWT_SECRET`, credenciales SMTP, cadena de conexión) está en el código fuente; todo vive en variables de entorno de la plataforma.
 - **Idempotencia en scripts de arranque:** `seedAdmin.js` y `seedRoles.js` verifican existencia antes de crear (`findOne` previo), permitiendo ejecutarlos repetidamente sin duplicar datos, algo deseable si se re-ejecutan como parte de un pipeline.

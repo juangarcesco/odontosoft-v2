@@ -1,4 +1,4 @@
-# Documentación del Módulo 1 — Autenticación y Control de Acceso
+# DOCUMENTACIÓN DEL MÓDULO 1 — AUTENTICACIÓN Y CONTROL DE ACCESO
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -20,7 +20,7 @@
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -39,7 +39,7 @@
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/test-e2e.sh`
 
@@ -105,7 +105,7 @@ Confirmado: cada intento de login (exitoso o fallido) queda registrado con `emai
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                     Servidor (Express)                  Base de datos (MongoDB)
@@ -130,7 +130,7 @@ Cliente (Angular)                     Servidor (Express)                  Base d
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -144,7 +144,7 @@ Cliente (Angular)                     Servidor (Express)                  Base d
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 Convención utilizada: `tipo(RF-XX,RNF-XX): descripción breve`, permitiendo trazar cada commit a un requisito específico del SRS.
 
@@ -177,7 +177,7 @@ chore: agregar .gitignore para backend y frontend
 
 ---
 
-## 6. Incidentes de seguridad detectados y resueltos
+## 6. INCIDENTES DE SEGURIDAD DETECTADOS Y RESUELTOS
 
 | Incidente | Detectado por | Descripción | Resolución |
 |---|---|---|---|
@@ -187,7 +187,7 @@ chore: agregar .gitignore para backend y frontend
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Evaluar migración de `localStorage` a cookies `httpOnly` + CSRF token si el alcance del proyecto lo permite.
 - [ ] Agregar pruebas unitarias automatizadas (Jest) además del script `test-e2e.sh` manual.
@@ -196,7 +196,7 @@ chore: agregar .gitignore para backend y frontend
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF/RNF del módulo implementados (RF-01 a RF-08, RNF-01, RNF-03, RNF-06, RNF-16)
 - [x] Pruebas automatizadas ejecutadas y evidenciadas (`test-e2e.sh`, 11/11 exitosas)
@@ -210,7 +210,7 @@ chore: agregar .gitignore para backend y frontend
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

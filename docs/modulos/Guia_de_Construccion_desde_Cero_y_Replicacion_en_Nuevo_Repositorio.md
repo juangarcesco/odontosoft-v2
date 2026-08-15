@@ -1,10 +1,10 @@
-# Guía de Construcción desde Cero — Cómo Replicar OdontoSoft en un Nuevo Repositorio
+# GUÍA DE CONSTRUCCIÓN DESDE CERO — CÓMO REPLICAR ODONTOSOFT EN UN NUEVO REPOSITORIO
 
 **Propósito:** este documento reconstruye, a partir del historial real de commits del repositorio, el orden y las decisiones con las que se construyó OdontoSoft. Sirve como guía práctica para levantar un proyecto equivalente desde un repositorio vacío, sin depender de memoria ni de suposiciones.
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Filosofía de construcción
 2. Prerrequisitos
@@ -22,7 +22,7 @@
 
 ---
 
-## 1. Filosofía de construcción
+## 1. FILOSOFÍA DE CONSTRUCCIÓN
 
 El proyecto no se construyó "backend completo, luego frontend completo". Se construyó **módulo funcional por módulo funcional**, verticalmente: para cada módulo (Autenticación, Pacientes, Citas, Historia Clínica, Facturación, Inventario, Recordatorios, Reportes, RIPS) se hizo primero el modelo de datos, luego el servicio, luego el controlador y la ruta, y se cerró con un script de pruebas end-to-end antes de pasar al siguiente módulo. El frontend Angular llegó **después** de tener el backend de Autenticación y Pacientes funcionando, no en paralelo desde el día uno.
 
@@ -59,7 +59,7 @@ Es decir: **modelo → servicio → controlador/ruta → integración frontend �
 
 ---
 
-## 2. Prerrequisitos
+## 2. PRERREQUISITOS
 
 - **Node.js** 20.x o superior y **npm** 10.x o superior.
 - **Angular CLI** (`npm install -g @angular/cli`) — el proyecto usa Angular 21 con standalone components.
@@ -69,7 +69,7 @@ Es decir: **modelo → servicio → controlador/ruta → integración frontend �
 
 ---
 
-## 3. Paso 0 — Estructura inicial del repositorio
+## 3. PASO 0 — ESTRUCTURA INICIAL DEL REPOSITORIO
 
 ```bash
 mkdir mi-proyecto && cd mi-proyecto
@@ -103,7 +103,7 @@ Primer commit: `git commit -m "Initial commit"` — vacío o solo con `.gitignor
 
 ---
 
-## 4. Paso 1 — Bootstrap del backend
+## 4. PASO 1 — BOOTSTRAP DEL BACKEND
 
 ### 4.1 Inicializar el proyecto Node
 
@@ -234,7 +234,7 @@ Commit: `chore: initialize backend package.json with dependencies and scripts`.
 
 ---
 
-## 5. Paso 2 — Módulo 1: Autenticación y control de acceso
+## 5. PASO 2 — MÓDULO 1: AUTENTICACIÓN Y CONTROL DE ACCESO
 
 Este fue el **primer módulo funcional real** y establece el patrón que se repite en todos los demás. El orden exacto seguido fue:
 
@@ -276,7 +276,7 @@ El controlador nunca contiene lógica de negocio; solo traduce `req`/`res` y del
 
 ---
 
-## 6. Paso 3 — Módulo 2: Pacientes
+## 6. PASO 3 — MÓDULO 2: PACIENTES
 
 Con Autenticación ya funcionando, se repite exactamente el mismo patrón para el segundo módulo, en este orden real:
 
@@ -295,7 +295,7 @@ Nota de proceso real que vale la pena replicar: en el historial hay un commit po
 
 ---
 
-## 7. Paso 4 — Módulos 3 a 9: repetir el patrón
+## 7. PASO 4 — MÓDULOS 3 A 9: REPETIR EL PATRÓN
 
 El resto del sistema (Citas, Historia Clínica, Facturación, Inventario, Recordatorios, Reportes, RIPS) se construyó con la **misma secuencia** que Pacientes, cambiando solo la complejidad del dominio:
 
@@ -324,7 +324,7 @@ El punto 7 (idempotencia) es importante: los scripts de prueba deben poder corre
 
 ---
 
-## 8. Paso 5 — Bootstrap del frontend (Angular)
+## 8. PASO 5 — BOOTSTRAP DEL FRONTEND (ANGULAR)
 
 El frontend se inicializa **después** de que el backend de Autenticación esté probado, no en paralelo:
 
@@ -374,7 +374,7 @@ export const environment = {
 
 ---
 
-## 9. Paso 6 — Infraestructura local (Docker + Mongo)
+## 9. PASO 6 — INFRAESTRUCTURA LOCAL (DOCKER + MONGO)
 
 `docker-compose.yml` en la raíz, para no depender de una instalación local de Mongo:
 
@@ -401,7 +401,7 @@ docker compose up -d
 
 ---
 
-## 10. Paso 7 — Pruebas end-to-end con scripts bash
+## 10. PASO 7 — PRUEBAS END-TO-END CON SCRIPTS BASH
 
 En vez de (o además de) un framework de e2e pesado, el proyecto usa scripts bash simples con `curl` en `backend/tests/`, uno por módulo (`test-e2e-auth.sh`, `test-e2e-pacientes.sh`, `test-e2e-citas.sh`, …). Patrón usado en todos:
 
@@ -425,7 +425,7 @@ Cada script: hace login con cada rol relevante, prueba el camino feliz, y prueba
 
 ---
 
-## 11. Paso 8 — Despliegue (Render + MongoDB Atlas)
+## 11. PASO 8 — DESPLIEGUE (RENDER + MONGODB ATLAS)
 
 Documentado en detalle en [`11_Infraestructura_Cloud_Despliegue_y_Practicas_DevOps`](./11_Infraestructura_Cloud_Despliegue_y_Practicas_DevOps.md). Resumen para replicar:
 
@@ -437,13 +437,13 @@ Documentado en detalle en [`11_Infraestructura_Cloud_Despliegue_y_Practicas_DevO
 
 ---
 
-## 12. Paso 9 — Documentación en paralelo
+## 12. PASO 9 — DOCUMENTACIÓN EN PARALELO
 
 La documentación no se escribió al final: cada módulo cerró con su propio archivo en `docs/modulos/Documentacion_ModuloN_<Nombre>.md`, y los documentos transversales (SRS, roles, arquitectura, DevOps, modelado de datos) se escribieron cuando el sistema ya tenía suficiente superficie real para describir con precisión (no se documentó código que aún no existía). Para un repo nuevo, replicar esto significa: un `docs/modulos/ModuloN.md` por cada módulo cerrado, más un puñado de documentos transversales al final (arquitectura, DevOps, modelo de datos), no antes.
 
 ---
 
-## 13. Checklist resumido para un repo nuevo
+## 13. CHECKLIST RESUMIDO PARA UN REPO NUEVO
 
 ```
 [ ] git init + estructura backend/ frontend/ docs/ + .gitignore

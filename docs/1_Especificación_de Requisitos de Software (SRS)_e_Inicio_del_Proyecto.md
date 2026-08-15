@@ -6,7 +6,7 @@
 
 ---
 
-# Especificación de Requisitos de Software (SRS)
+# ESPECIFICACIÓN DE REQUISITOS DE SOFTWARE (SRS)
 
 **Documento del Mes 1 — Análisis del Sistema**
 
@@ -24,7 +24,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Descripción del Cliente
@@ -38,7 +38,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 ### 1.1. Propósito
 
@@ -69,7 +69,7 @@ El SRS es autocontenido para efectos de lectura ejecutiva, pero remite a los tre
 
 ---
 
-## 2. Descripción del Cliente
+## 2. DESCRIPCIÓN DEL CLIENTE
 
 ### 2.1. Identificación
 
@@ -93,7 +93,7 @@ El proyecto presenta una **ventaja metodológica poco común**: la cliente cuent
 
 ---
 
-## 3. Metodología de Levantamiento de Información
+## 3. METODOLOGÍA DE LEVANTAMIENTO DE INFORMACIÓN
 
 Para la fase de análisis se aplicaron **tres instrumentos complementarios**:
 
@@ -130,7 +130,7 @@ Cada eje se tradujo posteriormente a requisitos concretos (ver sección 5 y Doc 
 
 ---
 
-## 4. Alcance del Sistema
+## 4. ALCANCE DEL SISTEMA
 
 ### 4.1. Descripción general
 
@@ -167,7 +167,7 @@ Esta elección responde a la preferencia explícita de la cliente por soluciones
 
 ---
 
-## 5. Resumen de Requisitos
+## 5. RESUMEN DE REQUISITOS
 
 El sistema define un total de **59 Requisitos Funcionales (RF)**, **14 Requisitos No Funcionales (RNF)** y **10 Reglas de Negocio (RN)**, todos validados con la cliente durante la fase de levantamiento.
 
@@ -220,7 +220,7 @@ Las 10 RN son restricciones inviolables que el sistema valida automáticamente:
 
 ---
 
-## 6. Modelo de Roles
+## 6. MODELO DE ROLES
 
 El sistema implementa un modelo **RBAC (Role-Based Access Control)** con **tres roles diferenciados**, alineados con la estructura organizacional del consultorio.
 
@@ -255,7 +255,7 @@ El control de acceso se aplica **tanto en frontend como en backend**. El fronten
 
 ---
 
-## 7. Delimitaciones del Alcance
+## 7. DELIMITACIONES DEL ALCANCE
 
 Se documentan explícitamente las decisiones de alcance del proyecto, todas validadas con la cliente:
 
@@ -275,7 +275,7 @@ Estas delimitaciones fueron aceptadas formalmente por la cliente durante la fase
 
 ---
 
-## 8. Documentos Anexos
+## 8. DOCUMENTOS ANEXOS
 
 Este SRS se complementa con los siguientes documentos independientes, que forman parte integral del análisis del sistema:
 
@@ -311,7 +311,7 @@ Contiene:
 
 ---
 
-## 9. Aprobación Formal
+## 9. APROBACIÓN FORMAL
 
 Habiendo revisado el presente SRS junto con los tres documentos independientes que lo complementan, la cliente manifiesta su aprobación formal del análisis del sistema OdontoSoft.
 

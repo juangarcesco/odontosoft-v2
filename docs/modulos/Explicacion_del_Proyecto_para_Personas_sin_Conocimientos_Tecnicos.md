@@ -1,10 +1,10 @@
-# OdontoSoft explicado en simple — para quien no sabe nada de esto
+# ODONTOSOFT EXPLICADO EN SIMPLE — PARA QUIEN NO SABE NADA DE ESTO
 
 **¿Para quién es este documento?** Para cualquier persona sin conocimientos de programación ni de sistemas: un familiar, un cliente, un instructor que evalúa el resultado final, o el propio dentista que va a usar el sistema. No vas a encontrar aquí código ni tecnicismos sin explicar — cada palabra "rara" se explica con una comparación de la vida real.
 
 ---
 
-## 1. ¿Qué es OdontoSoft, en una frase?
+## 1. ¿QUÉ ES ODONTOSOFT, EN UNA FRASE?
 
 OdontoSoft es un **programa de computador al que se accede desde internet** (como Gmail o Netflix, pero para un consultorio odontológico) que reemplaza el cuaderno, las carpetas de papel y el Excel con los que normalmente se administra un consultorio dental pequeño.
 
@@ -18,7 +18,7 @@ todo eso vive **en un solo sitio, en internet**, ordenado, buscable, y sin que s
 
 ---
 
-## 2. ¿Qué problema resuelve realmente?
+## 2. ¿QUÉ PROBLEMA RESUELVE REALMENTE?
 
 Un consultorio odontológico independiente (uno que no pertenece a una cadena grande) normalmente tiene tres dolores de cabeza:
 
@@ -30,7 +30,7 @@ OdontoSoft se construyó a la medida, conversando directamente con una odontólo
 
 ---
 
-## 3. ¿Cómo se ve "por fuera"? (la experiencia de uso)
+## 3. ¿CÓMO SE VE "POR FUERA"? (LA EXPERIENCIA DE USO)
 
 Quien usa OdontoSoft simplemente abre un navegador de internet (como Chrome), entra a una dirección web, escribe su usuario y contraseña, y ve una pantalla con menús. No instala nada en su computador — es como entrar a la página del banco.
 
@@ -46,7 +46,7 @@ Esto se llama **control de acceso por roles**: cada quien ve y puede hacer solam
 
 ---
 
-## 4. Las 9 "cajas" en las que está dividido el sistema
+## 4. LAS 9 "CAJAS" EN LAS QUE ESTÁ DIVIDIDO EL SISTEMA
 
 Todo el sistema se organiza en 9 partes (módulos). Piensa en cada una como un cajón distinto de un archivador físico:
 
@@ -62,7 +62,7 @@ Todo el sistema se organiza en 9 partes (módulos). Piensa en cada una como un c
 
 ---
 
-## 5. ¿Cómo funciona "por dentro"? (sin tecnicismos)
+## 5. ¿CÓMO FUNCIONA "POR DENTRO"? (SIN TECNICISMOS)
 
 Imagina un restaurante:
 
@@ -86,7 +86,7 @@ Esto significa que el consultorio no necesita comprar ni mantener un servidor pr
 
 ---
 
-## 6. Un ejemplo de principio a fin (un día cualquiera)
+## 6. UN EJEMPLO DE PRINCIPIO A FIN (UN DÍA CUALQUIERA)
 
 1. La **recepcionista** entra con su usuario y contraseña.
 2. Ve que llega un paciente nuevo. Lo registra en el módulo de **Pacientes** (nombre, documento, teléfono).
@@ -101,7 +101,7 @@ Todo esto sin papel, sin carpetas físicas, y con cada usuario viendo solo lo qu
 
 ---
 
-## 7. Glosario rápido de palabras "raras" usadas arriba
+## 7. GLOSARIO RÁPIDO DE PALABRAS "RARAS" USADAS ARRIBA
 
 | Palabra | Qué significa en simple |
 |---|---|
@@ -118,6 +118,6 @@ Todo esto sin papel, sin carpetas físicas, y con cada usuario viendo solo lo qu
 
 ---
 
-## 8. Para profundizar
+## 8. PARA PROFUNDIZAR
 
 Este documento es la puerta de entrada en lenguaje simple. Si quieres entender el detalle técnico real de cómo se construyó cada pieza, la carpeta `docs/` tiene documentos más profundos y ordenados por tema (requisitos, roles, arquitectura del backend, base de datos, frontend, despliegue, etc.), y `docs/modulos/` tiene un documento por cada uno de los 9 módulos descritos en la sección 4.

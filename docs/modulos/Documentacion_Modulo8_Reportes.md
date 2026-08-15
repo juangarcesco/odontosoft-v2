@@ -1,4 +1,4 @@
-# Documentación del Módulo 8 — Reportes y Estadísticas
+# DOCUMENTACIÓN DEL MÓDULO 8 — REPORTES Y ESTADÍSTICAS
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -32,7 +32,7 @@ A diferencia de los módulos anteriores, este **no introduce entidades nuevas ni
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -45,7 +45,7 @@ A diferencia de los módulos anteriores, este **no introduce entidades nuevas ni
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-reportes.sh`
 
@@ -115,7 +115,7 @@ Status: 200
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                                   Servidor (Express)                              Fuentes de datos (MongoDB)
@@ -143,7 +143,7 @@ Cliente (Angular)                                   Servidor (Express)          
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -160,7 +160,7 @@ Cliente (Angular)                                   Servidor (Express)          
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 10/10 pruebas end-to-end del Módulo 8 tras completar el frontend
@@ -182,7 +182,7 @@ feat(RF-50): implementar reporte de ingresos del mes en curso, basado en pagos e
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -192,7 +192,7 @@ Este fue el módulo con menos incidentes técnicos de todo el proyecto — proba
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Permitir configurar el rango de meses del reporte de pacientes nuevos (actualmente fijo en 6), en vez de un valor hardcodeado.
 - [ ] Evaluar agregar filtros de fecha personalizados a los reportes financieros (actualmente "ingresos" está fijo al mes en curso).
@@ -201,7 +201,7 @@ Este fue el módulo con menos incidentes técnicos de todo el proyecto — proba
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-50 a RF-55)
 - [x] Pruebas automatizadas ejecutadas y evidenciadas (`test-e2e-reportes.sh`, 10/10 exitosas, verificado dos veces)
@@ -214,7 +214,7 @@ Este fue el módulo con menos incidentes técnicos de todo el proyecto — proba
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

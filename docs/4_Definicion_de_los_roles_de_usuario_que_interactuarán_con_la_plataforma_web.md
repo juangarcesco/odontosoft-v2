@@ -6,7 +6,7 @@
 
 ---
 
-# Definición de Roles del Sistema
+# DEFINICIÓN DE ROLES DEL SISTEMA
 
 **Modelo de Control de Acceso Basado en Roles (RBAC)**
 
@@ -24,7 +24,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Origen del Modelo de Roles
@@ -39,7 +39,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 El presente documento define el **modelo de control de acceso basado en roles (RBAC — Role-Based Access Control)** para el sistema OdontoSoft. Establece con precisión qué usuarios pueden acceder a qué funcionalidades del sistema, garantizando el cumplimiento de los principios de mínimo privilegio, separación de funciones y confidencialidad de la información clínica.
 
@@ -49,7 +49,7 @@ Este documento complementa al **Informe de Requisitos** (documento independiente
 
 ---
 
-## 2. Origen del Modelo de Roles
+## 2. ORIGEN DEL MODELO DE ROLES
 
 Durante la entrevista semiestructurada aplicada a la Dra. EM, se identificó con precisión la estructura organizacional prevista para el consultorio OdontoSoft. Su respuesta a la pregunta 8 fue determinante:
 
@@ -70,7 +70,7 @@ Estos hallazgos determinan la definición de **tres roles técnicos** en el sist
 
 ---
 
-## 3. Mapeo entre Personal Real y Roles del Sistema
+## 3. MAPEO ENTRE PERSONAL REAL Y ROLES DEL SISTEMA
 
 El consultorio OdontoSoft contará con **tres personas físicas** desempeñando **tres roles técnicos** distintos en el sistema:
 
@@ -98,7 +98,7 @@ En caso de ausencia del administrador, la Dra. EM — como propietaria del consu
 
 ---
 
-## 4. Modelo Conceptual de Roles y Permisos
+## 4. MODELO CONCEPTUAL DE ROLES Y PERMISOS
 
 El sistema OdontoSoft implementa un modelo **RBAC estricto de tres niveles**:
 
@@ -141,7 +141,7 @@ El rol ADMIN **no incluye automáticamente** los permisos clínicos del rol ODON
 
 ---
 
-## 5. Definición Detallada de Roles
+## 5. DEFINICIÓN DETALLADA DE ROLES
 
 ### 5.1. Rol ADMIN — Administrador del Consultorio
 
@@ -229,7 +229,7 @@ La restricción de acceso a datos clínicos responde a la exigencia explícita d
 
 ---
 
-## 6. Matriz de Permisos por Módulo
+## 6. MATRIZ DE PERMISOS POR MÓDULO
 
 La siguiente matriz consolida los permisos por rol para cada módulo funcional del sistema.
 
@@ -335,7 +335,7 @@ La siguiente matriz consolida los permisos por rol para cada módulo funcional d
 
 ---
 
-## 7. Reglas de Aplicación de los Roles
+## 7. REGLAS DE APLICACIÓN DE LOS ROLES
 
 Las siguientes reglas rigen el funcionamiento del control de acceso a nivel operativo:
 
@@ -350,7 +350,7 @@ Las siguientes reglas rigen el funcionamiento del control de acceso a nivel oper
 
 ---
 
-## 8. Casos de Uso Típicos por Rol
+## 8. CASOS DE USO TÍPICOS POR ROL
 
 Esta sección ilustra el flujo operativo típico de cada rol durante una jornada laboral del consultorio OdontoSoft.
 
@@ -392,7 +392,7 @@ Esta sección ilustra el flujo operativo típico de cada rol durante una jornada
 
 ---
 
-## 9. Implementación Técnica del RBAC
+## 9. IMPLEMENTACIÓN TÉCNICA DEL RBAC
 
 ### 9.1. Almacenamiento del rol
 
@@ -482,7 +482,7 @@ La validación se aplica **tanto en frontend como en backend**, siguiendo el pri
 
 ---
 
-## 10. Aprobación Formal
+## 10. APROBACIÓN FORMAL
 
 La cliente, tras revisar la definición de los tres roles del sistema, la matriz de permisos por módulo y las reglas de aplicación descritas, manifiesta su aprobación formal del modelo de control de acceso.
 

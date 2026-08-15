@@ -6,7 +6,7 @@
 
 ---
 
-# Diagramas de Flujo y Pseudocódigo de los Algoritmos Principales
+# DIAGRAMAS DE FLUJO Y PSEUDOCÓDIGO DE LOS ALGORITMOS PRINCIPALES
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Algoritmo 1 — Inicio de Sesión (Login)
@@ -34,13 +34,13 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 Este documento presenta, para cada algoritmo crítico identificado en el documento anterior, un diagrama de flujo (notación Mermaid) y su pseudocódigo equivalente. Ambas representaciones describen el mismo algoritmo implementado en el código fuente del backend, referenciado con su archivo y función.
 
 ---
 
-## 2. Algoritmo 1 — Inicio de Sesión (Login)
+## 2. ALGORITMO 1 — INICIO DE SESIÓN (LOGIN)
 
 **Referencia:** `authController.js → login()`
 
@@ -109,7 +109,7 @@ FIN FUNCIÓN
 
 ---
 
-## 3. Algoritmo 2 — Validación de Acceso por Rol (RBAC)
+## 3. ALGORITMO 2 — VALIDACIÓN DE ACCESO POR ROL (RBAC)
 
 **Referencia:** `authMiddleware.js → verificarToken()` + `roleMiddleware.js → permitirRoles()`
 
@@ -193,7 +193,7 @@ FIN FUNCIÓN
 
 ---
 
-## 4. Algoritmo 3 — Detección de Conflicto de Horario en Citas
+## 4. ALGORITMO 3 — DETECCIÓN DE CONFLICTO DE HORARIO EN CITAS
 
 **Referencia:** `citaService.js → existeConflictoHorario()`
 
@@ -255,7 +255,7 @@ FIN FUNCIÓN
 
 ---
 
-## 5. Algoritmo 4 — Registro de Pago y Recálculo de Saldo de Factura
+## 5. ALGORITMO 4 — REGISTRO DE PAGO Y RECÁLCULO DE SALDO DE FACTURA
 
 **Referencia:** `facturaService.js → registrarPago()`
 
@@ -321,7 +321,7 @@ FIN FUNCIÓN
 
 ---
 
-## 6. Algoritmo 5 — Control de Salida de Inventario
+## 6. ALGORITMO 5 — CONTROL DE SALIDA DE INVENTARIO
 
 **Referencia:** `materialService.js → registrarSalida()`
 
@@ -377,7 +377,7 @@ FIN FUNCIÓN
 
 ---
 
-## 7. Algoritmo 6 — Validación y Generación de Archivo RIPS
+## 7. ALGORITMO 6 — VALIDACIÓN Y GENERACIÓN DE ARCHIVO RIPS
 
 **Referencia:** `ripsService.js → validarCamposObligatorios()` + `generarYRegistrarRips()`
 

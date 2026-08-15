@@ -6,7 +6,7 @@
 
 ---
 
-# Modelado e Implementación de la Base de Datos (MongoDB)
+# MODELADO E IMPLEMENTACIÓN DE LA BASE DE DATOS (MONGODB)
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Modelado NoSQL: Diagrama de Colecciones
@@ -33,7 +33,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 OdontoSoft utiliza **MongoDB** como motor de persistencia, a través del ODM **Mongoose** (Node.js). Este documento presenta el modelado NoSQL implementado: sus 10 colecciones, la estructura de cada documento, la relación entre colecciones (embebida o referenciada), el script real de inicialización (`backend/src/scripts/`) y evidencia de operaciones CRUD ejecutadas directamente sobre la base de datos.
 
@@ -41,7 +41,7 @@ OdontoSoft utiliza **MongoDB** como motor de persistencia, a través del ODM **M
 
 ---
 
-## 2. Modelado NoSQL: Diagrama de Colecciones
+## 2. MODELADO NOSQL: DIAGRAMA DE COLECCIONES
 
 ```mermaid
 erDiagram
@@ -85,7 +85,7 @@ erDiagram
 
 ---
 
-## 3. Esquemas por Colección (Documentos JSON)
+## 3. ESQUEMAS POR COLECCIÓN (DOCUMENTOS JSON)
 
 A continuación, un documento de ejemplo por colección, tal como quedaría almacenado en MongoDB (simulación fiel al esquema Mongoose real de `backend/src/models/`).
 
@@ -329,7 +329,7 @@ A continuación, un documento de ejemplo por colección, tal como quedaría alma
 
 ---
 
-## 4. Decisiones de Embebido vs. Referenciado
+## 4. DECISIONES DE EMBEBIDO VS. REFERENCIADO
 
 | Relación | Tipo elegido | Justificación |
 |---|---|---|
@@ -344,7 +344,7 @@ A continuación, un documento de ejemplo por colección, tal como quedaría alma
 
 ---
 
-## 5. Script de Inicialización
+## 5. SCRIPT DE INICIALIZACIÓN
 
 ### 5.1 Creación de colecciones e índices (MongoDB Shell — `mongosh`)
 
@@ -450,7 +450,7 @@ db.materials.insertOne({
 
 ---
 
-## 6. Consultas de Validación (Evidencia CRUD)
+## 6. CONSULTAS DE VALIDACIÓN (EVIDENCIA CRUD)
 
 A continuación, las operaciones CRUD fundamentales ejecutadas directamente sobre la base de datos con `mongosh` (equivalentes a lo que se ejecutaría desde MongoDB Compass). Cada bloque debe complementarse con la captura de pantalla de su ejecución real.
 

@@ -1,4 +1,4 @@
-# Documentación del Módulo 4 — Historia Clínica y Odontograma
+# DOCUMENTACIÓN DEL MÓDULO 4 — HISTORIA CLÍNICA Y ODONTOGRAMA
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -31,7 +31,7 @@
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -46,7 +46,7 @@
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-historia-clinica.sh`
 
@@ -118,7 +118,7 @@ Status: 403
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                                Servidor (Express)                            Base de datos (MongoDB)
@@ -149,7 +149,7 @@ Cliente (Angular)                                Servidor (Express)             
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -164,7 +164,7 @@ Cliente (Angular)                                Servidor (Express)             
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 16/16 pruebas end-to-end del Módulo 4 tras completar el frontend
@@ -188,7 +188,7 @@ feat(RF-25,RF-26,RF-27,RF-31,RN-10): agregar modelo HistoriaClinica con odontogr
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -201,7 +201,7 @@ feat(RF-25,RF-26,RF-27,RF-31,RN-10): agregar modelo HistoriaClinica con odontogr
 
 ---
 
-## 7. Actualización de la matriz de reglas de negocio
+## 7. ACTUALIZACIÓN DE LA MATRIZ DE REGLAS DE NEGOCIO
 
 Con el cierre de este módulo, las siguientes RN quedan verificadas (ver `docs/matriz_reglas_negocio.md` para la tabla completa y actualizada):
 
@@ -213,7 +213,7 @@ Con el cierre de este módulo, las siguientes RN quedan verificadas (ver `docs/m
 
 ---
 
-## 8. Pendientes / mejoras futuras identificadas
+## 8. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Evaluar migrar el almacenamiento de adjuntos de disco local a un servicio en la nube (S3, Cloudinary) si el proyecto escala más allá del entorno académico.
 - [ ] Considerar un guard de Angular adicional que redirija según rol específico (no solo sesión activa) para mejorar la experiencia de usuario en rutas donde RECEPCIONISTA no tiene ningún acceso, aunque la seguridad real ya está garantizada por el backend.
@@ -222,7 +222,7 @@ Con el cierre de este módulo, las siguientes RN quedan verificadas (ver `docs/m
 
 ---
 
-## 9. Checklist de cierre de módulo
+## 9. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-25 a RF-32)
 - [x] Reglas de negocio aplicadas y verificadas (RN-03, RN-09, RN-10)
@@ -238,7 +238,7 @@ Con el cierre de este módulo, las siguientes RN quedan verificadas (ver `docs/m
 
 ---
 
-## 10. Estructura final de archivos del módulo
+## 10. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

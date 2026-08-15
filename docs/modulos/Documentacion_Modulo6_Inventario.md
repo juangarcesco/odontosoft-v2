@@ -1,4 +1,4 @@
-# Documentación del Módulo 6 — Inventario de Materiales
+# DOCUMENTACIÓN DEL MÓDULO 6 — INVENTARIO DE MATERIALES
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -29,7 +29,7 @@
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -42,7 +42,7 @@
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-inventario.sh`
 
@@ -109,7 +109,7 @@ Status: 403
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                             Servidor (Express)                        Base de datos (MongoDB)
@@ -138,7 +138,7 @@ Cliente (Angular)                             Servidor (Express)                
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -151,7 +151,7 @@ Cliente (Angular)                             Servidor (Express)                
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 15/15 pruebas end-to-end del Módulo 6 tras completar el frontend
@@ -171,7 +171,7 @@ feat(RF-41,RF-44,RF-45,RN-06): agregar modelo Material con movimientos embebidos
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -184,7 +184,7 @@ feat(RF-41,RF-44,RF-45,RN-06): agregar modelo Material con movimientos embebidos
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Construir un endpoint dedicado `GET /materiales/:id` si el inventario crece lo suficiente como para que filtrar del lado del cliente deje de ser eficiente.
 - [ ] Evaluar agregar un estado `INACTIVO` explícito (descontinuar un material) con su propio endpoint, ya que el modelo lo contempla pero no se construyó la funcionalidad completa en este roadmap.
@@ -193,7 +193,7 @@ feat(RF-41,RF-44,RF-45,RN-06): agregar modelo Material con movimientos embebidos
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-41 a RF-45)
 - [x] Regla de negocio aplicada y verificada (RN-06)
@@ -208,7 +208,7 @@ feat(RF-41,RF-44,RF-45,RN-06): agregar modelo Material con movimientos embebidos
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

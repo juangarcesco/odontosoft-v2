@@ -6,7 +6,7 @@
 
 ---
 
-# Informe de Requisitos
+# INFORME DE REQUISITOS
 
 **Consolidación detallada de Requisitos Funcionales y No Funcionales**
 
@@ -24,7 +24,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Alcance del Sistema
@@ -38,7 +38,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 El presente documento constituye el **Informe de Requisitos** del proyecto OdontoSoft. Consolida de forma detallada los requisitos funcionales (RF), no funcionales (RNF) y las reglas de negocio (RN) que el sistema debe cumplir.
 
@@ -48,7 +48,7 @@ El propósito de este documento es servir como **contrato funcional** entre la c
 
 ---
 
-## 2. Alcance del Sistema
+## 2. ALCANCE DEL SISTEMA
 
 **OdontoSoft** es una aplicación web para la gestión integral del consultorio odontológico independiente de la Dra. EM en Bogotá D.C. El sistema digitaliza los procesos administrativos, clínicos y financieros del consultorio, siguiendo las funcionalidades estándar del sector odontológico validadas previamente con la cliente.
 
@@ -66,7 +66,7 @@ El sistema se implementa sobre el **stack MEAN** (MongoDB, Express, Angular, Nod
 
 ---
 
-## 3. Módulos Funcionales del Sistema
+## 3. MÓDULOS FUNCIONALES DEL SISTEMA
 
 El sistema se organiza en **9 módulos funcionales**, cada uno responsable de un dominio específico del negocio:
 
@@ -85,7 +85,7 @@ El sistema se organiza en **9 módulos funcionales**, cada uno responsable de un
 
 ---
 
-## 4. Requisitos Funcionales (RF)
+## 4. REQUISITOS FUNCIONALES (RF)
 
 Los requisitos funcionales definen las **capacidades específicas** que el sistema debe ofrecer. Cada RF fue validado con la cliente durante la fase de levantamiento y responde a una necesidad concreta identificada en sus 12 años de experiencia profesional.
 
@@ -213,7 +213,7 @@ Los requisitos funcionales definen las **capacidades específicas** que el siste
 
 ---
 
-## 5. Requisitos No Funcionales (RNF)
+## 5. REQUISITOS NO FUNCIONALES (RNF)
 
 Los requisitos no funcionales definen las **cualidades** del sistema — cómo debe comportarse, no solo qué debe hacer.
 
@@ -236,7 +236,7 @@ Los requisitos no funcionales definen las **cualidades** del sistema — cómo d
 
 ---
 
-## 6. Reglas de Negocio (RN)
+## 6. REGLAS DE NEGOCIO (RN)
 
 Las reglas de negocio son **restricciones inviolables** que el sistema debe validar automáticamente para preservar la integridad del dominio.
 
@@ -255,7 +255,7 @@ Las reglas de negocio son **restricciones inviolables** que el sistema debe vali
 
 ---
 
-## 7. Matriz de Trazabilidad
+## 7. MATRIZ DE TRAZABILIDAD
 
 La siguiente matriz vincula los ejes identificados en el levantamiento de información con los requisitos formulados:
 
@@ -278,7 +278,7 @@ Esta matriz garantiza que **cada necesidad identificada durante el levantamiento
 
 ---
 
-## 8. Delimitaciones del Alcance
+## 8. DELIMITACIONES DEL ALCANCE
 
 Se documentan explícitamente las decisiones de alcance del proyecto, todas validadas con la cliente durante la fase de levantamiento:
 
@@ -294,7 +294,7 @@ Se documentan explícitamente las decisiones de alcance del proyecto, todas vali
 
 ---
 
-## 9. Aprobación Formal
+## 9. APROBACIÓN FORMAL
 
 Habiendo revisado en detalle los 59 requisitos funcionales, los 14 requisitos no funcionales y las 10 reglas de negocio enunciadas en el presente documento, la cliente manifiesta su aprobación formal del alcance del proyecto OdontoSoft.
 

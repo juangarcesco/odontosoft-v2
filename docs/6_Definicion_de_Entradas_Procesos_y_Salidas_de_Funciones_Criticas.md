@@ -6,7 +6,7 @@
 
 ---
 
-# Definición de Entradas, Procesos y Salidas de las Funciones Críticas del Sistema
+# DEFINICIÓN DE ENTRADAS, PROCESOS Y SALIDAS DE LAS FUNCIONES CRÍTICAS DEL SISTEMA
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Criterio de Selección de Funciones Críticas
@@ -36,11 +36,11 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 Este documento especifica, en formato **Entrada → Proceso → Salida (E-P-S)**, las funciones consideradas críticas de OdontoSoft: aquellas que implementan una regla de negocio (RN-xx) cuyo fallo o mal funcionamiento generaría un daño operativo, financiero, clínico o de seguridad (acceso indebido a historias clínicas, doble reserva de citas, facturación incorrecta, pérdida de trazabilidad de inventario, incumplimiento normativo RIPS).
 
-## 2. Criterio de Selección de Funciones Críticas
+## 2. CRITERIO DE SELECCIÓN DE FUNCIONES CRÍTICAS
 
 Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
@@ -52,7 +52,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 3. Módulo de Autenticación y Control de Acceso
+## 3. MÓDULO DE AUTENTICACIÓN Y CONTROL DE ACCESO
 
 ### 3.1 `login(req, res)` — `authController.js`
 
@@ -85,7 +85,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 4. Módulo de Agenda de Citas
+## 4. MÓDULO DE AGENDA DE CITAS
 
 ### 4.1 `existeConflictoHorario({odontologo, fecha, hora, duracion, citaIdExcluir})` — `citaService.js`
 
@@ -115,7 +115,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 5. Módulo de Facturación
+## 5. MÓDULO DE FACTURACIÓN
 
 ### 5.1 `crearFactura(pacienteId, items, usuarioId)` — `facturaService.js`
 
@@ -145,7 +145,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 6. Módulo de Inventario de Materiales
+## 6. MÓDULO DE INVENTARIO DE MATERIALES
 
 ### 6.1 `registrarSalida(materialId, cantidad, motivo, usuarioId)` — `materialService.js`
 
@@ -165,7 +165,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 7. Módulo de Historia Clínica
+## 7. MÓDULO DE HISTORIA CLÍNICA
 
 ### 7.1 `agregarEvolucion(pacienteId, datosEvolucion, odontologoId)` — `historiaClinicaService.js`
 
@@ -185,7 +185,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 8. Módulo de RIPS
+## 8. MÓDULO DE RIPS
 
 ### 8.1 `validarCamposObligatorios(factura, paciente)` — `ripsService.js`
 
@@ -206,7 +206,7 @@ Se considera crítica toda función que cumpla al menos uno de estos criterios:
 
 ---
 
-## 9. Resumen de Códigos de Error de Negocio
+## 9. RESUMEN DE CÓDIGOS DE ERROR DE NEGOCIO
 
 | Código | Módulo | Significado |
 |---|---|---|

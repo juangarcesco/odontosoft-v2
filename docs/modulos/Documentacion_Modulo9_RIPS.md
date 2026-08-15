@@ -1,4 +1,4 @@
-# Documentación del Módulo 9 — Integración con RIPS
+# DOCUMENTACIÓN DEL MÓDULO 9 — INTEGRACIÓN CON RIPS
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -26,7 +26,7 @@
 
 ---
 
-## 1. Delimitación de alcance (explícita en el propio SRS)
+## 1. DELIMITACIÓN DE ALCANCE (EXPLÍCITA EN EL PROPIO SRS)
 
 El SRS delimita claramente qué cubre este módulo y qué no: **el envío automático al Mecanismo Único de Validación (MUV)** y **la obtención del Código Único de Validación (CUV)** requieren que la factura esté acoplada a un facturador electrónico habilitado ante la DIAN — explícitamente fuera del alcance del proyecto (sección 13 del SRS). OdontoSoft genera únicamente el **archivo RIPS en formato JSON**, para radicación manual o incorporación a un facturador externo.
 
@@ -36,7 +36,7 @@ La estructura JSON generada es una **versión simplificada** que cubre los campo
 
 ---
 
-## 2. Matriz de trazabilidad de requisitos
+## 2. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -47,7 +47,7 @@ La estructura JSON generada es una **versión simplificada** que cubre los campo
 
 ---
 
-## 3. Evidencia de pruebas
+## 3. EVIDENCIA DE PRUEBAS
 
 ### 3.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-rips.sh`
 
@@ -108,7 +108,7 @@ Status: 403
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -123,7 +123,7 @@ Status: 403
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 12/12 pruebas end-to-end del Módulo 9 tras completar el frontend
@@ -145,7 +145,7 @@ feat(RF-56,RF-57): extender Factura.items con codigoCups y diagnostico para sopo
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -155,7 +155,7 @@ Este fue, junto al Módulo 8, uno de los módulos con menos incidentes técnicos
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Incorporar catálogos oficiales de referencia (CIE-10, CUPS) con validación real contra las tablas del Ministerio, en vez de texto libre.
 - [ ] Agregar campos de habilitación del prestador (código REPS) y datos normalizados de EPS/afiliación al modelo `Paciente`.
@@ -165,7 +165,7 @@ Este fue, junto al Módulo 8, uno de los módulos con menos incidentes técnicos
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-56 a RF-59)
 - [x] Pruebas automatizadas ejecutadas y evidenciadas (`test-e2e-rips.sh`, 12/12 exitosas, verificado dos veces)
@@ -178,7 +178,7 @@ Este fue, junto al Módulo 8, uno de los módulos con menos incidentes técnicos
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

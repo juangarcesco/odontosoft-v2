@@ -1,4 +1,4 @@
-# Documentación del Módulo 7 — Recordatorios Automáticos
+# DOCUMENTACIÓN DEL MÓDULO 7 — RECORDATORIOS AUTOMÁTICOS
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -29,7 +29,7 @@ Con el cierre de este módulo, **las 10 reglas de negocio del SRS quedan complet
 
 ---
 
-## 1. Decisión de alcance clave: envío real vs. simulado
+## 1. DECISIÓN DE ALCANCE CLAVE: ENVÍO REAL VS. SIMULADO
 
 Ninguno de los 4 requisitos de este módulo es *Must have* — todos son *Should* o *Could*. El envío real por WhatsApp requiere un proveedor externo (Twilio u otro) con fricciones de aprobación/costo desproporcionadas para el alcance académico del proyecto. Se decidió, de forma consciente y documentada (mismo criterio ya aplicado en el Módulo 9 del SRS, que excluye explícitamente el envío automático al MUV real):
 
@@ -38,7 +38,7 @@ Ninguno de los 4 requisitos de este módulo es *Must have* — todos son *Should
 
 ---
 
-## 2. Matriz de trazabilidad de requisitos
+## 2. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -50,7 +50,7 @@ Ninguno de los 4 requisitos de este módulo es *Must have* — todos son *Should
 
 ---
 
-## 3. Evidencia de pruebas
+## 3. EVIDENCIA DE PRUEBAS
 
 ### 3.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-recordatorios.sh`
 
@@ -114,7 +114,7 @@ Status: 403
 
 ---
 
-## 4. Arquitectura del módulo
+## 4. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                              Servidor (Express)                            Base de datos (MongoDB)
@@ -146,7 +146,7 @@ Cliente (Angular)                              Servidor (Express)               
 
 ---
 
-## 5. Decisiones técnicas y su justificación
+## 5. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -161,7 +161,7 @@ Cliente (Angular)                              Servidor (Express)               
 
 ---
 
-## 6. Bitácora de commits
+## 6. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 13/13 pruebas end-to-end del Módulo 7 tras completar el frontend
@@ -183,7 +183,7 @@ feat(RF-48,RF-49): agregar modelos Recordatorio y ConfiguracionMensaje
 
 ---
 
-## 7. Problemas encontrados y soluciones
+## 7. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -194,7 +194,7 @@ feat(RF-48,RF-49): agregar modelos Recordatorio y ConfiguracionMensaje
 
 ---
 
-## 8. Actualización de la matriz de reglas de negocio
+## 8. ACTUALIZACIÓN DE LA MATRIZ DE REGLAS DE NEGOCIO
 
 Con el cierre de este módulo, **RN-08 pasa a ✅**, completando las 10 reglas de negocio del SRS:
 
@@ -204,7 +204,7 @@ Con el cierre de este módulo, **RN-08 pasa a ✅**, completando las 10 reglas d
 
 ---
 
-## 9. Pendientes / mejoras futuras identificadas
+## 9. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Reemplazar la simulación de WhatsApp por una integración real (Twilio u otro proveedor) si el proyecto avanza más allá del alcance académico — la interfaz de `enviarWhatsApp()` ya está diseñada para ese reemplazo sin tocar el resto del sistema.
 - [ ] Migrar el envío de email de Ethereal (pruebas) a un proveedor SMTP real (SendGrid, Gmail API, etc.) para producción.
@@ -214,7 +214,7 @@ Con el cierre de este módulo, **RN-08 pasa a ✅**, completando las 10 reglas d
 
 ---
 
-## 10. Checklist de cierre de módulo
+## 10. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-46 a RF-49)
 - [x] Regla de negocio aplicada y verificada (RN-08 — última pendiente del SRS)
@@ -229,7 +229,7 @@ Con el cierre de este módulo, **RN-08 pasa a ✅**, completando las 10 reglas d
 
 ---
 
-## 11. Estructura final de archivos del módulo
+## 11. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

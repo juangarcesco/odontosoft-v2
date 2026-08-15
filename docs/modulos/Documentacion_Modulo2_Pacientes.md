@@ -1,4 +1,4 @@
-# Documentación del Módulo 2 — Gestión de Pacientes
+# DOCUMENTACIÓN DEL MÓDULO 2 — GESTIÓN DE PACIENTES
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -32,7 +32,7 @@ Esto es consistente con la nota de diseño del SRS sobre separación de funcione
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -47,7 +47,7 @@ Esto es consistente con la nota de diseño del SRS sobre separación de funcione
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-pacientes.sh`
 
@@ -113,7 +113,7 @@ OK: ya no aparece en el listado
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                          Servidor (Express)                    Base de datos (MongoDB)
@@ -138,7 +138,7 @@ Cliente (Angular)                          Servidor (Express)                   
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -153,7 +153,7 @@ Cliente (Angular)                          Servidor (Express)                   
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: agregar script end-to-end de pacientes con limpieza idempotente
@@ -175,7 +175,7 @@ feat(RF-15,RF-16): agregar modelo Paciente con validación de documento único
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -191,7 +191,7 @@ feat(RF-15,RF-16): agregar modelo Paciente con validación de documento único
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Evaluar agregar validación de formato de teléfono y documento según el tipo (ej. longitud esperada por `tipoDocumento`).
 - [ ] Considerar un endpoint de "reactivar" paciente, si el negocio lo requiere más adelante (actualmente solo existe desactivar).
@@ -200,7 +200,7 @@ feat(RF-15,RF-16): agregar modelo Paciente con validación de documento único
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-09 a RF-16)
 - [x] Pruebas automatizadas ejecutadas y evidenciadas (`test-e2e-pacientes.sh`, 12/12 exitosas)
@@ -213,7 +213,7 @@ feat(RF-15,RF-16): agregar modelo Paciente con validación de documento único
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

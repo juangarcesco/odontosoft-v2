@@ -6,7 +6,7 @@
 
 ---
 
-# Instrumentos de Recolección de Datos
+# INSTRUMENTOS DE RECOLECCIÓN DE DATOS
 
 **Aplicación de Metodologías de Levantamiento de Información**
 
@@ -24,7 +24,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Contexto del Cliente
@@ -37,7 +37,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 El presente documento describe la aplicación de las metodologías de levantamiento de información empleadas en la fase inicial del proyecto **OdontoSoft**, un sistema de gestión clínica odontológica desarrollado como parte de la Etapa Productiva del programa de Análisis y Desarrollo de Software del SENA.
 
@@ -49,7 +49,7 @@ Los hallazgos aquí consolidados constituyen la base sobre la cual se elabora po
 
 ---
 
-## 2. Contexto del Cliente
+## 2. CONTEXTO DEL CLIENTE
 
 Antes de aplicar los instrumentos se caracterizó al cliente objetivo:
 
@@ -76,7 +76,7 @@ Esta motivación configura un caso técnicamente favorable: la cliente **ya sabe
 
 ---
 
-## 3. Metodología de Levantamiento de Información
+## 3. METODOLOGÍA DE LEVANTAMIENTO DE INFORMACIÓN
 
 Se combinaron **tres técnicas de recolección** con propósitos complementarios:
 
@@ -106,7 +106,7 @@ Esta combinación ofrece una **visión 360°**: la estratégica (entrevista), la
 
 ---
 
-## 4. Instrumento 1 — Entrevista Semiestructurada a la Cliente
+## 4. INSTRUMENTO 1 — ENTREVISTA SEMIESTRUCTURADA A LA CLIENTE
 
 *Aplicada a la Dra. EM, odontóloga con 12 años de experiencia profesional. La entrevista se estructuró en cinco bloques temáticos.*
 
@@ -182,7 +182,7 @@ Esta combinación ofrece una **visión 360°**: la estratégica (entrevista), la
 
 ---
 
-## 5. Instrumento 2 — Análisis de Experiencia Profesional Previa
+## 5. INSTRUMENTO 2 — ANÁLISIS DE EXPERIENCIA PROFESIONAL PREVIA
 
 *Sesión guiada de trabajo colaborativo con la cliente para sistematizar su conocimiento profesional acumulado sobre software del sector odontológico. Este instrumento se distingue de la entrevista porque se enfoca específicamente en el análisis funcional-comparativo, con base en su experiencia como usuaria durante 12 años.*
 
@@ -310,7 +310,7 @@ La cliente prefiere un sistema **con el 40% de las funcionalidades del estándar
 
 ---
 
-## 6. Instrumento 3 — Observación Directa del Flujo de Trabajo Actual
+## 6. INSTRUMENTO 3 — OBSERVACIÓN DIRECTA DEL FLUJO DE TRABAJO ACTUAL
 
 *Se acompañó a la Dra. EM durante una jornada laboral típica de 4 horas en su lugar de trabajo actual, observando su interacción con el software profesional que utiliza y su rutina operativa. Este instrumento sirve para validar y complementar los hallazgos de la entrevista y del análisis de experiencia.*
 
@@ -360,7 +360,7 @@ Estos hallazgos se documentan como **requisitos derivados** que enriquecen el si
 
 ---
 
-## 7. Consolidación de Hallazgos
+## 7. CONSOLIDACIÓN DE HALLAZGOS
 
 A partir del cruce de los tres instrumentos, se identifican los siguientes ejes que el sistema deberá resolver:
 
@@ -390,7 +390,7 @@ Adicionalmente se identifican **decisiones de alcance ya validadas con la client
 
 ---
 
-## 8. Conclusiones
+## 8. CONCLUSIONES
 
 La aplicación de los tres instrumentos (entrevista semiestructurada, análisis de experiencia profesional previa y observación directa) permitió obtener una comprensión precisa y de alta calidad de los requisitos del sistema OdontoSoft.
 

@@ -6,7 +6,7 @@
 
 ---
 
-# Lógica de Programación y Estructura Funcional de la Aplicación
+# LÓGICA DE PROGRAMACIÓN Y ESTRUCTURA FUNCIONAL DE LA APLICACIÓN
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Arquitectura General del Sistema
@@ -35,7 +35,7 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 Este documento describe la lógica de programación y la estructura funcional interna de OdontoSoft, complementando el SRS y el informe de requisitos ya entregados. Su propósito es explicar **cómo** está construido el software — su arquitectura, capas, módulos y convenciones — de manera que cualquier desarrollador pueda entender el sistema sin necesidad de leer línea por línea el código fuente.
 
@@ -46,7 +46,7 @@ El sistema está compuesto por dos aplicaciones independientes que se comunican 
 
 ---
 
-## 2. Arquitectura General del Sistema
+## 2. ARQUITECTURA GENERAL DEL SISTEMA
 
 ```
 ┌─────────────────┐        HTTPS / JSON        ┌──────────────────────┐
@@ -64,7 +64,7 @@ El backend expone una API REST bajo el prefijo `/api`, protegida con autenticaci
 
 ---
 
-## 3. Estructura por Capas (Backend)
+## 3. ESTRUCTURA POR CAPAS (BACKEND)
 
 El backend sigue una arquitectura en capas, con separación estricta de responsabilidades:
 
@@ -101,7 +101,7 @@ models/          → esquemas Mongoose, validaciones de datos, acceso a MongoDB
 
 ---
 
-## 4. Estructura Funcional por Módulo
+## 4. ESTRUCTURA FUNCIONAL POR MÓDULO
 
 El sistema se organiza en 9 módulos funcionales, cada uno con su propio conjunto rutas → controlador → servicio → modelo:
 
@@ -121,7 +121,7 @@ Cada módulo es funcionalmente independiente, pero varios dependen de datos de o
 
 ---
 
-## 5. Modelo de Datos y Relaciones
+## 5. MODELO DE DATOS Y RELACIONES
 
 ```
 Usuario ──< creadoPor >── Paciente ──1:1── HistoriaClinica ──< evoluciones (embebido)
@@ -143,7 +143,7 @@ Usuario ──< creadoPor >── Paciente ──1:1── HistoriaClinica ─�
 
 ---
 
-## 6. Flujo General de una Petición HTTP
+## 6. FLUJO GENERAL DE UNA PETICIÓN HTTP
 
 Todas las peticiones (salvo `/api/auth/login` y `/api/health`) siguen el mismo patrón funcional:
 
@@ -158,7 +158,7 @@ Este mismo patrón se documenta en detalle, con pseudocódigo y diagramas de flu
 
 ---
 
-## 7. Convenciones de Programación Adoptadas
+## 7. CONVENCIONES DE PROGRAMACIÓN ADOPTADAS
 
 - **Idioma del dominio:** nombres de funciones, variables y colecciones en español (`crearCita`, `registrarPago`, `existeConflictoHorario`), reflejando el lenguaje del negocio real (consultorio odontológico colombiano).
 - **Errores de negocio tipados:** todo error de regla de negocio incluye una propiedad `codigo` (ej. `CONFLICTO_HORARIO`, `STOCK_INSUFICIENTE`) que el frontend usa para mostrar mensajes específicos, en vez de depender del texto del mensaje.
@@ -168,7 +168,7 @@ Este mismo patrón se documenta en detalle, con pseudocódigo y diagramas de flu
 
 ---
 
-## 8. Conclusiones
+## 8. CONCLUSIONES
 
 La estructura funcional de OdontoSoft separa claramente el **transporte HTTP** (routes/controllers) de la **lógica de negocio** (services) y de la **persistencia** (models), lo que facilita el mantenimiento, la trazabilidad de reglas de negocio y las pruebas. Esta organización es la base sobre la cual se documentan, en los siguientes tres documentos, las entradas/procesos/salidas de las funciones críticas, sus algoritmos en pseudocódigo, y las pruebas de escritorio que verifican su correcto funcionamiento.
 

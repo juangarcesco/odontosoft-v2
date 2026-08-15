@@ -6,7 +6,7 @@
 
 ---
 
-# Desarrollo del Frontend (Angular) e Informe Final de Entrega
+# DESARROLLO DEL FRONTEND (ANGULAR) E INFORME FINAL DE ENTREGA
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Arquitectura del Frontend
@@ -34,13 +34,13 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 Este documento cierra la serie de documentación técnica de OdontoSoft (documentos 5 al 12) describiendo la implementación del **frontend en Angular** y presentando el **informe final de entrega** del proyecto en su conjunto: alcance cubierto, artefactos producidos, estado de las pruebas y del despliegue, y trabajo pendiente.
 
 ---
 
-## 2. Arquitectura del Frontend
+## 2. ARQUITECTURA DEL FRONTEND
 
 **Stack real implementado:** Angular 21 (standalone components, sin `NgModule`), TypeScript 5.9, `provideHttpClient` con interceptores funcionales, `provideRouter` con *lazy loading* por ruta, Vitest + jsdom para pruebas unitarias.
 
@@ -70,7 +70,7 @@ graph TD
 
 ---
 
-## 3. Nota Técnica: Decisión de No Usar Materialize — Alternativa Adoptada y Justificación
+## 3. NOTA TÉCNICA: DECISIÓN DE NO USAR MATERIALIZE — ALTERNATIVA ADOPTADA Y JUSTIFICACIÓN
 
 El requerimiento original del proyecto formativo contemplaba **Angular + Materialize** como stack de frontend. Durante la implementación se tomó la decisión técnica de **no usar Materialize** y adoptar en su lugar **SCSS propio por componente**, aprovechando la encapsulación de estilos nativa de Angular (`ViewEncapsulation.Emulated`). Esta sección deja constancia formal de esa decisión y de las razones que la motivaron, para trazabilidad entre lo *requerido en el enunciado original* y lo *efectivamente implementado*.
 
@@ -102,7 +102,7 @@ Esta decisión queda documentada como **definitiva para la versión actual del p
 
 ---
 
-## 4. Estructura de Componentes y Enrutamiento
+## 4. ESTRUCTURA DE COMPONENTES Y ENRUTAMIENTO
 
 Todas las rutas (excepto `/login`) están protegidas por `authGuard`, que verifica localmente si existe un token válido antes de permitir la navegación (defensa de primera línea; la autorización real y definitiva ocurre siempre en el backend vía `verificarToken` + `permitirRoles`).
 
@@ -123,7 +123,7 @@ Todas las rutas (excepto `/login`) están protegidas por `authGuard`, que verifi
 
 ---
 
-## 5. Capa de Comunicación con el Backend (Servicios HTTP, Guard, Interceptor)
+## 5. CAPA DE COMUNICACIÓN CON EL BACKEND (SERVICIOS HTTP, GUARD, INTERCEPTOR)
 
 ### 5.1 Interceptor de autenticación (`core/auth-interceptor.ts`)
 
@@ -164,7 +164,7 @@ Cada colección/módulo del backend tiene su espejo en `core/` (`paciente.ts`, `
 
 ---
 
-## 6. Flujo de Navegación por Rol
+## 6. FLUJO DE NAVEGACIÓN POR ROL
 
 ```mermaid
 flowchart TD
@@ -178,7 +178,7 @@ El frontend **no oculta de forma exhaustiva** cada botón por rol en todos los c
 
 ---
 
-## 7. Informe Final de Entrega del Proyecto
+## 7. INFORME FINAL DE ENTREGA DEL PROYECTO
 
 ### 7.1 Resumen ejecutivo
 

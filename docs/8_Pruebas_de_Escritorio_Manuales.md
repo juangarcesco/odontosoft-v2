@@ -6,7 +6,7 @@
 
 ---
 
-# Pruebas de Escritorio Manuales
+# PRUEBAS DE ESCRITORIO MANUALES
 
 **Verificación de la Efectividad de la Lógica Planteada**
 
@@ -24,7 +24,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción y Metodología
 2. Prueba de Escritorio 1 — Login (caso exitoso y casos de rechazo)
@@ -37,7 +37,7 @@
 
 ---
 
-## 1. Introducción y Metodología
+## 1. INTRODUCCIÓN Y METODOLOGÍA
 
 Una **prueba de escritorio** (*desk check*) consiste en ejecutar mentalmente un algoritmo, paso a paso, con datos de entrada concretos, registrando en una tabla el valor de cada variable relevante en cada punto de decisión, hasta llegar a la salida. Su objetivo es verificar la lógica del algoritmo **antes o independientemente** de ejecutarlo en el computador, detectando errores de diseño que una prueba automatizada podría no cubrir si el caso de prueba no existe.
 
@@ -45,7 +45,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 2. Prueba de Escritorio 1 — Login
+## 2. PRUEBA DE ESCRITORIO 1 — LOGIN
 
 **Algoritmo:** `authController.js → login()`
 
@@ -98,7 +98,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 3. Prueba de Escritorio 2 — Control de Acceso por Rol (RBAC)
+## 3. PRUEBA DE ESCRITORIO 2 — CONTROL DE ACCESO POR ROL (RBAC)
 
 **Algoritmo:** `verificarToken()` + `permitirRoles('RECEPCIONISTA')` sobre `POST /api/facturas`
 
@@ -132,7 +132,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 4. Prueba de Escritorio 3 — Conflicto de Horario en Citas
+## 4. PRUEBA DE ESCRITORIO 3 — CONFLICTO DE HORARIO EN CITAS
 
 **Algoritmo:** `existeConflictoHorario()`
 
@@ -167,7 +167,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 5. Prueba de Escritorio 4 — Pago de Factura y Recálculo de Saldo
+## 5. PRUEBA DE ESCRITORIO 4 — PAGO DE FACTURA Y RECÁLCULO DE SALDO
 
 **Algoritmo:** `registrarPago()`
 
@@ -214,7 +214,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 6. Prueba de Escritorio 5 — Salida de Inventario
+## 6. PRUEBA DE ESCRITORIO 5 — SALIDA DE INVENTARIO
 
 **Algoritmo:** `registrarSalida()`
 
@@ -247,7 +247,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 7. Prueba de Escritorio 6 — Validación de Periodo para RIPS
+## 7. PRUEBA DE ESCRITORIO 6 — VALIDACIÓN DE PERIODO PARA RIPS
 
 **Algoritmo:** `generarYRegistrarRips()` / `validarCamposObligatorios()`
 
@@ -286,7 +286,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 
 ---
 
-## 8. Resumen de Resultados
+## 8. RESUMEN DE RESULTADOS
 
 | # | Algoritmo | Caso exitoso | Caso de rechazo | Caso límite verificado |
 |---|---|:---:|:---:|---|

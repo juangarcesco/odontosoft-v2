@@ -1,4 +1,4 @@
-# Documentación del Módulo 5 — Facturación y Pagos
+# DOCUMENTACIÓN DEL MÓDULO 5 — FACTURACIÓN Y PAGOS
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -28,7 +28,7 @@
 
 ---
 
-## 1. Decisión de diseño clave: origen de los ítems facturados
+## 1. DECISIÓN DE DISEÑO CLAVE: ORIGEN DE LOS ÍTEMS FACTURADOS
 
 El SRS exige que la factura muestre "tratamientos realizados" (RF-34). Se decidió vincular los ítems de la factura con los tratamientos reales registrados en la historia clínica (Módulo 4), priorizando trazabilidad sobre la alternativa de captura manual libre.
 
@@ -38,7 +38,7 @@ El SRS exige que la factura muestre "tratamientos realizados" (RF-34). Se decidi
 
 ---
 
-## 2. Matriz de trazabilidad de requisitos
+## 2. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -55,7 +55,7 @@ El SRS exige que la factura muestre "tratamientos realizados" (RF-34). Se decidi
 
 ---
 
-## 3. Evidencia de pruebas
+## 3. EVIDENCIA DE PRUEBAS
 
 ### 3.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-facturacion.sh`
 
@@ -126,7 +126,7 @@ Status: 409
 
 ---
 
-## 4. Arquitectura del módulo
+## 4. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                              Servidor (Express)                          Base de datos (MongoDB)
@@ -155,7 +155,7 @@ Cliente (Angular)                              Servidor (Express)               
 
 ---
 
-## 5. Decisiones técnicas y su justificación
+## 5. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -171,7 +171,7 @@ Cliente (Angular)                              Servidor (Express)               
 
 ---
 
-## 6. Bitácora de commits
+## 6. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 17/17 pruebas end-to-end del Módulo 5 tras completar el frontend
@@ -195,7 +195,7 @@ feat(RF-33,RF-34,RF-36,RF-37,RN-04): agregar modelo Factura con pagos embebidos 
 
 ---
 
-## 7. Problemas encontrados y soluciones
+## 7. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -207,13 +207,13 @@ feat(RF-33,RF-34,RF-36,RF-37,RN-04): agregar modelo Factura con pagos embebidos 
 
 ---
 
-## 8. Herramienta de soporte creada durante este módulo
+## 8. HERRAMIENTA DE SOPORTE CREADA DURANTE ESTE MÓDULO
 
 Como consecuencia directa de los problemas 3 y 4 (necesidad frecuente de re-loguearse y verificar datos), se creó `scripts/dev-start.sh`: un script que levanta Mongo, backend y frontend, espera a que estén disponibles, y guarda los tokens de los 3 roles de prueba en `.tokens.env` (no versionado) para cargarlos rápidamente en cualquier terminal nueva con `source .tokens.env`. Documentado también en el README, sección "Solución de problemas comunes".
 
 ---
 
-## 9. Pendientes / mejoras futuras identificadas
+## 9. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Evaluar agregar un endpoint de "reembolso" o reversión de pagos si el negocio lo requiere (actualmente los pagos, una vez registrados, no pueden revertirse individualmente — solo la factura completa puede anularse).
 - [ ] Considerar agregar validación de formato de fecha límite de pago si se requiere control de mora en el futuro.
@@ -222,7 +222,7 @@ Como consecuencia directa de los problemas 3 y 4 (necesidad frecuente de re-logu
 
 ---
 
-## 10. Checklist de cierre de módulo
+## 10. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-33 a RF-40)
 - [x] Reglas de negocio aplicadas y verificadas (RN-04, RN-05)
@@ -237,7 +237,7 @@ Como consecuencia directa de los problemas 3 y 4 (necesidad frecuente de re-logu
 
 ---
 
-## 11. Estructura final de archivos del módulo
+## 11. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/

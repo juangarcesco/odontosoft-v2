@@ -6,7 +6,7 @@
 
 ---
 
-# Arquitectura del Backend (Node.js + Express) y API REST
+# ARQUITECTURA DEL BACKEND (NODE.JS + EXPRESS) Y API REST
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Contenido
+## CONTENIDO
 
 1. Introducción
 2. Diagrama de Componentes del Backend
@@ -33,13 +33,13 @@
 
 ---
 
-## 1. Introducción
+## 1. INTRODUCCIÓN
 
 El backend de OdontoSoft es una **API REST** construida en **Node.js 20 + Express 5**, organizada bajo el patrón **Rutas → Middlewares → Controladores → Servicios → Modelos** (variante de MVC adaptada a APIs sin vistas server-side). Este documento detalla su composición en componentes, cada endpoint expuesto y la forma en que Mongoose integra la aplicación con MongoDB.
 
 ---
 
-## 2. Diagrama de Componentes del Backend
+## 2. DIAGRAMA DE COMPONENTES DEL BACKEND
 
 ```mermaid
 graph TD
@@ -104,7 +104,7 @@ graph TD
 
 ---
 
-## 3. Diagrama de Arquitectura (Rutas → Controladores → Servicios → Modelos)
+## 3. DIAGRAMA DE ARQUITECTURA (RUTAS → CONTROLADORES → SERVICIOS → MODELOS)
 
 ```mermaid
 flowchart LR
@@ -122,7 +122,7 @@ Este es el mismo patrón documentado en detalle (con pseudocódigo) en el docume
 
 ---
 
-## 4. Definición y Documentación de Endpoints de la API REST
+## 4. DEFINICIÓN Y DOCUMENTACIÓN DE ENDPOINTS DE LA API REST
 
 Todos los endpoints (salvo `POST /api/auth/login` y `GET /api/health`) requieren el encabezado `Authorization: Bearer <token>`. La columna **Rol** indica los roles autorizados según `permitirRoles(...)` definido en cada ruta.
 
@@ -287,7 +287,7 @@ Response `409 Conflict` (sobrepago):
 
 ---
 
-## 5. Formato Estándar de Respuestas JSON
+## 5. FORMATO ESTÁNDAR DE RESPUESTAS JSON
 
 Todos los controladores siguen una convención uniforme:
 
@@ -301,7 +301,7 @@ Todos los controladores siguen una convención uniforme:
 
 ---
 
-## 6. Integración de MongoDB con el Backend (Mongoose)
+## 6. INTEGRACIÓN DE MONGODB CON EL BACKEND (MONGOOSE)
 
 ### 6.1 Conexión
 

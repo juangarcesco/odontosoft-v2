@@ -1,4 +1,4 @@
-# Documentación del Módulo 3 — Citas y Agenda
+# DOCUMENTACIÓN DEL MÓDULO 3 — CITAS Y AGENDA
 
 **Proyecto:** OdontoSoft
 **Stack:** MEAN (MongoDB · Express · Angular · Node.js)
@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Datos generales del módulo
+## 0. DATOS GENERALES DEL MÓDULO
 
 | Campo | Valor |
 |---|---|
@@ -36,7 +36,7 @@ Aunque el SRS establece que el consultorio tiene un solo odontólogo principal, 
 
 ---
 
-## 1. Matriz de trazabilidad de requisitos
+## 1. MATRIZ DE TRAZABILIDAD DE REQUISITOS
 
 | Requisito | Descripción (SRS) | Implementado en | Método de verificación | Estado |
 |---|---|---|---|---|
@@ -51,7 +51,7 @@ Aunque el SRS establece que el consultorio tiene un solo odontólogo principal, 
 
 ---
 
-## 2. Evidencia de pruebas
+## 2. EVIDENCIA DE PRUEBAS
 
 ### 2.1 Pruebas automatizadas (backend) — `backend/tests/test-e2e-citas.sh`
 
@@ -118,7 +118,7 @@ Status: 200
 
 ---
 
-## 3. Arquitectura del módulo
+## 3. ARQUITECTURA DEL MÓDULO
 
 ```
 Cliente (Angular)                             Servidor (Express)                        Base de datos (MongoDB)
@@ -145,7 +145,7 @@ Cliente (Angular)                             Servidor (Express)                
 
 ---
 
-## 4. Decisiones técnicas y su justificación
+## 4. DECISIONES TÉCNICAS Y SU JUSTIFICACIÓN
 
 | Decisión | Alternativa descartada | Motivo |
 |---|---|---|
@@ -160,7 +160,7 @@ Cliente (Angular)                             Servidor (Express)                
 
 ---
 
-## 5. Bitácora de commits
+## 5. BITÁCORA DE COMMITS
 
 ```
 test: confirmar 13/13 pruebas end-to-end del Módulo 3 tras completar el frontend
@@ -184,7 +184,7 @@ feat(RF-18,RF-19,RF-20,RF-22): agregar modelo Cita con estados y validación de 
 
 ---
 
-## 6. Problemas encontrados y soluciones
+## 6. PROBLEMAS ENCONTRADOS Y SOLUCIONES
 
 | # | Problema | Causa raíz | Solución |
 |---|---|---|---|
@@ -197,7 +197,7 @@ feat(RF-18,RF-19,RF-20,RF-22): agregar modelo Cita con estados y validación de 
 
 ---
 
-## 7. Pendientes / mejoras futuras identificadas
+## 7. PENDIENTES / MEJORAS FUTURAS IDENTIFICADAS
 
 - [ ] Extraer `nombrePaciente`, `nombreOdontologo` y `claseEstado` a una función utilitaria compartida entre `Agenda` y `Dashboard`, en vez de duplicarlas.
 - [ ] Evaluar una vista de calendario más visual (tipo grilla horaria) si el tiempo del proyecto lo permite, en vez de la lista agrupada por día actual.
@@ -206,7 +206,7 @@ feat(RF-18,RF-19,RF-20,RF-22): agregar modelo Cita con estados y validación de 
 
 ---
 
-## 8. Checklist de cierre de módulo
+## 8. CHECKLIST DE CIERRE DE MÓDULO
 
 - [x] Todos los RF del módulo implementados (RF-17 a RF-24)
 - [x] Reglas de negocio aplicadas (RN-01, RN-07)
@@ -220,7 +220,7 @@ feat(RF-18,RF-19,RF-20,RF-22): agregar modelo Cita con estados y validación de 
 
 ---
 
-## 9. Estructura final de archivos del módulo
+## 9. ESTRUCTURA FINAL DE ARCHIVOS DEL MÓDULO
 
 ```
 backend/
