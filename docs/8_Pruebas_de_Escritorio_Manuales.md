@@ -8,7 +8,7 @@
 
 # PRUEBAS DE ESCRITORIO MANUALES
 
-**Verificación de la Efectividad de la Lógica Planteada**
+**Verificación de la Efectividad de la Lógica Planteada (sintaxis PSeInt)**
 
 **Proyecto:** OdontoSoft — Sistema de Gestión Clínica Odontológica
 
@@ -41,246 +41,250 @@
 
 Una **prueba de escritorio** (*desk check*) consiste en ejecutar mentalmente un algoritmo, paso a paso, con datos de entrada concretos, registrando en una tabla el valor de cada variable relevante en cada punto de decisión, hasta llegar a la salida. Su objetivo es verificar la lógica del algoritmo **antes o independientemente** de ejecutarlo en el computador, detectando errores de diseño que una prueba automatizada podría no cubrir si el caso de prueba no existe.
 
-Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pseudocódigo), se traza aquí al menos un caso de **camino exitoso** y un caso de **camino de rechazo**, seleccionados por ser los de mayor riesgo si la lógica estuviera mal implementada.
+Las tablas de este documento se elaboraron trazando el **pseudocódigo en sintaxis PSeInt** del documento 7. PSeInt incluye una función nativa de **prueba de escritorio**: al ejecutar un algoritmo paso a paso (tecla F8) muestra automáticamente una tabla con el valor de cada variable en cada línea ejecutada. Las tablas siguientes están construidas con ese mismo formato (paso/línea → estado de variables), de modo que puedan reproducirse pegando el pseudocódigo del documento 7 en PSeInt y comparando la tabla generada por la herramienta contra la aquí documentada.
+
+Como se explicó en el documento 7, los algoritmos usan datos **simulados** (arreglos precargados en vez de consultas a MongoDB, comparación de cadenas en vez de bcrypt, concatenación en vez de JWT real). Esa simulación no afecta la validez de la prueba de escritorio porque lo que se verifica es la **lógica de decisión**, no la integración con librerías externas.
+
+Para cada algoritmo crítico documentado en el punto 7, se traza aquí al menos un caso de **camino exitoso** y un caso de **camino de rechazo**, seleccionados por ser los de mayor riesgo si la lógica estuviera mal implementada.
 
 ---
 
 ## 2. PRUEBA DE ESCRITORIO 1 — LOGIN
 
-**Algoritmo:** `authController.js → login()`
+**Algoritmo:** `Proceso Login` (documento 7, sección 2)
+
+**Datos precargados (simulación de BD):** `bdEmail[1]="dra.em@consultorio.com"`, `bdPasswordHash[1]="Clinica2026*"`, `bdEstado[1]="ACTIVO"` — `bdEmail[2]="odontologo@consultorio.com"`, `bdPasswordHash[2]="Odonto2026*"`, `bdEstado[2]="INACTIVO"`.
 
 ### Caso 1.A — Credenciales correctas, usuario activo (camino exitoso)
 
-**Datos de entrada:** `email = "DRA.EM@Consultorio.com "`, `password = "Clinica2026*"`
-**Estado previo en BD:** usuario con `email = "dra.em@consultorio.com"`, `estado = "ACTIVO"`, `passwordHash` = hash bcrypt válido de `"Clinica2026*"`.
+**Entrada:** `email = "dra.em@consultorio.com"`, `password = "Clinica2026*"`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1 | `SI email vacío O password vacío` | Ambos tienen valor → condición falsa, continúa |
-| 2 | `emailNormalizado ← minusculas(quitarEspacios(email))` | `emailNormalizado = "dra.em@consultorio.com"` |
-| 3 | `usuario ← buscarUsuarioPorEmail(...)` | `usuario` encontrado, `estado = "ACTIVO"` |
-| 4 | `SI usuario NO existe` | Falso, continúa |
-| 5 | `SI estado ≠ "ACTIVO"` | Falso (`"ACTIVO" == "ACTIVO"`), continúa |
-| 6 | `passwordValida ← bcrypt.comparar(...)` | `passwordValida = true` |
-| 7 | `SI NO passwordValida` | Falso, continúa |
-| 8 | `token ← generarJWT(...)` | `token = "eyJhbGciOiJIUzI1NiIs..."` (no vacío) |
-| 9 | `registrarIntento(exito=true)` | Log insertado |
-| 10 | Retorno | `HTTP 200 { mensaje, token, usuario }` |
+| 1 | `Leer email`, `Leer password` | `email="dra.em@consultorio.com"`, `password="Clinica2026*"` |
+| 2 | `Si email = "" O password = ""` | Falso → continúa |
+| 3 | `emailNormalizado <- Minusculas(email)` | `emailNormalizado="dra.em@consultorio.com"` |
+| 4 | `indiceUsuario <- BuscarUsuarioPorEmail(...)` | `i` recorre 1..2, coincide en `i=1` → `indiceUsuario=1` |
+| 5 | `Si indiceUsuario = 0` | Falso, continúa |
+| 6 | `Si bdEstado[1] <> "ACTIVO"` | Falso (`"ACTIVO"="ACTIVO"`), continúa |
+| 7 | `passwordValida <- (password = bdPasswordHash[1])` | `passwordValida=Verdadero` |
+| 8 | `Si NO passwordValida` | Falso, continúa |
+| 9 | `token <- "JWT." + bdRol[1] + "." + bdNombre[1]` | `token="JWT.ADMIN.Dra. EM"` |
+| 10 | `Escribir` | `"HTTP 200 - Login exitoso. Token: JWT.ADMIN.Dra. EM"` |
 
 **Resultado esperado:** HTTP 200 con token. **Resultado obtenido en el trazado:** HTTP 200 con token. ✅ **Coincide.**
 
 ### Caso 1.B — Contraseña incorrecta (camino de rechazo)
 
-**Datos de entrada:** mismo email, `password = "clavequivocada"`.
+**Entrada:** mismo email, `password = "clavequivocada"`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1-5 | Igual al caso anterior | `usuario` existe y `ACTIVO` |
-| 6 | `passwordValida ← bcrypt.comparar("clavequivocada", hashReal)` | `passwordValida = false` |
-| 7 | `SI NO passwordValida` | Verdadero → entra al bloque |
-| 7a | `registrarIntento(exito=false, motivo="contraseña incorrecta")` | Log insertado con motivo específico |
-| 7b | Retorno | `HTTP 401 "Credenciales inválidas"` |
+| 1-6 | Igual al caso anterior | `indiceUsuario=1`, `bdEstado[1]="ACTIVO"` |
+| 7 | `passwordValida <- ("clavequivocada" = "Clinica2026*")` | `passwordValida=Falso` |
+| 8 | `Si NO passwordValida` | Verdadero → entra al bloque |
+| 8a | `Escribir "LOG: intento fallido..."` | Registro con motivo específico |
+| 8b | `Escribir` | `"HTTP 401 - Credenciales inválidas"` |
 
-**Resultado esperado:** HTTP 401 con mensaje genérico (no debe indicar cuál campo falló). **Resultado obtenido:** HTTP 401 "Credenciales inválidas". ✅ **Coincide.** Se verifica además que el mensaje es **idéntico** al del caso "usuario no existe" (Caso 1.C), confirmando que no hay fuga de información sobre existencia de cuentas.
+**Resultado esperado:** HTTP 401 con mensaje genérico (no debe indicar cuál campo falló). **Resultado obtenido:** HTTP 401 "Credenciales inválidas". ✅ **Coincide.** Se verifica además que el mensaje es **idéntico** al del caso "usuario no existe" (`indiceUsuario=0`), confirmando que no hay fuga de información sobre existencia de cuentas.
 
 ### Caso 1.C — Usuario inactivo (camino de rechazo)
 
-**Datos de entrada:** email válido y password correcta, pero `usuario.estado = "INACTIVO"` (ej. odontólogo que se retiró del consultorio).
+**Entrada:** `email = "odontologo@consultorio.com"`, `password = "Odonto2026*"` (correcta), pero `bdEstado[2] = "INACTIVO"`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 3 | `usuario ← buscarUsuarioPorEmail(...)` | `usuario` encontrado, `estado = "INACTIVO"` |
-| 5 | `SI estado ≠ "ACTIVO"` | Verdadero → entra al bloque |
-| 5a | `registrarIntento(exito=false, motivo="usuario inactivo")` | Log insertado |
-| 5b | Retorno | `HTTP 403 "Usuario inactivo, contacte al administrador"` |
+| 4 | `indiceUsuario <- BuscarUsuarioPorEmail(...)` | Coincide en `i=2` → `indiceUsuario=2` |
+| 6 | `Si bdEstado[2] <> "ACTIVO"` | Verdadero (`"INACTIVO"<>"ACTIVO"`) → entra al bloque |
+| 6a | `Escribir "LOG: intento fallido - usuario inactivo"` | Registro insertado |
+| 6b | `Escribir` | `"HTTP 403 - Usuario inactivo, contacte al administrador"` |
 
-**Nota crítica verificada:** el algoritmo comprueba `estado` **antes** de comparar la contraseña. Esto es correcto: evita gastar ciclos de cómputo en bcrypt (operación costosa por diseño, `SALT_ROUNDS = 12`) para una cuenta que de todas formas será rechazada. ✅ **Coincide con el diseño esperado.**
+**Nota crítica verificada:** el algoritmo comprueba `bdEstado` **antes** de comparar la contraseña (paso 6 ocurre antes que el paso 7 del caso 1.A). Esto es correcto: evita comparar contraseñas para una cuenta que de todas formas será rechazada; en el sistema real evita además gastar ciclos de cómputo en bcrypt (operación costosa por diseño, `SALT_ROUNDS = 12`). ✅ **Coincide con el diseño esperado.**
 
 ---
 
 ## 3. PRUEBA DE ESCRITORIO 2 — CONTROL DE ACCESO POR ROL (RBAC)
 
-**Algoritmo:** `verificarToken()` + `permitirRoles('RECEPCIONISTA')` sobre `POST /api/facturas`
+**Algoritmo:** `Proceso ValidarAccesoPorRol` (documento 7, sección 3), con `rolesPermitidos[1] = "RECEPCIONISTA"` (equivalente a `POST /api/facturas`).
+
+**Datos precargados:** `tokensInvalidados[1] = "TKN-USR2-CERRADO"`. En `DecodificarToken`, cualquier token distinto de `"TKN-EXPIRADO"` decodifica a `rolUsuario="ODONTOLOGO"`, `tokenValido=Verdadero`, `tokenExpirado=Falso`.
 
 ### Caso 2.A — Odontólogo intenta crear una factura (debe rechazarse)
 
-**Datos de entrada:** JWT válido, no expirado, no invalidado, con payload `{ rol: "ODONTOLOGO" }`. Endpoint protegido con `permitirRoles('RECEPCIONISTA')`.
+**Entrada:** `token = "TKN-ODONTO-VALIDO"` (no está en la lista de invalidados).
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1 | `¿Existe encabezado Bearer?` | Sí |
-| 2 | `jwt.verificar(token)` | Firma y expiración válidas → `payload = {id, rol:"ODONTOLOGO", nombre}` |
-| 3 | `¿Token en lista de invalidados?` | No |
-| 4 | `req.usuario ← payload` | `req.usuario.rol = "ODONTOLOGO"` |
-| 5 | `permitirRoles(['RECEPCIONISTA'])`: `¿req.usuario existe?` | Sí |
-| 6 | `¿"ODONTOLOGO" ESTÁ EN ["RECEPCIONISTA"]?` | **No** |
-| 7 | Retorno | `HTTP 403 "No tiene permisos para acceder a este recurso"` |
+| 1 | `Si token = ""` | Falso, continúa |
+| 2 | `DecodificarToken(...)` | `tokenValido=Verdadero`, `tokenExpirado=Falso`, `rolUsuario="ODONTOLOGO"` |
+| 3 | `Si tokenExpirado` | Falso, continúa |
+| 4 | `Si NO tokenValido` | Falso, continúa |
+| 5 | `tokenInvalidado <- EstaEnListaInvalidados(...)` | `"TKN-ODONTO-VALIDO"` no está en `tokensInvalidados` → `tokenInvalidado=Falso` |
+| 6 | `tienePermiso <- (rolUsuario = rolesPermitidos[1])` | `("ODONTOLOGO" = "RECEPCIONISTA")` → `tienePermiso=Falso` |
+| 7 | `Si NO tienePermiso` | Verdadero → entra al bloque |
+| 7a | `Escribir` | `"HTTP 403 - No tiene permisos para acceder a este recurso"` |
 
 **Resultado esperado:** HTTP 403 (el odontólogo NO factura, según la matriz de roles del cliente). **Resultado obtenido:** HTTP 403. ✅ **Coincide.**
 
 ### Caso 2.B — Token de sesión ya cerrada (logout previo)
 
-**Datos de entrada:** JWT con firma y expiración válidas, pero el usuario ejecutó `logout` minutos antes (el token fue insertado en `TokenInvalidado`).
+**Entrada:** `token = "TKN-USR2-CERRADO"` (firma y expiración válidas, pero fue invalidado por logout).
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1-2 | Encabezado presente, firma válida | `payload` decodificado correctamente |
-| 3 | `¿Token en lista de invalidados?` | **Sí** (coincide con registro insertado en logout) |
-| 4 | Retorno | `HTTP 401 "Sesión cerrada, inicie sesión nuevamente"` |
+| 1-4 | Token no vacío, `DecodificarToken` retorna válido y no expirado | `rolUsuario="ODONTOLOGO"` |
+| 5 | `tokenInvalidado <- EstaEnListaInvalidados("TKN-USR2-CERRADO", ...)` | Coincide con `tokensInvalidados[1]` → `tokenInvalidado=Verdadero` |
+| 6 | `Si tokenInvalidado` | Verdadero → entra al bloque |
+| 6a | `Escribir` | `"HTTP 401 - Sesión cerrada, inicie sesión nuevamente"` |
 
-**Resultado esperado:** el sistema NO debe confiar únicamente en la expiración del JWT — debe rechazar tokens invalidados manualmente aunque aún no hayan expirado. **Resultado obtenido:** HTTP 401 antes de llegar siquiera a `permitirRoles`. ✅ **Coincide** — confirma que el cierre de sesión es efectivo de inmediato y no depende de esperar la expiración natural (hasta 8 horas según `.env`).
+**Resultado esperado:** el sistema NO debe confiar únicamente en la expiración del token — debe rechazar tokens invalidados manualmente aunque aún no hayan expirado. **Resultado obtenido:** HTTP 401 antes de siquiera evaluar `rolesPermitidos` (el paso 6 ocurre antes que el paso 6 de tienePermiso del caso 2.A). ✅ **Coincide** — confirma que el cierre de sesión es efectivo de inmediato y no depende de esperar la expiración natural.
 
 ---
 
 ## 4. PRUEBA DE ESCRITORIO 3 — CONFLICTO DE HORARIO EN CITAS
 
-**Algoritmo:** `existeConflictoHorario()`
+**Algoritmo:** `Proceso ConflictoDeHorario` (documento 7, sección 4)
 
-**Estado previo en BD:** el odontólogo `Dr. J` ya tiene, para el 2026-08-03, una cita `PROGRAMADA` de **09:00 a 09:30** (30 min) y otra `CONFIRMADA` de **10:00 a 10:45** (45 min).
+**Datos precargados:** `citaInicio[1]=540` (09:00), `citaFin[1]=570` (09:30); `citaInicio[2]=600` (10:00), `citaFin[2]=645` (10:45).
 
 ### Caso 3.A — Nueva cita se solapa parcialmente (debe rechazarse)
 
-**Entrada:** `odontologo = Dr. J`, `fecha = 2026-08-03`, `hora = "09:20"`, `duracion = 30`.
+**Entrada:** `inicioNueva = 560` (09:20), `duracion = 30`.
 
 | Paso | Cálculo | Valor |
 |---|---|---|
-| 1 | `inicioNueva = horaAMinutos("09:20")` | `9*60+20 = 560` |
-| 2 | `finNueva = 560 + 30` | `590` |
-| 3 | Consulta citas del día para Dr. J en estado bloqueante | 2 citas encontradas |
-| 4 | **Evaluación cita 1** (`09:00`, 30 min): `inicioExistente=540`, `finExistente=570` | `560 < 570` (V) **y** `540 < 590` (V) → **ambas verdaderas** |
-| 5 | Conclusión | `existeConflictoHorario = true` (se detiene en la primera coincidencia) |
+| 1 | `finNueva <- 560 + 30` | `finNueva = 590` |
+| 2 | `conflicto <- Falso`, `i <- 1` | — |
+| 3 | Iteración `i=1`: `Si inicioNueva(560) < citaFin[1](570) Y citaInicio[1](540) < finNueva(590)` | `560<570` (V) **y** `540<590` (V) → **ambas verdaderas** |
+| 4 | `conflicto <- Verdadero` | `Mientras` se detiene (`NO conflicto` es falso) |
 
-**Resultado esperado:** conflicto detectado (09:20-09:50 se solapa con 09:00-09:30 entre 09:20 y 09:30). **Resultado obtenido:** `true`. ✅ **Coincide.**
+**Resultado esperado:** conflicto detectado (09:20-09:50 se solapa con 09:00-09:30 entre 09:20 y 09:30). **Resultado obtenido:** `conflicto = Verdadero`. ✅ **Coincide.**
 
 ### Caso 3.B — Nueva cita justo después, sin solape (debe aceptarse)
 
-**Entrada:** `hora = "09:30"`, `duracion = 30` (inicia exactamente cuando termina la cita de las 09:00).
+**Entrada:** `inicioNueva = 570` (09:30), `duracion = 30` (inicia exactamente cuando termina la cita de las 09:00).
 
 | Paso | Cálculo | Valor |
 |---|---|---|
-| 1 | `inicioNueva = 570`, `finNueva = 600` | — |
-| 2 | **Evaluación cita 1** (540-570): `570 < 570` → **falso** | Condición `inicioNueva < finExistente` falla → no hay solape con esta cita |
-| 3 | **Evaluación cita 2** (10:00-10:45 → `inicioExistente=600`, `finExistente=645`): `inicioNueva(570) < finExistente(645)` = V; `inicioExistente(600) < finNueva(600)` = **falso** | No hay solape con esta cita tampoco (falla la segunda condición) |
-| 4 | Ninguna cita generó solape | `existeConflictoHorario = false` |
+| 1 | `finNueva <- 570 + 30` | `finNueva = 600` |
+| 2 | Iteración `i=1`: `570 < citaFin[1](570)` | **Falso** → la condición completa es falsa, no hay solape con esta cita |
+| 3 | `i <- 2` | — |
+| 4 | Iteración `i=2`: `570 < citaFin[2](645)` (V) **y** `citaInicio[2](600) < finNueva(600)` | **Falso** (`600 < 600` no se cumple) → condición completa falsa |
+| 5 | `i <- 3`, `i <= totalCitas` | Falso → termina el `Mientras` | 
+| 6 | `conflicto` nunca cambió | `conflicto = Falso` |
 
-**Resultado esperado:** una cita que **empieza exactamente cuando termina la anterior** (intervalos `[540,570)` y `[570,600)`) no debe considerarse conflicto, porque los rangos son medio-abiertos (el minuto 570 pertenece solo al segundo intervalo). **Resultado obtenido:** `false`. ✅ **Coincide** — se confirma que la comparación con `<` estricto (no `<=`) es la correcta para este caso límite (*boundary case*), que es precisamente el tipo de error que una prueba de escritorio busca exponer.
+**Resultado esperado:** una cita que **empieza exactamente cuando termina la anterior** (intervalos `[540,570)` y `[570,600)`) no debe considerarse conflicto, porque los rangos son medio-abiertos (el minuto 570 pertenece solo al segundo intervalo). **Resultado obtenido:** `conflicto = Falso`. ✅ **Coincide** — se confirma que la comparación con `<` estricto (no `<=`) es la correcta para este caso límite (*boundary case*), que es precisamente el tipo de error que una prueba de escritorio busca exponer.
 
 ---
 
 ## 5. PRUEBA DE ESCRITORIO 4 — PAGO DE FACTURA Y RECÁLCULO DE SALDO
 
-**Algoritmo:** `registrarPago()`
+**Algoritmo:** `Proceso RegistrarPago` (documento 7, sección 5)
 
-**Estado previo:** factura con `valorTotal = 250000`, `saldoPendiente = 250000`, `estado = "PENDIENTE"`, `pagos = []`.
+**Estado precargado:** `valorTotal = 250000`, `saldoPendiente = 250000`, `estadoFactura = "PENDIENTE"`.
 
 ### Caso 4.A — Abono parcial válido
 
 **Entrada:** `monto = 100000`, `metodoPago = "EFECTIVO"`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1 | `¿metodoPago válido?` | Sí |
-| 2 | `factura` encontrada, `estado = "PENDIENTE"` | — |
-| 3 | `¿estado == "ANULADA"?` | No |
-| 4 | `¿monto(100000) > saldoPendiente(250000)?` | No |
-| 5 | `pagos.agregar({100000, EFECTIVO})` | `pagos.length = 1` |
-| 6 | `saldoPendiente ← 250000 − 100000` | `saldoPendiente = 150000` |
-| 7 | `¿saldoPendiente == 0?` | No → `estado` permanece `"PENDIENTE"` |
+| 1 | `metodoValido <- ("EFECTIVO"="EFECTIVO" O ...)` | `metodoValido=Verdadero` |
+| 2 | `Si NO metodoValido` | Falso, continúa |
+| 3 | `Si estadoFactura = "ANULADA"` | Falso, continúa |
+| 4 | `Si monto(100000) > saldoPendiente(250000)` | Falso, continúa |
+| 5 | `saldoPendiente <- 250000 - 100000` | `saldoPendiente = 150000` |
+| 6 | `Si saldoPendiente = 0` | Falso → `estadoFactura` permanece `"PENDIENTE"` |
+| 7 | `Escribir` | `"Saldo pendiente: 150000"`, `"Estado: PENDIENTE"` |
 
-**Resultado esperado:** `saldoPendiente = 150000`, `estado = "PENDIENTE"`. **Resultado obtenido:** coincide. ✅
+**Resultado esperado:** `saldoPendiente = 150000`, `estadoFactura = "PENDIENTE"`. **Resultado obtenido:** coincide. ✅
 
 ### Caso 4.B — Segundo abono que salda exactamente el resto
 
-**Entrada (continuación del caso anterior):** `monto = 150000`.
+**Entrada:** continuación del caso anterior (se traza una nueva ejecución con el estado inicial ajustado a `saldoPendiente = 150000`, resultado del caso 4.A), `monto = 150000`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 4 | `¿150000 > 150000?` | No (igual no es mayor) |
-| 6 | `saldoPendiente ← 150000 − 150000` | `saldoPendiente = 0` |
-| 7 | `¿saldoPendiente == 0?` | **Sí** → `estado ← "PAGADA"` |
+| 4 | `Si monto(150000) > saldoPendiente(150000)` | Falso (igual no es mayor) |
+| 5 | `saldoPendiente <- 150000 - 150000` | `saldoPendiente = 0` |
+| 6 | `Si saldoPendiente = 0` | **Verdadero** → `estadoFactura <- "PAGADA"` |
 
-**Resultado esperado:** factura queda en `PAGADA` con saldo exactamente `0`. **Resultado obtenido:** coincide. ✅ Se verifica el caso límite `monto == saldoPendiente` (no solo `monto < saldoPendiente`).
+**Resultado esperado:** factura queda en `"PAGADA"` con saldo exactamente `0`. **Resultado obtenido:** coincide. ✅ Se verifica el caso límite `monto == saldoPendiente` (no solo `monto < saldoPendiente`).
 
 ### Caso 4.C — Intento de sobrepago (debe rechazarse)
 
 **Entrada:** sobre la factura original (`saldoPendiente = 250000`), `monto = 300000`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 4 | `¿monto(300000) > saldoPendiente(250000)?` | **Sí** |
-| 4a | Retorno | Error `MONTO_EXCEDE_SALDO`, ningún cambio persistido |
+| 4 | `Si monto(300000) > saldoPendiente(250000)` | **Verdadero** |
+| 4a | `Escribir` | `"Error: MONTO_EXCEDE_SALDO"` |
 
-**Resultado esperado:** la factura **no debe modificarse** (ni `pagos` ni `saldoPendiente`) ante un intento de sobrepago. **Resultado obtenido:** el algoritmo lanza el error **antes** de tocar `factura.pagos` o `factura.saldoPendiente` (paso 4, previo al paso 5 de la prueba 4.A). ✅ **Coincide** — se confirma que no hay modificación parcial de estado ante un error de validación.
+**Resultado esperado:** la factura **no debe modificarse** (ni `saldoPendiente` ni `estadoFactura`) ante un intento de sobrepago. **Resultado obtenido:** el algoritmo escribe el error **antes** de llegar a la línea `saldoPendiente <- saldoPendiente - monto` (paso 4, previo al paso 5 de la prueba 4.A). ✅ **Coincide** — se confirma que no hay modificación parcial de estado ante un error de validación.
 
 ---
 
 ## 6. PRUEBA DE ESCRITORIO 5 — SALIDA DE INVENTARIO
 
-**Algoritmo:** `registrarSalida()`
+**Algoritmo:** `Proceso RegistrarSalidaInventario` (documento 7, sección 6)
 
-**Estado previo:** material "Guantes de nitrilo talla M", `stock = 20`, `stockMinimo = 15`.
+**Estado precargado:** `stock = 20`, `stockMinimo = 15`.
 
 ### Caso 5.A — Salida válida que deja el stock por debajo del mínimo
 
 **Entrada:** `cantidad = 8`, `motivo = "Uso en procedimientos del día"`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1 | `¿cantidad(8) <= 0?` | No |
-| 2 | `material` encontrado | `stock = 20` |
-| 3 | `¿cantidad(8) > stock(20)?` | No |
-| 4 | `movimientos.agregar({SALIDA, 8, motivo})` | — |
-| 5 | `stock ← 20 − 8` | `stock = 12` |
+| 1 | `Si cantidad(8) <= 0` | Falso, continúa |
+| 2 | `Si cantidad(8) > stock(20)` | Falso, continúa |
+| 3 | `stock <- 20 - 8` | `stock = 12` |
+| 4 | `stockBajo <- (stock(12) <= stockMinimo(15))` | `stockBajo = Verdadero` |
+| 5 | `Escribir` | `"Stock actual: 12"`, `"Alerta: stock bajo, reabastecer"` |
 
-**Verificación cruzada con `listarMateriales()`:** `stockBajo = (12 <= 15) = true`. **Resultado esperado:** la salida se registra y el material queda marcado como stock bajo. **Resultado obtenido:** coincide. ✅
+**Resultado esperado:** la salida se registra y el material queda marcado como stock bajo. **Resultado obtenido:** coincide. ✅
 
 ### Caso 5.B — Salida que excede el stock disponible (debe rechazarse)
 
 **Entrada:** sobre el mismo material (`stock = 12` tras el caso anterior), `cantidad = 20`.
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 3 | `¿cantidad(20) > stock(12)?` | **Sí** |
-| 3a | Retorno | Error `STOCK_INSUFICIENTE` ("Disponible: 12, solicitado: 20") |
+| 2 | `Si cantidad(20) > stock(12)` | **Verdadero** |
+| 2a | `Escribir` | `"Error: STOCK_INSUFICIENTE. Disponible: 12, solicitado: 20"` |
 
-**Resultado esperado:** el stock **nunca** debe volverse negativo; la operación se rechaza completa, sin descuento parcial. **Resultado obtenido:** el algoritmo retorna el error antes del paso de resta (`stock ← stock − cantidad` nunca se ejecuta). ✅ **Coincide.**
+**Resultado esperado:** el stock **nunca** debe volverse negativo; la operación se rechaza completa, sin descuento parcial. **Resultado obtenido:** el algoritmo escribe el error antes del paso `stock <- stock - cantidad` (ese paso nunca se ejecuta). ✅ **Coincide.**
 
 ---
 
 ## 7. PRUEBA DE ESCRITORIO 6 — VALIDACIÓN DE PERIODO PARA RIPS
 
-**Algoritmo:** `generarYRegistrarRips()` / `validarCamposObligatorios()`
+**Algoritmo:** `Proceso ValidarYGenerarRips` (documento 7, sección 7)
 
-**Estado previo:** periodo `"2026-07"` tiene 3 facturas no anuladas:
-
-- Factura F1: paciente con documento completo; 1 ítem con `codigoCups="890201"` y `diagnostico="K02.1"`.
-- Factura F2: paciente con documento completo; 1 ítem **sin** `codigoCups` (campo vacío).
-- Factura F3: paciente **sin** `numeroDocumento` registrado.
+**Estado precargado:** `totalFacturas = 3` — Factura 1: `tieneDocumento=Verdadero`, `tieneCups=Verdadero`; Factura 2: `tieneDocumento=Verdadero`, `tieneCups=Falso`; Factura 3: `tieneDocumento=Falso`, `tieneCups=Verdadero`.
 
 ### Caso 6.A — Periodo con al menos una atención incompleta (debe bloquear la generación)
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1 | Buscar facturas no anuladas de julio 2026 | `facturas = [F1, F2, F3]` |
-| 2 | Validar F1 | `camposFaltantes = []` → `completas = [F1]` |
-| 3 | Validar F2 | `camposFaltantes = ["ítem 1: código CUPS"]` → `incompletas = [F2]` |
-| 4 | Validar F3 | `camposFaltantes = ["documento del paciente"]` → `incompletas = [F2, F3]` |
-| 5 | `¿incompletas vacía?` | **No** (tiene 2 elementos) |
-| 6 | Retorno | Error `ATENCIONES_INCOMPLETAS`, detalle con F2 y F3. **No se genera ni persiste ningún archivo.** |
+| 1 | `i <- 1`: `tieneDocumento[1] Y tieneCups[1]` | Verdadero → `completas <- 1` |
+| 2 | `i <- 2`: `tieneDocumento[2] Y tieneCups[2]` | Falso (`tieneCups[2]=Falso`) → `incompletas <- 1`, `Escribir "Factura 2 incompleta"` |
+| 3 | `i <- 3`: `tieneDocumento[3] Y tieneCups[3]` | Falso (`tieneDocumento[3]=Falso`) → `incompletas <- 2`, `Escribir "Factura 3 incompleta"` |
+| 4 | `Si incompletas(2) > 0` | **Verdadero** |
+| 4a | `Escribir` | `"Error: ATENCIONES_INCOMPLETAS. No se genera el RIPS"` |
 
-**Resultado esperado:** aunque F1 sí es válida, el sistema **no debe generar un RIPS parcial** (es un requisito normativo, no solo una regla interna). **Resultado obtenido:** el algoritmo aborta antes de construir la estructura o persistir el `ArchivoRips`, incluso habiendo una factura completa. ✅ **Coincide con la regla de "todo o nada".**
+**Resultado esperado:** aunque la Factura 1 sí es válida, el sistema **no debe generar un RIPS parcial** (es un requisito normativo, no solo una regla interna). **Resultado obtenido:** el algoritmo se detiene en el bloque de error sin llegar a la rama de generación, aun habiendo una factura completa (`completas=1`). ✅ **Coincide con la regla de "todo o nada".**
 
 ### Caso 6.B — Periodo con todas las atenciones completas (camino exitoso)
 
-**Estado previo (variación):** mismo periodo, pero F2 y F3 han sido corregidas por el administrador (CUPS y documento completados).
+**Estado precargado (variación):** mismo periodo, pero `tieneCups[2] <- Verdadero` y `tieneDocumento[3] <- Verdadero` (corregidas por el administrador).
 
-| Paso | Instrucción | Estado de variables |
+| Paso | Línea / instrucción | Estado de variables |
 |---|---|---|
-| 1-4 | Validar F1, F2, F3 | Las tres pasan validación → `completas = [F1, F2, F3]`, `incompletas = []` |
-| 5 | `¿incompletas vacía?` | Sí |
-| 6 | `¿completas vacía?` | No (tiene 3) |
-| 7 | Construir estructura RIPS y persistir `ArchivoRips` | `archivo.cantidadAtenciones = 3` |
-| 8 | Retorno | `{ estructura, archivo }` con éxito |
+| 1-3 | Las tres iteraciones cumplen `tieneDocumento[i] Y tieneCups[i]` | `completas = 3`, `incompletas = 0` |
+| 4 | `Si incompletas(0) > 0` | Falso |
+| 5 | `Si completas(3) = 0` | Falso |
+| 6 | `Escribir` | `"RIPS generado con éxito. Atenciones incluidas: 3"` |
 
 **Resultado esperado:** generación exitosa del archivo con las 3 atenciones. **Resultado obtenido:** coincide. ✅
 
@@ -297,7 +301,7 @@ Para cada algoritmo crítico documentado en el punto 7 (Diagramas de Flujo y Pse
 | 5 | Salida de inventario | ✅ | ✅ | No hay descuento parcial ante error |
 | 6 | Generación RIPS | ✅ | ✅ | Regla "todo o nada" con datos parcialmente válidos |
 
-**Conclusión general:** las seis pruebas de escritorio realizadas confirman que la lógica implementada en el backend de OdontoSoft se comporta conforme a lo especificado en el documento de Entradas-Procesos-Salidas y en los diagramas de flujo, incluyendo el manejo correcto de los casos límite (*boundary cases*) de mayor riesgo: solapamiento exacto de horarios, saldos exactos en pagos, y bloqueo íntegro de reportes normativos ante datos incompletos. No se identificaron discrepancias entre el comportamiento esperado (según el pseudocódigo) y el comportamiento trazado manualmente sobre el código fuente real.
+**Conclusión general:** las seis pruebas de escritorio realizadas —trazadas sobre el pseudocódigo en sintaxis PSeInt del documento 7— confirman que la lógica implementada se comporta conforme a lo especificado en el documento de Entradas-Procesos-Salidas y en los diagramas de flujo, incluyendo el manejo correcto de los casos límite (*boundary cases*) de mayor riesgo: solapamiento exacto de horarios, saldos exactos en pagos, y bloqueo íntegro de reportes normativos ante datos incompletos. No se identificaron discrepancias entre el comportamiento esperado (según el pseudocódigo) y el comportamiento trazado manualmente, y las mismas tablas pueden reproducirse ejecutando cada `Proceso` paso a paso (F8) dentro de PSeInt.
 
 ---
 
