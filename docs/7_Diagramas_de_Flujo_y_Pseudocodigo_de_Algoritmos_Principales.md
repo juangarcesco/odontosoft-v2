@@ -88,75 +88,69 @@ flowchart TD
 **Pseudocódigo (sintaxis PSeInt):**
 
 ```
-Proceso Login
+Algoritmo Login
 	// ---- Simulación de la base de datos de usuarios ----
-	Dimension bdEmail[5] Como Cadena
-	Dimension bdPasswordHash[5] Como Cadena
-	Dimension bdEstado[5] Como Cadena
-	Dimension bdRol[5] Como Cadena
-	Dimension bdNombre[5] Como Cadena
+	Definir bdEmail, bdPasswordHash, bdEstado, bdRol, bdNombre Como Cadena
+	Dimensionar bdEmail(5)
+	Dimensionar bdPasswordHash(5)
+	Dimensionar bdEstado(5)
+	Dimensionar bdRol(5)
+	Dimensionar bdNombre(5)
 	Definir totalUsuarios Como Entero
-
 	totalUsuarios <- 2
-	bdEmail[1] <- "dra.em@consultorio.com"
-	bdPasswordHash[1] <- "Clinica2026*"
-	bdEstado[1] <- "ACTIVO"
-	bdRol[1] <- "ADMIN"
-	bdNombre[1] <- "Dra. EM"
-
-	bdEmail[2] <- "odontologo@consultorio.com"
-	bdPasswordHash[2] <- "Odonto2026*"
-	bdEstado[2] <- "INACTIVO"
-	bdRol[2] <- "ODONTOLOGO"
-	bdNombre[2] <- "Dr. Perez"
-
+	bdEmail[1] <- 'dra.em@consultorio.com'
+	bdPasswordHash[1] <- 'Clinica2026*'
+	bdEstado[1] <- 'ACTIVO'
+	bdRol[1] <- 'ADMIN'
+	bdNombre[1] <- 'Dra. EM'
+	bdEmail[2] <- 'odontologo@consultorio.com'
+	bdPasswordHash[2] <- 'Odonto2026*'
+	bdEstado[2] <- 'INACTIVO'
+	bdRol[2] <- 'ODONTOLOGO'
+	bdNombre[2] <- 'Dr. Perez'
 	Definir email, password, emailNormalizado, token Como Cadena
 	Definir indiceUsuario Como Entero
-	Definir passwordValida Como Logico
-
-	Escribir "Ingrese email:"
+	Definir passwordValida Como Lógico
+	Escribir 'Ingrese email:'
 	Leer email
-	Escribir "Ingrese password:"
+	Escribir 'Ingrese password:'
 	Leer password
-
-	Si email = "" O password = "" Entonces
-		Escribir "HTTP 400 - Email y contraseña son obligatorios"
+	Si email='' O password='' Entonces
+		Escribir 'HTTP 400 - Email y contraseña son obligatorios'
 	SiNo
 		emailNormalizado <- Minusculas(email)
-		indiceUsuario <- BuscarUsuarioPorEmail(emailNormalizado, bdEmail, totalUsuarios)
-
-		Si indiceUsuario = 0 Entonces
-			Escribir "LOG: intento fallido - usuario no existe"
-			Escribir "HTTP 401 - Credenciales inválidas"
+		indiceUsuario <- BuscarUsuarioPorEmail(emailNormalizado,bdEmail,totalUsuarios)
+		Si indiceUsuario=0 Entonces
+			Escribir 'LOG: intento fallido - usuario no existe'
+			Escribir 'HTTP 401 - Credenciales inválidas'
 		SiNo
-			Si bdEstado[indiceUsuario] <> "ACTIVO" Entonces
-				Escribir "LOG: intento fallido - usuario inactivo"
-				Escribir "HTTP 403 - Usuario inactivo, contacte al administrador"
+			Si bdEstado[indiceUsuario]<>'ACTIVO' Entonces
+				Escribir 'LOG: intento fallido - usuario inactivo'
+				Escribir 'HTTP 403 - Usuario inactivo, contacte al administrador'
 			SiNo
-				passwordValida <- (password = bdPasswordHash[indiceUsuario])
-
-				Si NO passwordValida Entonces
-					Escribir "LOG: intento fallido - contraseña incorrecta"
-					Escribir "HTTP 401 - Credenciales inválidas"
+				passwordValida <- (password=bdPasswordHash[indiceUsuario])
+				Si  NO passwordValida Entonces
+					Escribir 'LOG: intento fallido - contraseña incorrecta'
+					Escribir 'HTTP 401 - Credenciales inválidas'
 				SiNo
-					token <- "JWT." + bdRol[indiceUsuario] + "." + bdNombre[indiceUsuario]
-					Escribir "LOG: intento exitoso"
-					Escribir "HTTP 200 - Login exitoso. Token: ", token
+					token <- 'JWT.'+bdRol[indiceUsuario]+'.'+bdNombre[indiceUsuario]
+					Escribir 'LOG: intento exitoso'
+					Escribir 'HTTP 200 - Login exitoso. Token: ', token
 				FinSi
 			FinSi
 		FinSi
 	FinSi
-FinProceso
+FinAlgoritmo
 
-SubProceso indiceUsuario <- BuscarUsuarioPorEmail(emailBuscado, bdEmail, totalUsuarios)
+Función indiceUsuario <- BuscarUsuarioPorEmail(emailBuscado,bdEmail,totalUsuarios)
 	Definir i Como Entero
 	indiceUsuario <- 0
-	Para i <- 1 Hasta totalUsuarios Con Paso 1 Hacer
-		Si bdEmail[i] = emailBuscado Entonces
+	Para i<-1 Hasta totalUsuarios Con Paso 1 Hacer
+		Si bdEmail[i]=emailBuscado Entonces
 			indiceUsuario <- i
 		FinSi
 	FinPara
-FinSubProceso
+FinFunción
 ```
 
 **Nota de diseño:** los casos "usuario no existe" y "contraseña incorrecta" devuelven el **mismo mensaje genérico** al cliente ("Credenciales inválidas"), aunque internamente se registran con motivos distintos en el log de auditoría. Esto evita que un atacante pueda enumerar cuentas válidas por ensayo y error (mitigación de enumeración de usuarios).
