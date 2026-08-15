@@ -36,7 +36,20 @@
 
 ## 1. INTRODUCCIÓN
 
-Este documento presenta, para cada algoritmo crítico identificado en el documento anterior, un diagrama de flujo (notación Mermaid) y su pseudocódigo equivalente. Ambas representaciones describen el mismo algoritmo implementado en el código fuente del backend, referenciado con su archivo y función.
+Este documento presenta, para cada algoritmo crítico identificado en el documento anterior, un diagrama de flujo (notación Mermaid) y su pseudocódigo equivalente, expresado en **sintaxis PSeInt**. Ambas representaciones describen el mismo algoritmo implementado en el código fuente del backend, referenciado con su archivo y función.
+
+### 1.1 Nota sobre la adaptación a PSeInt
+
+PSeInt es una herramienta pensada para verificar la **lógica** de un algoritmo de forma aislada; no ejecuta peticiones HTTP, no se conecta a MongoDB ni puede invocar librerías criptográficas reales (bcrypt, jsonwebtoken). Por eso, para poder trazar y ejecutar estos algoritmos dentro de PSeInt, se aplican las siguientes simplificaciones, válidas únicamente para fines de verificación lógica:
+
+| Elemento real del sistema | Simulación en PSeInt |
+|---|---|
+| Consulta a MongoDB (`buscarUsuarioPorEmail`, `buscarFacturaPorId`, etc.) | Arreglos (`Dimension`) cargados al inicio del `Proceso` con datos de prueba |
+| `bcrypt.comparar(password, hash)` | Comparación directa de cadenas (`password = passwordGuardada`) |
+| `jwt.verificar()` / `generarJWT()` | Cadena de texto armada por concatenación, sin firma real |
+| Petición HTTP y sus códigos de estado | `Leer` para la entrada y `Escribir` con el código y mensaje como salida por consola |
+
+Cada algoritmo indica explícitamente qué partes están simuladas. El pseudocódigo usa las palabras clave estándar de PSeInt (`Proceso`/`FinProceso`, `SubProceso`/`FinSubProceso`, `Funcion`/`FinFuncion`, `Definir`, `Dimension`, `Si-Entonces-SiNo-FinSi`, `Mientras-FinMientras`, `Para-FinPara`, `Escribir`, `Leer`). Los diagramas de flujo (Mermaid) mostrados a continuación son equivalentes al diagrama DFD que PSeInt genera automáticamente con la opción **Ver → Diagrama de flujo** al pegar cada algoritmo en el editor.
 
 ---
 
@@ -70,39 +83,80 @@ flowchart TD
     K --> Z
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** la consulta a MongoDB se reemplaza por arreglos `bdEmail/bdPasswordHash/bdEstado/bdRol/bdNombre` cargados al inicio; `bcrypt.comparar()` se reemplaza por comparación directa de cadenas; `generarJWT()` se reemplaza por una cadena armada por concatenación.
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN login(email, password):
-    SI email es vacío O password es vacío ENTONCES
-        RETORNAR HTTP 400 "Email y contraseña son obligatorios"
-    FIN SI
+Proceso Login
+	// ---- Simulación de la base de datos de usuarios ----
+	Dimension bdEmail[5] Como Cadena
+	Dimension bdPasswordHash[5] Como Cadena
+	Dimension bdEstado[5] Como Cadena
+	Dimension bdRol[5] Como Cadena
+	Dimension bdNombre[5] Como Cadena
+	Definir totalUsuarios Como Entero
 
-    emailNormalizado ← minusculas(quitarEspacios(email))
-    usuario ← buscarUsuarioPorEmail(emailNormalizado)
+	totalUsuarios <- 2
+	bdEmail[1] <- "dra.em@consultorio.com"
+	bdPasswordHash[1] <- "Clinica2026*"
+	bdEstado[1] <- "ACTIVO"
+	bdRol[1] <- "ADMIN"
+	bdNombre[1] <- "Dra. EM"
 
-    SI usuario NO existe ENTONCES
-        registrarIntento(emailNormalizado, exito=false, motivo="usuario no existe")
-        RETORNAR HTTP 401 "Credenciales inválidas"
-    FIN SI
+	bdEmail[2] <- "odontologo@consultorio.com"
+	bdPasswordHash[2] <- "Odonto2026*"
+	bdEstado[2] <- "INACTIVO"
+	bdRol[2] <- "ODONTOLOGO"
+	bdNombre[2] <- "Dr. Perez"
 
-    SI usuario.estado ≠ "ACTIVO" ENTONCES
-        registrarIntento(emailNormalizado, exito=false, motivo="usuario inactivo")
-        RETORNAR HTTP 403 "Usuario inactivo, contacte al administrador"
-    FIN SI
+	Definir email, password, emailNormalizado, token Como Cadena
+	Definir indiceUsuario Como Entero
+	Definir passwordValida Como Logico
 
-    passwordValida ← bcrypt.comparar(password, usuario.passwordHash)
+	Escribir "Ingrese email:"
+	Leer email
+	Escribir "Ingrese password:"
+	Leer password
 
-    SI NO passwordValida ENTONCES
-        registrarIntento(emailNormalizado, exito=false, motivo="contraseña incorrecta")
-        RETORNAR HTTP 401 "Credenciales inválidas"
-    FIN SI
+	Si email = "" O password = "" Entonces
+		Escribir "HTTP 400 - Email y contraseña son obligatorios"
+	SiNo
+		emailNormalizado <- Minusculas(email)
+		indiceUsuario <- BuscarUsuarioPorEmail(emailNormalizado, bdEmail, totalUsuarios)
 
-    token ← generarJWT({id: usuario.id, rol: usuario.rol, nombre: usuario.nombre})
-    registrarIntento(emailNormalizado, exito=true, motivo="login exitoso")
+		Si indiceUsuario = 0 Entonces
+			Escribir "LOG: intento fallido - usuario no existe"
+			Escribir "HTTP 401 - Credenciales inválidas"
+		SiNo
+			Si bdEstado[indiceUsuario] <> "ACTIVO" Entonces
+				Escribir "LOG: intento fallido - usuario inactivo"
+				Escribir "HTTP 403 - Usuario inactivo, contacte al administrador"
+			SiNo
+				passwordValida <- (password = bdPasswordHash[indiceUsuario])
 
-    RETORNAR HTTP 200 { mensaje: "Login exitoso", token, usuario }
-FIN FUNCIÓN
+				Si NO passwordValida Entonces
+					Escribir "LOG: intento fallido - contraseña incorrecta"
+					Escribir "HTTP 401 - Credenciales inválidas"
+				SiNo
+					token <- "JWT." + bdRol[indiceUsuario] + "." + bdNombre[indiceUsuario]
+					Escribir "LOG: intento exitoso"
+					Escribir "HTTP 200 - Login exitoso. Token: ", token
+				FinSi
+			FinSi
+		FinSi
+	FinSi
+FinProceso
+
+SubProceso indiceUsuario <- BuscarUsuarioPorEmail(emailBuscado, bdEmail, totalUsuarios)
+	Definir i Como Entero
+	indiceUsuario <- 0
+	Para i <- 1 Hasta totalUsuarios Con Paso 1 Hacer
+		Si bdEmail[i] = emailBuscado Entonces
+			indiceUsuario <- i
+		FinSi
+	FinPara
+FinSubProceso
 ```
 
 **Nota de diseño:** los casos "usuario no existe" y "contraseña incorrecta" devuelven el **mismo mensaje genérico** al cliente ("Credenciales inválidas"), aunque internamente se registran con motivos distintos en el log de auditoría. Esto evita que un atacante pueda enumerar cuentas válidas por ensayo y error (mitigación de enumeración de usuarios).
@@ -135,49 +189,80 @@ flowchart TD
     H --> Z
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** `jwt.verificar()` se reemplaza por el `SubProceso DecodificarToken`, que a partir de un token de ejemplo devuelve si es válido, si expiró y los datos del payload; la lista de tokens invalidados por logout se simula con un arreglo.
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN verificarToken(peticion):
-    encabezado ← peticion.headers["Authorization"]
+Proceso ValidarAccesoPorRol
+	// ---- Simulación de tokens invalidados por logout previo ----
+	Dimension tokensInvalidados[3] Como Cadena
+	Definir totalInvalidados Como Entero
+	totalInvalidados <- 1
+	tokensInvalidados[1] <- "TKN-USR2-CERRADO"
 
-    SI encabezado no existe O no comienza con "Bearer " ENTONCES
-        RETORNAR HTTP 401 "Token no proporcionado"
-    FIN SI
+	// Roles permitidos para este endpoint de ejemplo: POST /api/facturas
+	Dimension rolesPermitidos[1] Como Cadena
+	rolesPermitidos[1] <- "RECEPCIONISTA"
 
-    token ← extraerToken(encabezado)
+	Definir token, rolUsuario, idUsuario, nombreUsuario Como Cadena
+	Definir tokenValido, tokenExpirado, tokenInvalidado, tienePermiso Como Logico
 
-    INTENTAR
-        payload ← jwt.verificar(token, CLAVE_SECRETA)
-    CAPTURAR error
-        SI error.tipo == "TokenExpirado" ENTONCES
-            RETORNAR HTTP 401 "Sesión expirada, inicie sesión nuevamente"
-        SINO
-            RETORNAR HTTP 401 "Token inválido"
-        FIN SI
-    FIN INTENTAR
+	Escribir "Ingrese el token (encabezado Authorization):"
+	Leer token
 
-    SI token EXISTE EN listaDeTokensInvalidados ENTONCES
-        RETORNAR HTTP 401 "Sesión cerrada, inicie sesión nuevamente"
-    FIN SI
+	Si token = "" Entonces
+		Escribir "HTTP 401 - Token no proporcionado"
+	SiNo
+		DecodificarToken(token, idUsuario, rolUsuario, nombreUsuario, tokenValido, tokenExpirado)
 
-    peticion.usuario ← payload
-    CONTINUAR
-FIN FUNCIÓN
+		Si tokenExpirado Entonces
+			Escribir "HTTP 401 - Sesión expirada, inicie sesión nuevamente"
+		SiNo
+			Si NO tokenValido Entonces
+				Escribir "HTTP 401 - Token inválido"
+			SiNo
+				tokenInvalidado <- EstaEnListaInvalidados(token, tokensInvalidados, totalInvalidados)
 
-FUNCIÓN permitirRoles(rolesPermitidos[]):
-    RETORNAR FUNCIÓN(peticion):
-        SI peticion.usuario NO existe ENTONCES
-            RETORNAR HTTP 401 "No autenticado"
-        FIN SI
+				Si tokenInvalidado Entonces
+					Escribir "HTTP 401 - Sesión cerrada, inicie sesión nuevamente"
+				SiNo
+					tienePermiso <- (rolUsuario = rolesPermitidos[1])
 
-        SI peticion.usuario.rol NO ESTÁ EN rolesPermitidos ENTONCES
-            RETORNAR HTTP 403 "No tiene permisos para acceder a este recurso"
-        FIN SI
+					Si NO tienePermiso Entonces
+						Escribir "HTTP 403 - No tiene permisos para acceder a este recurso"
+					SiNo
+						Escribir "Acceso permitido: continúa al controlador"
+					FinSi
+				FinSi
+			FinSi
+		FinSi
+	FinSi
+FinProceso
 
-        CONTINUAR
-    FIN FUNCIÓN
-FIN FUNCIÓN
+SubProceso DecodificarToken(token, Por Referencia idUsuario, Por Referencia rolUsuario, Por Referencia nombreUsuario, Por Referencia tokenValido, Por Referencia tokenExpirado)
+	// Simulación de jwt.verificar(): valores de ejemplo según el token recibido
+	Si token = "TKN-EXPIRADO" Entonces
+		tokenValido <- Falso
+		tokenExpirado <- Verdadero
+	SiNo
+		tokenValido <- Verdadero
+		tokenExpirado <- Falso
+		idUsuario <- "2"
+		rolUsuario <- "ODONTOLOGO"
+		nombreUsuario <- "Dr. J"
+	FinSi
+FinSubProceso
+
+Funcion encontrado <- EstaEnListaInvalidados(token, tokensInvalidados, totalInvalidados)
+	Definir i Como Entero
+	encontrado <- Falso
+	Para i <- 1 Hasta totalInvalidados Con Paso 1 Hacer
+		Si tokensInvalidados[i] = token Entonces
+			encontrado <- Verdadero
+		FinSi
+	FinPara
+FinFuncion
 ```
 
 **Matriz de decisión aplicada por endpoint (ejemplos reales del sistema):**
@@ -215,41 +300,51 @@ flowchart TD
     J -- No --> F
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** la consulta a MongoDB (`buscarCitas`) se reemplaza por dos arreglos `citaInicio`/`citaFin` (en minutos) cargados con las citas del odontólogo para el día. Es el algoritmo más directo de trasladar a PSeInt porque no depende de librerías externas: es matemática pura.
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN existeConflictoHorario(odontologo, fecha, hora, duracion, citaIdExcluir):
-    inicioNueva ← convertirAMinutos(hora)
-    finNueva ← inicioNueva + duracion
+Proceso ConflictoDeHorario
+	// ---- Citas existentes del odontólogo ese día (simulación de la consulta a BD) ----
+	Dimension citaInicio[10] Como Entero
+	Dimension citaFin[10] Como Entero
+	Definir totalCitas Como Entero
+	totalCitas <- 2
+	citaInicio[1] <- 540	// 09:00
+	citaFin[1] <- 570	// 09:30
+	citaInicio[2] <- 600	// 10:00
+	citaFin[2] <- 645	// 10:45
 
-    inicioDia ← fecha con hora 00:00:00.000 UTC
-    finDia ← fecha con hora 23:59:59.999 UTC
+	Definir horaTexto Como Cadena
+	Definir duracion, inicioNueva, finNueva, i Como Entero
+	Definir conflicto Como Logico
 
-    filtro ← {
-        odontologo: odontologo,
-        fecha: ENTRE inicioDia Y finDia,
-        estado: EN ["PROGRAMADA", "CONFIRMADA"]
-    }
-    SI citaIdExcluir EXISTE ENTONCES
-        filtro._id ← DISTINTO DE citaIdExcluir
-    FIN SI
+	Escribir "Ingrese hora de la nueva cita en minutos desde 00:00 (ej. 09:20 -> 560):"
+	Leer inicioNueva
+	Escribir "Ingrese duración en minutos:"
+	Leer duracion
 
-    citasDelDia ← buscarCitas(filtro)
+	finNueva <- inicioNueva + duracion
 
-    PARA CADA citaExistente EN citasDelDia HACER
-        inicioExistente ← convertirAMinutos(citaExistente.hora)
-        finExistente ← inicioExistente + citaExistente.duracion
+	conflicto <- Falso
+	i <- 1
+	Mientras i <= totalCitas Y NO conflicto Hacer
+		Si inicioNueva < citaFin[i] Y citaInicio[i] < finNueva Entonces
+			conflicto <- Verdadero
+		FinSi
+		i <- i + 1
+	FinMientras
 
-        // Dos rangos se solapan si uno empieza antes de que el otro termine,
-        // evaluado en ambos sentidos
-        SI inicioNueva < finExistente Y inicioExistente < finNueva ENTONCES
-            RETORNAR verdadero  // hay conflicto
-        FIN SI
-    FIN PARA
-
-    RETORNAR falso  // no hay conflicto
-FIN FUNCIÓN
+	Si conflicto Entonces
+		Escribir "Conflicto detectado: la cita se solapa con una existente"
+	SiNo
+		Escribir "Sin conflicto: la cita puede programarse"
+	FinSi
+FinProceso
 ```
+
+**Nota de captura de datos:** para simplificar la entrada en PSeInt (que no trae por defecto una función de conversión "HH:MM → minutos"), la hora se ingresa directamente en minutos desde medianoche. Si se desea conservar el formato `HH:MM`, se puede agregar un `SubProceso ConvertirAMinutos` que use `SubCadena()` para separar horas y minutos, disponible en el módulo de cadenas de PSeInt (verificar el nombre exacto de la función según la versión instalada, en Configuración → Preferencias del lenguaje).
 
 **Prueba de solapamiento (regla matemática):** dados dos intervalos `[A_inicio, A_fin)` y `[B_inicio, B_fin)`, se solapan si y solo si `A_inicio < B_fin` **y** `B_inicio < A_fin`. Esta doble condición cubre los cuatro casos posibles (contención total, contención parcial por la izquierda, por la derecha, e igualdad de rangos).
 
@@ -284,39 +379,50 @@ flowchart TD
     K --> Z
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** la factura consultada por `buscarFacturaPorId()` se reemplaza por variables precargadas con un estado previo de ejemplo (`valorTotal`, `saldoPendiente`, `estadoFactura`).
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN registrarPago(facturaId, monto, metodoPago, usuarioId):
-    SI metodoPago NO ESTÁ EN {"EFECTIVO","TRANSFERENCIA","TARJETA"} ENTONCES
-        LANZAR error METODO_INVALIDO
-    FIN SI
+Proceso RegistrarPago
+	// ---- Estado previo de la factura (simulación de la consulta a BD) ----
+	Definir valorTotal, saldoPendiente, monto Como Real
+	Definir metodoPago, estadoFactura Como Cadena
+	Definir metodoValido Como Logico
 
-    factura ← buscarFacturaPorId(facturaId)
-    SI factura NO existe ENTONCES
-        LANZAR error FACTURA_NO_EXISTE
-    FIN SI
+	valorTotal <- 250000
+	saldoPendiente <- 250000
+	estadoFactura <- "PENDIENTE"
 
-    SI factura.estado == "ANULADA" ENTONCES
-        LANZAR error FACTURA_ANULADA
-    FIN SI
+	Escribir "Ingrese monto a pagar:"
+	Leer monto
+	Escribir "Ingrese método de pago (EFECTIVO/TRANSFERENCIA/TARJETA):"
+	Leer metodoPago
 
-    SI monto > factura.saldoPendiente ENTONCES
-        LANZAR error MONTO_EXCEDE_SALDO
-    FIN SI
+	metodoValido <- (metodoPago = "EFECTIVO" O metodoPago = "TRANSFERENCIA" O metodoPago = "TARJETA")
 
-    factura.pagos.agregar({monto, metodoPago, registradoPor: usuarioId, fecha: ahora})
+	Si NO metodoValido Entonces
+		Escribir "Error: METODO_INVALIDO"
+	SiNo
+		Si estadoFactura = "ANULADA" Entonces
+			Escribir "Error: FACTURA_ANULADA"
+		SiNo
+			Si monto > saldoPendiente Entonces
+				Escribir "Error: MONTO_EXCEDE_SALDO"
+			SiNo
+				// El saldo SIEMPRE se recalcula aquí, nunca se acepta ya calculado
+				saldoPendiente <- saldoPendiente - monto
 
-    // El saldo SIEMPRE se recalcula en el servidor, nunca se acepta del cliente
-    factura.saldoPendiente ← factura.saldoPendiente − monto
+				Si saldoPendiente = 0 Entonces
+					estadoFactura <- "PAGADA"
+				FinSi
 
-    SI factura.saldoPendiente == 0 ENTONCES
-        factura.estado ← "PAGADA"
-    FIN SI
-
-    guardar(factura)
-    RETORNAR factura
-FIN FUNCIÓN
+				Escribir "Pago registrado. Saldo pendiente: ", saldoPendiente
+				Escribir "Estado de la factura: ", estadoFactura
+			FinSi
+		FinSi
+	FinSi
+FinProceso
 ```
 
 ---
@@ -344,33 +450,41 @@ flowchart TD
     I --> Z
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** el material consultado por `buscarMaterialPorId()` se reemplaza por variables precargadas con un `stock` y `stockMinimo` de ejemplo.
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN registrarSalida(materialId, cantidad, motivo, usuarioId):
-    SI cantidad ES NULA O cantidad <= 0 ENTONCES
-        LANZAR error CANTIDAD_INVALIDA
-    FIN SI
+Proceso RegistrarSalidaInventario
+	// ---- Estado previo del material (simulación de la consulta a BD) ----
+	Definir stock, stockMinimo, cantidad Como Entero
+	Definir motivo Como Cadena
+	Definir stockBajo Como Logico
 
-    material ← buscarMaterialPorId(materialId)
-    SI material NO existe ENTONCES
-        LANZAR error MATERIAL_NO_EXISTE
-    FIN SI
+	stock <- 20
+	stockMinimo <- 15
 
-    SI cantidad > material.stock ENTONCES
-        LANZAR error STOCK_INSUFICIENTE
-             ("Disponible: " + material.stock + ", solicitado: " + cantidad)
-    FIN SI
+	Escribir "Ingrese cantidad a retirar:"
+	Leer cantidad
+	Escribir "Ingrese motivo:"
+	Leer motivo
 
-    material.movimientos.agregar({
-        tipo: "SALIDA", cantidad, motivo, registradoPor: usuarioId
-    })
+	Si cantidad <= 0 Entonces
+		Escribir "Error: CANTIDAD_INVALIDA"
+	SiNo
+		Si cantidad > stock Entonces
+			Escribir "Error: STOCK_INSUFICIENTE. Disponible: ", stock, ", solicitado: ", cantidad
+		SiNo
+			stock <- stock - cantidad
+			stockBajo <- (stock <= stockMinimo)
 
-    material.stock ← material.stock − cantidad
-    guardar(material)
-
-    RETORNAR material
-FIN FUNCIÓN
+			Escribir "Salida registrada. Stock actual: ", stock
+			Si stockBajo Entonces
+				Escribir "Alerta: stock bajo, reabastecer"
+			FinSi
+		FinSi
+	FinSi
+FinProceso
 ```
 
 **Indicador derivado (usado en el listado):** `stockBajo ← (stock <= stockMinimo)`, calculado en `listarMateriales()` para alertar reabastecimiento sin necesidad de un campo redundante en la base de datos.
@@ -404,37 +518,52 @@ flowchart TD
     M --> Z
 ```
 
-**Pseudocódigo:**
+**Simulación necesaria:** `buscarFacturas()` se reemplaza por tres arreglos paralelos (`facturaId`, `tieneDocumento`, `tieneCups`) que representan las facturas del periodo ya consultadas; `validarCamposObligatorios()` se reduce a evaluar esos dos indicadores booleanos por factura.
+
+**Pseudocódigo (sintaxis PSeInt):**
 
 ```
-FUNCIÓN generarYRegistrarRips(periodo, usuarioId):
-    {fechaInicio, fechaFin} ← calcularRangoPeriodo(periodo)
-    facturas ← buscarFacturas(NO ANULADA, creadas ENTRE fechaInicio Y fechaFin)
+Proceso ValidarYGenerarRips
+	// ---- Facturas del periodo (simulación de la consulta a BD) ----
+	Dimension facturaId[10] Como Entero
+	Dimension tieneDocumento[10] Como Logico
+	Dimension tieneCups[10] Como Logico
+	Definir totalFacturas, completas, incompletas, i Como Entero
 
-    completas ← []
-    incompletas ← []
+	totalFacturas <- 3
+	facturaId[1] <- 1
+	tieneDocumento[1] <- Verdadero
+	tieneCups[1] <- Verdadero
 
-    PARA CADA factura EN facturas HACER
-        camposFaltantes ← validarCamposObligatorios(factura, factura.paciente)
-        SI camposFaltantes ESTÁ VACÍA ENTONCES
-            completas.agregar(transformarAProcedimientosRips(factura))
-        SINO
-            incompletas.agregar({factura.id, camposFaltantes})
-        FIN SI
-    FIN PARA
+	facturaId[2] <- 2
+	tieneDocumento[2] <- Verdadero
+	tieneCups[2] <- Falso
 
-    // Regla normativa: el RIPS es todo-o-nada, no se generan reportes parciales
-    SI incompletas NO ESTÁ VACÍA ENTONCES
-        LANZAR error ATENCIONES_INCOMPLETAS (detalle: incompletas)
-    FIN SI
+	facturaId[3] <- 3
+	tieneDocumento[3] <- Falso
+	tieneCups[3] <- Verdadero
 
-    SI completas ESTÁ VACÍA ENTONCES
-        LANZAR error SIN_ATENCIONES
-    FIN SI
+	completas <- 0
+	incompletas <- 0
 
-    estructura ← construirEstructuraRips(completas)
-    archivo ← persistirArchivoRips(periodo, facturas, usuarioId)
+	Para i <- 1 Hasta totalFacturas Con Paso 1 Hacer
+		Si tieneDocumento[i] Y tieneCups[i] Entonces
+			completas <- completas + 1
+		SiNo
+			incompletas <- incompletas + 1
+			Escribir "Factura ", facturaId[i], " incompleta"
+		FinSi
+	FinPara
 
-    RETORNAR {estructura, archivo}
-FIN FUNCIÓN
+	// Regla normativa: el RIPS es todo-o-nada, no se generan reportes parciales
+	Si incompletas > 0 Entonces
+		Escribir "Error: ATENCIONES_INCOMPLETAS. No se genera el RIPS"
+	SiNo
+		Si completas = 0 Entonces
+			Escribir "Error: SIN_ATENCIONES"
+		SiNo
+			Escribir "RIPS generado con éxito. Atenciones incluidas: ", completas
+		FinSi
+	FinSi
+FinProceso
 ```
