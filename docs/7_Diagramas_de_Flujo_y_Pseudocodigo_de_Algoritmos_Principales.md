@@ -189,27 +189,30 @@ flowchart TD
 
 ```
 Proceso ValidarAccesoPorRol
-	// ---- Simulación de tokens invalidados por logout previo ----
-	Dimension tokensInvalidados[3] Como Cadena
+	// ---- Declaración del tamaño de los arreglos ----
+	Dimension tokensInvalidados[3]
+	Dimension rolesPermitidos[1]
+	
+	// ---- Definición de variables ----
+	Definir tokensInvalidados, rolesPermitidos, token, rolUsuario, idUsuario, nombreUsuario Como Cadena
 	Definir totalInvalidados Como Entero
+	Definir tokenValido, tokenExpirado, tokenInvalidado, tienePermiso Como Logico
+	
+	// ---- Inicialización de datos simulados ----
 	totalInvalidados <- 1
 	tokensInvalidados[1] <- "TKN-USR2-CERRADO"
-
+	
 	// Roles permitidos para este endpoint de ejemplo: POST /api/facturas
-	Dimension rolesPermitidos[1] Como Cadena
 	rolesPermitidos[1] <- "RECEPCIONISTA"
-
-	Definir token, rolUsuario, idUsuario, nombreUsuario Como Cadena
-	Definir tokenValido, tokenExpirado, tokenInvalidado, tienePermiso Como Logico
-
-	Escribir "Ingrese el token (encabezado Authorization):"
+	
+	Escribir "Ingrese el token (ej. TKN-EXPIRADO o cualquier otro valor):"
 	Leer token
-
+	
 	Si token = "" Entonces
 		Escribir "HTTP 401 - Token no proporcionado"
 	SiNo
 		DecodificarToken(token, idUsuario, rolUsuario, nombreUsuario, tokenValido, tokenExpirado)
-
+		
 		Si tokenExpirado Entonces
 			Escribir "HTTP 401 - Sesión expirada, inicie sesión nuevamente"
 		SiNo
@@ -217,12 +220,12 @@ Proceso ValidarAccesoPorRol
 				Escribir "HTTP 401 - Token inválido"
 			SiNo
 				tokenInvalidado <- EstaEnListaInvalidados(token, tokensInvalidados, totalInvalidados)
-
+				
 				Si tokenInvalidado Entonces
 					Escribir "HTTP 401 - Sesión cerrada, inicie sesión nuevamente"
 				SiNo
 					tienePermiso <- (rolUsuario = rolesPermitidos[1])
-
+					
 					Si NO tienePermiso Entonces
 						Escribir "HTTP 403 - No tiene permisos para acceder a este recurso"
 					SiNo
@@ -234,8 +237,7 @@ Proceso ValidarAccesoPorRol
 	FinSi
 FinProceso
 
-SubProceso DecodificarToken(token, Por Referencia idUsuario, Por Referencia rolUsuario, Por Referencia nombreUsuario, Por Referencia tokenValido, Por Referencia tokenExpirado)
-	// Simulación de jwt.verificar(): valores de ejemplo según el token recibido
+SubProceso DecodificarToken(token, idUsuario, rolUsuario, nombreUsuario, tokenValido, tokenExpirado)
 	Si token = "TKN-EXPIRADO" Entonces
 		tokenValido <- Falso
 		tokenExpirado <- Verdadero
@@ -248,15 +250,16 @@ SubProceso DecodificarToken(token, Por Referencia idUsuario, Por Referencia rolU
 	FinSi
 FinSubProceso
 
-Funcion encontrado <- EstaEnListaInvalidados(token, tokensInvalidados, totalInvalidados)
+SubProceso encontrado <- EstaEnListaInvalidados(token, tokensInvalidados, totalInvalidados)
 	Definir i Como Entero
+	Definir encontrado Como Logico
 	encontrado <- Falso
 	Para i <- 1 Hasta totalInvalidados Con Paso 1 Hacer
 		Si tokensInvalidados[i] = token Entonces
 			encontrado <- Verdadero
 		FinSi
 	FinPara
-FinFuncion
+FinSubProceso
 ```
 
 **Matriz de decisión aplicada por endpoint (ejemplos reales del sistema):**
@@ -300,27 +303,30 @@ flowchart TD
 
 ```
 Proceso ConflictoDeHorario
+	// ---- Declaración del tamaño de los arreglos ----
+	Dimension citaInicio[10]
+	Dimension citaFin[10]
+	
+	// ---- Definición de variables ----
+	Definir citaInicio, citaFin Como Entero
+	Definir totalCitas, duracion, inicioNueva, finNueva, i Como Entero
+	Definir horaTexto Como Cadena
+	Definir conflicto Como Logico
+	
 	// ---- Citas existentes del odontólogo ese día (simulación de la consulta a BD) ----
-	Dimension citaInicio[10] Como Entero
-	Dimension citaFin[10] Como Entero
-	Definir totalCitas Como Entero
 	totalCitas <- 2
 	citaInicio[1] <- 540	// 09:00
 	citaFin[1] <- 570	// 09:30
 	citaInicio[2] <- 600	// 10:00
 	citaFin[2] <- 645	// 10:45
-
-	Definir horaTexto Como Cadena
-	Definir duracion, inicioNueva, finNueva, i Como Entero
-	Definir conflicto Como Logico
-
+	
 	Escribir "Ingrese hora de la nueva cita en minutos desde 00:00 (ej. 09:20 -> 560):"
 	Leer inicioNueva
 	Escribir "Ingrese duración en minutos:"
 	Leer duracion
-
+	
 	finNueva <- inicioNueva + duracion
-
+	
 	conflicto <- Falso
 	i <- 1
 	Mientras i <= totalCitas Y NO conflicto Hacer
@@ -329,7 +335,7 @@ Proceso ConflictoDeHorario
 		FinSi
 		i <- i + 1
 	FinMientras
-
+	
 	Si conflicto Entonces
 		Escribir "Conflicto detectado: la cita se solapa con una existente"
 	SiNo
@@ -518,28 +524,33 @@ flowchart TD
 
 ```
 Proceso ValidarYGenerarRips
-	// ---- Facturas del periodo (simulación de la consulta a BD) ----
-	Dimension facturaId[10] Como Entero
-	Dimension tieneDocumento[10] Como Logico
-	Dimension tieneCups[10] Como Logico
+	// ---- Declaración del tamaño de los arreglos ----
+	Dimension facturaId[10]
+	Dimension tieneDocumento[10]
+	Dimension tieneCups[10]
+	
+	// ---- Definición de variables ----
+	Definir facturaId Como Entero
+	Definir tieneDocumento, tieneCups Como Logico
 	Definir totalFacturas, completas, incompletas, i Como Entero
-
+	
+	// ---- Facturas del periodo (simulación de la consulta a BD) ----
 	totalFacturas <- 3
 	facturaId[1] <- 1
 	tieneDocumento[1] <- Verdadero
 	tieneCups[1] <- Verdadero
-
+	
 	facturaId[2] <- 2
 	tieneDocumento[2] <- Verdadero
 	tieneCups[2] <- Falso
-
+	
 	facturaId[3] <- 3
 	tieneDocumento[3] <- Falso
 	tieneCups[3] <- Verdadero
-
+	
 	completas <- 0
 	incompletas <- 0
-
+	
 	Para i <- 1 Hasta totalFacturas Con Paso 1 Hacer
 		Si tieneDocumento[i] Y tieneCups[i] Entonces
 			completas <- completas + 1
@@ -548,7 +559,7 @@ Proceso ValidarYGenerarRips
 			Escribir "Factura ", facturaId[i], " incompleta"
 		FinSi
 	FinPara
-
+	
 	// Regla normativa: el RIPS es todo-o-nada, no se generan reportes parciales
 	Si incompletas > 0 Entonces
 		Escribir "Error: ATENCIONES_INCOMPLETAS. No se genera el RIPS"
